@@ -2,7 +2,7 @@
 class ImagenUploader {
     private $carpeta;
 
-    public function __construct($carpeta_destino = "/imagenDB") {
+    public function __construct($carpeta_destino = "../imagenDB/") {
         $this->carpeta = $carpeta_destino;
         if (!file_exists($this->carpeta)) {
             mkdir($this->carpeta, 0777, true);
@@ -36,19 +36,15 @@ class ImagenUploader {
             throw new Exception("No se pudo guardar la imagen.");
         }
 
-        // Generar miniatura
-        $ruta_miniatura = $this->generarMiniatura($ruta_original, $tipo_imagen);
-
         return [
             'ruta_original' => $ruta_original,
-            'ruta_miniatura' => $ruta_miniatura,
             'tipo' => $tipo_imagen
         ];
     }
 
     //genera una version mas liviana de la imagen original
     //para la miniatura
-    private function generarMiniatura($ruta_original, $tipo_imagen) {
+    public function generarMiniatura($ruta_original, $tipo_imagen) {
         list($ancho, $alto) = getimagesize($ruta_original);
         $nuevo_ancho = 100;
         $nuevo_alto = intval(($alto / $ancho) * $nuevo_ancho);
@@ -58,7 +54,7 @@ class ImagenUploader {
 
         imagecopyresampled($miniatura, $origen, 0, 0, 0, 0, $nuevo_ancho, $nuevo_alto, $ancho, $alto);
 
-        $ruta_miniatura = str_replace("imagesDb/", "imagesDb/thumb_", $ruta_original);
+        $ruta_miniatura = str_replace("imagenDB/", "imagenDB/thumb_", $ruta_original);
 
         if ($tipo_imagen === 'image/jpeg') {
             imagejpeg($miniatura, $ruta_miniatura);
