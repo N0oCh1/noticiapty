@@ -64,7 +64,7 @@ CREATE TABLE `imagenes` (
   `tipo_imagen` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `noticia_id` (`noticia_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Imagenes';
+) ENGINE=MyISAM AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Imagenes';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -82,10 +82,8 @@ CREATE TABLE `noticias` (
   `categoria` varchar(50) DEFAULT NULL,
   `activo` tinyint(1) DEFAULT '1',
   `fecha_creacion` datetime DEFAULT CURRENT_TIMESTAMP,
-  `id_usuario` int DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `id_usuario` (`id_usuario`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Noticias';
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Noticias';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -121,4 +119,4 @@ CREATE TABLE `usuarios` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-07-11 16:32:47
+-- Dump completed on 2025-07-11 18:52:59
