@@ -50,25 +50,31 @@ require_once "C_subirImagen.php";
       }
     }
 
-    public function ObtenerNoticias() {
-      $classImagen = new Imagen();
-      try{
+    public function ObtenerNoticias($categoria = 'todas') {
+    $classImagen = new Imagen();
+    try {
         $response = [];
-        $data = $this->db->select("noticias", "*");
-        foreach($data as $noticia){
-          $imagenes = $classImagen->ObtenerImagenes($noticia['id']);
-          $noticia['imagenes'] = $imagenes;
-          $response[] = $noticia;
+        
+        // Modificar la consulta para ordenar por ID descendente
+        if($categoria === 'todas') {
+            $data = $this->db->select("noticias", "*", "1 ORDER BY id DESC");
+        } else {
+            $data = $this->db->select("noticias", "*", "categoria = '$categoria' ORDER BY id DESC");
         }
+        
+        foreach($data as $noticia){
+            $imagenes = $classImagen->ObtenerImagenes($noticia['id']);
+            $noticia['imagenes'] = $imagenes;
+            $response[] = $noticia;
+        }
+        
         $this->db->disconnect();
         return $response;
-      }
-      catch(Exception $e){
-        throw new Exception("Error al obtener noticias");
-        $this->db->disconnect();
-        return false;
-      }
     }
+    catch(Exception $e){
+        throw new Exception("Error al obtener noticias");
+    }
+}
     private function GuardarImagen($id_noticia,  $imagen) {
       $total = count($imagen['name']);
       $guardarImagen = new Imagen();

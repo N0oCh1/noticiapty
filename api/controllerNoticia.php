@@ -28,18 +28,22 @@ require "../class/C_noticia.php";
   }
  }
  if($_SERVER["REQUEST_METHOD"]==="GET"){
-  header("Content-Type: application/json; charset=utf-8");
-  try{
-    $noticia = new Noticia();
-    $noticias = $noticia->ObtenerNoticias();
-    http_response_code(202);
-    echo json_encode($noticias);
-  }
-  catch(Exception $e){
-    http_response_code(500);
-    echo json_encode([
-      "messange" => "Error al obtener noticias"
-    ]);
-  }
- }
+    header("Content-Type: application/json; charset=utf-8");
+    try{
+        $noticia = new Noticia();
+        $categoria = isset($_GET['category']) ? $_GET['category'] : 'todas';
+        
+        // Modificar el método para ordenar por ID descendente
+        $noticias = $noticia->ObtenerNoticias($categoria);
+        
+        http_response_code(200);
+        echo json_encode($noticias);
+    }
+    catch(Exception $e){
+        http_response_code(500);
+        echo json_encode([
+            "message" => "Error al obtener noticias: " . $e->getMessage()
+        ]);
+    }
+}
 ?>
