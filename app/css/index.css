@@ -12,16 +12,18 @@ body {
 /* Menú superior */
 .top-nav {
     background: #2c3e50;
-    color: white;
     padding: 1rem;
+    color: white;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.nav-brand {
+.nav-brand a {
     font-size: 1.5rem;
     font-weight: bold;
+    text-decoration: none;
+    color: white;
 }
 
 .visitor-count {
@@ -138,4 +140,42 @@ body {
 
 .load-more-btn:hover {
     background: #2980b9;
+}
+
+
+/* Actualiza los estilos de los botones de autenticación */
+.nav-auth {
+    display: flex;
+    gap: 1rem;
+}
+
+.auth-btn {
+    color: white;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border: 1px solid white;
+    border-radius: 4px;
+    transition: all 0.3s;
+}
+
+/* Estilos específicos para el botón de login */
+.login-btn {
+    background: transparent;
+}
+
+.login-btn:hover {
+    background: white;
+    color: #2c3e50;
+}
+
+/* Estilos específicos para el botón de registro */
+.register-btn {
+    background: #27ae60;
+    border-color: #27ae60;
+}
+
+.register-btn:hover {
+    background: #219a52;
+    border-color: #219a52;
+    color: white;
 }
