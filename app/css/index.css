@@ -18,6 +18,9 @@ body {
     justify-content: space-between;
     align-items: center;
 }
+.nav-brand{
+    flex:1;
+}
 
 .nav-brand a {
     font-size: 1.5rem;
@@ -28,6 +31,13 @@ body {
 
 .visitor-count {
     font-size: 0.9rem;
+    flex:1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.visitor-count i {
+    margin-right: 0.5rem;
 }
 
 .login-btn {
@@ -147,7 +157,8 @@ body {
 /* Actualiza los estilos de los botones de autenticación */
 .nav-auth {
     display: flex;
-    gap: 1rem;
+    flex:1;
+    justify-content: flex-end;
 }
 
 .auth-btn {
@@ -157,6 +168,11 @@ body {
     border: 1px solid white;
     border-radius: 4px;
     transition: all 0.3s;
+    
+}
+
+.nav-auth .auth-btn:first-child {
+    margin-right: 1rem; /* Agrega un margen derecho de 1rem al primer hijo */
 }
 
 /* Estilos específicos para el botón de login */
