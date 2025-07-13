@@ -309,6 +309,41 @@ body {
 
 
 
+.user-info span {
+    margin-right: 10px;
+}
+
+#logoutBtn {
+    flex: 1;
+    background-color: #ff5733;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 5px; /* Bordes redondeados */
+    transition: all 0.3s ease-in-out; /* Transición suave */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+}
+
+#logoutBtn:hover {
+    background-color: #e74c3c; /* Cambio de color al pasar el mouse */
+    transform: translateY(-2px); /* Desplazamiento hacia arriba para efecto de hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Sombra más prominente al hacer hover */
+}
+
+#logoutBtn:active {
+    background-color: #c0392b; /* Color más oscuro al hacer clic */
+    transform: translateY(0); /* Eliminar el efecto de desplazamiento al hacer clic */
+}
+
+#logoutBtn:focus {
+    outline: none; /* Eliminar el borde de enfoque predeterminado */
+}
+
+
+
 /* Responsive design */
 @media (max-width: 768px) {
     .secondary-news {

@@ -9,20 +9,20 @@ body {
     font-family: 'Arial', sans-serif;
     background-color: #f9f9f9;
     color: #333;
-    line-height: 1.6;
+  
 }
 
 /* Menú superior */
 .top-nav {
     background: #2c3e50;
-    padding: 1rem 2rem;
+    padding: 1rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
 .nav-brand a {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     font-weight: bold;
     text-decoration: none;
     color: white;
@@ -39,7 +39,7 @@ body {
     border: 1px solid white;
     border-radius: 4px;
     margin-left: 1rem;
-    transition: all 0.3s ease;
+    transition: all 0.3s;
 }
 
 .auth-btn:hover {
@@ -191,6 +191,36 @@ textarea {
 
 .submit-comment:hover {
     background-color: #27ae60;
+}
+
+
+#logoutBtn {
+    flex: 1;
+    background-color: #ff5733;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 5px; /* Bordes redondeados */
+    transition: all 0.3s ease-in-out; /* Transición suave */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+}
+
+#logoutBtn:hover {
+    background-color: #e74c3c; /* Cambio de color al pasar el mouse */
+    transform: translateY(-2px); /* Desplazamiento hacia arriba para efecto de hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Sombra más prominente al hacer hover */
+}
+
+#logoutBtn:active {
+    background-color: #c0392b; /* Color más oscuro al hacer clic */
+    transform: translateY(0); /* Eliminar el efecto de desplazamiento al hacer clic */
+}
+
+#logoutBtn:focus {
+    outline: none; /* Eliminar el borde de enfoque predeterminado */
 }
 
 /* Responsive Design */

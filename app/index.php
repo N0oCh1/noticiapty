@@ -28,6 +28,9 @@ $totalVisitas = $visita->ObtenerVisitas();
             sizes="16x16"
             href="../../logo.png"
         />
+        <!-- SweetAlert2 CDN -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
         <title>NoticiaPTY - Noticias de Panamá</title>
     </head>
     <body>
@@ -38,6 +41,16 @@ $totalVisitas = $visita->ObtenerVisitas();
                 <i class="fas fa-users"></i>
 <span id="visitorCount"><?php echo $totalVisitas . " "; ?>visitas</span>
             </div>
+
+            <div class="user-info" style="display: none;">
+    <button id="logoutBtn" onclick="logout()">
+       <i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión
+    </button>
+</div>
+
+
+
+
             <div class="nav-auth">
                 <div class="auth-btn-container">
                     <a href="iniciar-sesion/index.html" class="auth-btn login-btn">
@@ -77,5 +90,6 @@ $totalVisitas = $visita->ObtenerVisitas();
         </main>
 
         <script src="js/index.js"></script>
+
     </body>
 </html>
