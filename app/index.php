@@ -57,11 +57,11 @@ $totalVisitas = $visita->ObtenerVisitas();
         <nav class="main-nav">
             <ul>
                 <li><a href="#" data-category="todas">Todas</a></li>
-                <li><a href="#" data-category="deportes">Deportes</a></li>
-                <li><a href="#" data-category="politica">Política</a></li>
-                <li><a href="#" data-category="tecnologia">Tecnología</a></li>
+                <li><a href="#" data-category="1">Deportes</a></li>
+                <li><a href="#" data-category="2">Política</a></li>
+                <li><a href="#" data-category="3">Tecnología</a></li>
                 <li>
-                    <a href="#" data-category="entretenimiento"
+                    <a href="#" data-category="4"
                         >Entretenimiento</a
                     >
                 </li>
