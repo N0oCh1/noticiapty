@@ -1,7 +1,7 @@
 // Variables globales
 let currentPage = 1;
 const initialNewsCount = 3; // Número inicial de noticias a mostrar
-const newsPerPage = 2; // Noticias a cargar en "cargar más"
+const newsPerPage = 4; // Noticias a cargar en "cargar más"
 let currentCategory = "todas";
 let allNews = []; // Almacenar todas las noticias
 
