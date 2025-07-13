@@ -105,3 +105,13 @@ button[data-action="toggle"]:hover {
 button[data-action="guardar"]:hover {
   background-color: #1e8e4f;
 }
+
+/* Botón de regreso */
+button[onclick*="index.php"] {
+  background-color: #6c757d;
+}
+
+button[onclick*="index.php"]:hover {
+  background-color: #5a6268;
+}
+
