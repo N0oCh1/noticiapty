@@ -15,10 +15,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $usuario = trim($data['usuario']);
         $password = $data['password'];
 
-        // Crear instancia de Usuario sin parámetros
         $usuarioObj = new Usuario();
 
-        // Usar el nuevo método insertarUsuario()
         $registroResultado = $usuarioObj->insertarUsuario($nombre, $apellido, $usuario, $password, 'global');
 
         if ($registroResultado === true) {

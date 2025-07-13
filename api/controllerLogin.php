@@ -11,7 +11,7 @@ try {
             $usuarioInput = $data['usuario'];
             $passwordInput = $data['password'];
 
-            $usuarioObj = new Usuario(); // Constructor sin parámetros
+            $usuarioObj = new Usuario();
 
             if ($usuarioObj->verificarLogin($usuarioInput, $passwordInput)) {
                 echo json_encode([
