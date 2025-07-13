@@ -1,8 +1,6 @@
 <?php
-
-
 try {
-    require_once "../class/C_usuario.php"; // Asegúrate de incluir la clase Usuario
+    require_once "../class/C_usuario.php";
 
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
         header("Content-Type: application/json; charset=utf-8");
@@ -10,23 +8,43 @@ try {
         $data = json_decode(file_get_contents("php://input"), true);
 
         if (isset($data['usuario'], $data['password'])) {
-            $usuario = $data['usuario'];
-            $password = $data['password'];
+            $usuarioInput = $data['usuario'];
+            $passwordInput = $data['password'];
 
-            $usuarioObj = new Usuario($usuario, $password);
+            $usuarioObj = new Usuario(); // Constructor sin parámetros
 
-            if ($usuarioObj->verificarLogin()) {
-                echo json_encode(['success' => true, 'usuario_id' => $usuarioObj->getId()]);
+            if ($usuarioObj->verificarLogin($usuarioInput, $passwordInput)) {
+                echo json_encode([
+                    'success' => true,
+                    'usuario_id' => $usuarioObj->getId()
+                ]);
             } else {
-                echo json_encode(['success' => false, 'message' => 'Usuario o contraseña incorrectos']);
+                http_response_code(401); // Unauthorized
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'Usuario o contraseña incorrectos'
+                ]);
             }
         } else {
-            echo json_encode(['success' => false, 'message' => 'Faltan datos']);
+            http_response_code(400); // Bad Request
+            echo json_encode([
+                'success' => false,
+                'message' => 'Faltan datos: usuario o password'
+            ]);
         }
+    } else {
+        http_response_code(405); // Method Not Allowed
+        echo json_encode([
+            'success' => false,
+            'message' => 'Método no permitido'
+        ]);
     }
 } catch (Exception $e) {
-    // Loguear el error y devolver una respuesta JSON adecuada
     error_log("Error en el servidor: " . $e->getMessage());
-    echo json_encode(['success' => false, 'message' => 'Error interno del servidor: ' . $e->getMessage()]);
+    http_response_code(500); // Internal Server Error
+    echo json_encode([
+        'success' => false,
+        'message' => 'Error interno del servidor'
+    ]);
 }
 ?>

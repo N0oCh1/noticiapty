@@ -1,72 +1,4 @@
 <?php
-require_once "C_conexion.php"; // Asegúrate de que tu clase de conexión esté incluida correctamente
-
-class Usuario {
-    private int $id;
-    private string $nombre;
-    private string $apellido;
-    private string $usuario;
-    private string $contrasena;
-    private string $rol;
-    private bool $activo;
-    private $db; // Instancia de la clase db para acceso a la base de datos
-
-    // Constructor que recibe el usuario y la contraseña
-    public function __construct($usuario, $password) {
-        $this->usuario = $usuario;
-        $this->contrasena = $password;
-        $this->db = new db(); // Instancia de la clase db
-    }
-
-    // Método para verificar el inicio de sesión
-    public function verificarLogin() {
-        // Usamos el método select de db para obtener el usuario
-       
-        $user = $this->db->select("usuarios", "id, usuario, contrasena", "usuario = '$this->usuario'");
-
-        if ($user) {
-            $user = $user[0]; // Accedemos al primer elemento del array
-            if (password_verify($this->contrasena, $user['contrasena'])) {
-                // Si el usuario existe y la contraseña es correcta
-                $this->id = $user['id']; // Guardamos el ID del usuario
-                return true;
-            }
-        }
-
-        // Si no existe el usuario o la contraseña es incorrecta
-        return false;
-    }
-
-    // Método para obtener el ID del usuario (si se autenticó correctamente)
-    public function getId() {
-        return $this->id;
-    }
-
-    // Método para registrar un nuevo usuario
-    public function registrarUsuario($nombre, $apellido, $usuario, $contrasena, $rol = 'global') {
-    // 1. Verificar si el usuario ya existe
-    $existe = $this->db->select("usuarios", "*", "usuario = '$usuario'");
-    if ($existe && count($existe) > 0) {
-        return "duplicate"; // Usuario ya existe
-    }
-
-    // 2. Encriptar la contraseña
-    $hashedPassword = password_hash($contrasena, PASSWORD_BCRYPT);
-
-    // 3. Insertar nuevo usuario
-    $data = [
-        'nombre' => $nombre,
-        'apellido' => $apellido,
-        'usuario' => $usuario,
-        'contrasena' => $hashedPassword,
-        'rol' => $rol,
-    ];
-
-    return $this->db->insertSeguro('usuarios', $data); // true o false
-}
-}
-?>
-
 require_once "C_conexion.php";
 
 class Usuario {
@@ -86,12 +18,39 @@ class Usuario {
     $this->conexion = $this->db->getConexion();
   }
 
+  // ===========================
+  // MÉTODO: Verificar Login
+  // ===========================
+  public function verificarLogin(string $usuario, string $password): bool {
+    $resultado = $this->db->select("usuarios", "id, usuario, contrasena", "usuario = " . $this->conexion->quote($usuario));
+
+    if ($resultado && count($resultado) > 0) {
+      $usuarioData = $resultado[0];
+
+      if (password_verify($password, $usuarioData['contrasena'])) {
+        $this->id = $usuarioData['id'];
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  // ===========================
   // MÉTODO: Insertar nuevo usuario
-  public function insertarUsuario(string $nombre, string $apellido, string $usuario, string $contrasena, string $rol): bool {
+  // ===========================
+  public function insertarUsuario(string $nombre, string $apellido, string $usuario, string $contrasena, string $rol): bool|string {
+    // Validar si ya existe
+    $existe = $this->db->select("usuarios", "*", "usuario = " . $this->conexion->quote($usuario));
+    if ($existe && count($existe) > 0) {
+      return "duplicate";
+    }
+
+    // Asignar valores y encriptar contraseña
     $this->nombre = $nombre;
     $this->apellido = $apellido;
     $this->usuario = $usuario;
-    $this->contrasena = password_hash($contrasena, PASSWORD_DEFAULT);
+    $this->contrasena = password_hash($contrasena, PASSWORD_BCRYPT);
     $this->rol = $rol;
     $this->activo = true;
 
@@ -115,7 +74,9 @@ class Usuario {
     }
   }
 
+  // ===========================
   // MÉTODO: Obtener todos los usuarios
+  // ===========================
   public function obtenerUsuarios(): array|false {
     try {
       $usuarios = $this->db->select("usuarios", "*");
@@ -127,7 +88,9 @@ class Usuario {
     }
   }
 
-  // MÉTODO: Obtener un usuario por ID
+  // ===========================
+  // MÉTODO: Obtener usuario por ID
+  // ===========================
   public function obtenerUsuarioPorId(int $id): array|false {
     try {
       $resultado = $this->db->select("usuarios", "*", "id = $id");
@@ -139,7 +102,9 @@ class Usuario {
     }
   }
 
-  // MÉTODO: Actualizar un usuario por ID
+  // ===========================
+  // MÉTODO: Actualizar usuario por ID
+  // ===========================
   public function actualizarUsuario(int $id, array $nuevosDatos): bool {
     try {
       $campos = "";
@@ -160,7 +125,9 @@ class Usuario {
     }
   }
 
-  // MÉTODO: Desactivar usuario (soft delete)
+  // ===========================
+  // MÉTODO: Desactivar usuario
+  // ===========================
   public function desactivarUsuario(int $id): bool {
     try {
       $resultado = $this->db->update("usuarios", "activo = 0", "id = $id");
@@ -172,7 +139,13 @@ class Usuario {
     }
   }
 
-  // MÉTODO opcional: convertir datos en array
+  // ===========================
+  // GETTERS opcionales
+  // ===========================
+  public function getId(): int {
+    return $this->id;
+  }
+
   public function toArray(): array {
     return [
       'id' => $this->id,

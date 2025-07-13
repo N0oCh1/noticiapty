@@ -1,44 +1,57 @@
 <?php
 
-require_once "../class/C_usuario.php"; // Asegúrate de incluir la clase Usuario
+require_once "../class/C_usuario.php"; // Incluir la clase actualizada
 
-// Comprobamos si la solicitud es un POST
+// Verificar que la solicitud sea POST
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     header("Content-Type: application/json; charset=utf-8");
 
-    // Recibimos los datos desde el frontend
     $data = json_decode(file_get_contents("php://input"), true);
 
-    // Validamos que los campos necesarios estén presentes
+    // Validar campos obligatorios
     if (isset($data['nombre'], $data['apellido'], $data['usuario'], $data['password'])) {
-        $nombre = $data['nombre'];
-        $apellido = $data['apellido'];
-        $usuario = $data['usuario'];
+        $nombre = trim($data['nombre']);
+        $apellido = trim($data['apellido']);
+        $usuario = trim($data['usuario']);
         $password = $data['password'];
 
-        // Instanciamos la clase Usuario para registrar al nuevo usuario
-        $usuarioObj = new Usuario($usuario, $password);
+        // Crear instancia de Usuario sin parámetros
+        $usuarioObj = new Usuario();
 
-        // Llamamos al método para registrar el nuevo usuario
-        $registroResultado = $usuarioObj->registrarUsuario($nombre, $apellido, $usuario, $password);
+        // Usar el nuevo método insertarUsuario()
+        $registroResultado = $usuarioObj->insertarUsuario($nombre, $apellido, $usuario, $password, 'global');
 
-if ($registroResultado === true) {
-    echo json_encode([
-        'success' => true,
-        'message' => 'Usuario registrado correctamente.'
-    ]);
-} elseif ($registroResultado === "duplicate") {
-    echo json_encode([
-        'success' => false,
-        'message' => 'El nombre de usuario ya está en uso.'
-    ]);
+        if ($registroResultado === true) {
+            http_response_code(201); // Created
+            echo json_encode([
+                'success' => true,
+                'message' => 'Usuario registrado correctamente.'
+            ]);
+        } elseif ($registroResultado === "duplicate") {
+            http_response_code(409); // Conflict
+            echo json_encode([
+                'success' => false,
+                'message' => 'El nombre de usuario ya está en uso.'
+            ]);
+        } else {
+            http_response_code(500); // Internal Server Error
+            echo json_encode([
+                'success' => false,
+                'message' => 'Error al registrar el usuario.'
+            ]);
+        }
+    } else {
+        http_response_code(400); // Bad Request
+        echo json_encode([
+            'success' => false,
+            'message' => 'Faltan datos obligatorios (nombre, apellido, usuario, password).'
+        ]);
+    }
 } else {
+    http_response_code(405); // Method Not Allowed
     echo json_encode([
         'success' => false,
-        'message' => 'Error al registrar el usuario.'
+        'message' => 'Método HTTP no permitido. Usa POST.'
     ]);
-}
-
-}
 }
 ?>
