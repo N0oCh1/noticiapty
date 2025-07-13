@@ -18,7 +18,7 @@ document
         };
 
         // Enviar los datos al backend mediante fetch (POST)
-        fetch("../../api/controllerRegistroUsuario.php", {
+        fetch("../../../api/controllerRegistroUsuario.php", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -43,7 +43,8 @@ document
                         timerProgressBar: true,
                         showConfirmButton: false,
                     }).then(() => {
-                        window.location.href = "../iniciar-sesion/index.html";
+                        window.location.href =
+                            "../iniciar-sesion/index.html";
                     });
                 } else {
                     Swal.fire({

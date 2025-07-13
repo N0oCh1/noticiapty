@@ -14,82 +14,81 @@ $totalVisitas = $visita->ObtenerVisitas();
 
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="css/index.css" />
-        <link
-            rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-        />
-        <link
-            rel="icon"
-            type="image/png"
-            sizes="16x16"
-            href="../../logo.png"
-        />
-        <!-- SweetAlert2 CDN -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-        <title>NoticiaPTY - Noticias de Panamá</title>
-    </head>
-    <body>
-        <!-- Menú horizontal superior -->
-        <nav class="top-nav">
-            <div class="nav-brand"><a href="index.php">NoticiaPTY</a></div>
-            <div class="visitor-count">
-                <i class="fas fa-users"></i>
-<span id="visitorCount"><?php echo $totalVisitas . " "; ?>visitas</span>
-            </div>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="index.css" />
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link
+        rel="icon"
+        type="image/png"
+        sizes="16x16"
+        href="../../logo.png" />
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-            <div class="user-info" style="display: none;">
-    <button id="logoutBtn" onclick="logout()">
-       <i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión
-    </button>
-</div>
+    <title>NoticiaPTY - Noticias de Panamá</title>
+</head>
 
+<body>
+    <!-- Menú horizontal superior -->
+    <nav class="top-nav">
+        <div class="nav-brand"><a href="index.php">NoticiaPTY</a></div>
+        <div class="visitor-count">
+            <i class="fas fa-users"></i>
+            <span id="visitorCount"><?php echo $totalVisitas . " "; ?>visitas</span>
+        </div>
 
+        <div class="user-info" style="display: none;">
+            <button id="logoutBtn" onclick="logout()">
+                <i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión
+            </button>
+        </div>
 
 
-            <div class="nav-auth">
-                <div class="auth-btn-container">
-                    <a href="iniciar-sesion/index.html" class="auth-btn login-btn">
+
+
+        <div class="nav-auth">
+            <div class="auth-btn-container">
+                <a href="auth/iniciar-sesion/index.html" class="auth-btn login-btn">
                     <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
                 </a>
-                <a href="registro/index.html" class="auth-btn register-btn">
+                <a href="auth/registro/index.html" class="auth-btn register-btn">
                     <i class="fas fa-user-plus"></i> Registrarse
                 </a>
 
 
-                </div>
-                
             </div>
-        </nav>
 
-        <!-- Menú central de categorías -->
-        <nav class="main-nav">
-            <ul>
-                <li><a href="#" data-category="todas">Todas</a></li>
-                <li><a href="#" data-category="1">Deportes</a></li>
-                <li><a href="#" data-category="2">Política</a></li>
-                <li><a href="#" data-category="3">Tecnología</a></li>
-                <li>
-                    <a href="#" data-category="4"
-                        >Entretenimiento</a
-                    >
-                </li>
-            </ul>
-        </nav>
+        </div>
+    </nav>
 
-        <!-- Contenedor principal de noticias -->
-        <main class="news-container">
-            <div id="newsGrid" class="news-grid"></div>
-            <button id="loadMore" class="load-more-btn">
-                <i class="fas fa-sync"></i> Cargar más noticias
-            </button>
-        </main>
+    <!-- Menú central de categorías -->
+    <nav class="main-nav">
+        <ul>
+            <li><a href="#" data-category="todas">Todas</a></li>
+            <li><a href="#" data-category="1">Deportes</a></li>
+            <li><a href="#" data-category="2">Política</a></li>
+            <li><a href="#" data-category="3">Tecnología</a></li>
+            <li>
+                <a href="#" data-category="4">Entretenimiento</a>
+            </li>
+        </ul>
+    </nav>
 
-        <script src="js/index.js"></script>
+    <!-- Contenedor principal de noticias -->
+    <main class="news-container">
+        <div id="newsGrid" class="news-grid"></div>
+        <button id="loadMore" class="load-more-btn">
+            <i class="fas fa-sync"></i> Cargar más noticias
+        </button>
+    </main>
 
-    </body>
+    <script src="index.js"></script>
+
+</body>
+
 </html>

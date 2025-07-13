@@ -7,7 +7,7 @@ document
         const password = document.getElementById("password").value;
 
         if (usuario && password) {
-            fetch("../../api/controllerLogin.php", {
+            fetch("../../../api/controllerLogin.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ usuario, password }),
@@ -26,7 +26,7 @@ document
                             timerProgressBar: true,
                             showConfirmButton: false,
                         }).then(() => {
-                            window.location.href = "../index.php";
+                            window.location.href = "../../index.php";
                         });
                     } else {
                         Swal.fire({
