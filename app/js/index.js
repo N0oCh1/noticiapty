@@ -38,6 +38,7 @@ function loadInitialNews() {
                 (a, b) =>
                     new Date(b.fecha_creacion) - new Date(a.fecha_creacion)
             );
+            console.log("All news loaded:", allNews);
 
             // Mostrar solo las primeras 3 noticias
             renderNews(allNews.slice(0, initialNewsCount));
@@ -121,9 +122,15 @@ function renderNews(news) {
 }
 
 function createFeaturedNewsCard(article, className) {
-    const card = document.createElement("div");
+    const card = document.createElement("a"); // Usamos <a> en lugar de <div>
     card.className = `news-card ${className}`;
+    card.href = "#"; // Evitamos que el enlace se redirija automáticamente
 
+    // Al hacer clic en el card, almacenamos los datos de la noticia en localStorage
+    card.addEventListener("click", () => {
+        localStorage.setItem("noticia", JSON.stringify(article));
+        window.location.href = "../app/detalle-noticia/index.html"; // Redirigimos a la página de detalles
+    });
     const imageUrl =
         article.imagenes && article.imagenes.length > 0
             ? article.imagenes[0].imagen

@@ -22,15 +22,21 @@ $totalVisitas = $visita->ObtenerVisitas();
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
         />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="../../logo.png"
+        />
         <title>NoticiaPTY - Noticias de Panamá</title>
     </head>
     <body>
         <!-- Menú horizontal superior -->
         <nav class="top-nav">
-            <div class="nav-brand"><a href="index.html">NoticiaPTY</a></div>
+            <div class="nav-brand"><a href="index.php">NoticiaPTY</a></div>
             <div class="visitor-count">
                 <i class="fas fa-users"></i>
-            <span id="visitorCount"><?php echo $totalVisitas; ?></span> visitantes
+<span id="visitorCount"><?php echo $totalVisitas . " "; ?>visitas</span>
             </div>
             <div class="nav-auth">
                 <div class="auth-btn-container">
