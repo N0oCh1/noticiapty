@@ -6,11 +6,7 @@ let currentCategory = "todas";
 let allNews = []; // Almacenar todas las noticias
 
 document.addEventListener("DOMContentLoaded", () => {
-    // ...existing visitor counter code...
-
-    const visitors = parseInt(localStorage.getItem("visitors") || "0");
-    localStorage.setItem("visitors", visitors + 1);
-    document.getElementById("visitorCount").textContent = visitors + 1;
+  
 
     // Carga inicial de noticias
     loadInitialNews();

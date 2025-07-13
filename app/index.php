@@ -1,3 +1,17 @@
+<?php
+require_once "../class/visita.php";
+
+// Crear una nueva instancia de la clase Visita
+$visita = new Visita();
+
+// Guardar un nuevo visitante cada vez que alguien carga la página
+$visita->GuardarVisita();
+
+// Obtener la cantidad total de visitas
+$totalVisitas = $visita->ObtenerVisitas();
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -16,7 +30,7 @@
             <div class="nav-brand"><a href="index.html">NoticiaPTY</a></div>
             <div class="visitor-count">
                 <i class="fas fa-users"></i>
-                <span id="visitorCount">0</span> visitantes
+            <span id="visitorCount"><?php echo $totalVisitas; ?></span> visitantes
             </div>
             <div class="nav-auth">
                 <div class="auth-btn-container">
