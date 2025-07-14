@@ -26,7 +26,7 @@ $totalVisitas = $visita->ObtenerVisitas();
         rel="icon"
         type="image/png"
         sizes="16x16"
-        href="../../logo.png" />
+        href="../logo.png" />
     <!-- SweetAlert2 CDN -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
