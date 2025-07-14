@@ -19,10 +19,10 @@ try {
             if ($usuarioObj->verificarLogin($usuarioInput, $passwordInput)) {
                 // Guardar el ID del usuario en sesión
                 $_SESSION['usuario_id'] = $usuarioObj->getId();
-
+                
                 echo json_encode([
                     'success' => true,
-                    'usuario_id' => $usuarioObj->getId()
+                    'usuario_id' => $usuarioObj->getId(),
                 ]);
             } else {
                 http_response_code(401); // Unauthorized

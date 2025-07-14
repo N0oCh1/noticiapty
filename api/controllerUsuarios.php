@@ -13,7 +13,7 @@ $method = $_SERVER['REQUEST_METHOD'];
 $usuario = new Usuario();
 $id = isset($_GET['id']) ? intval($_GET['id']) : null;
 
-// Función para ocultar contraseña (igual que antes)
+// Función para ocultar contraseña
 function ocultarContrasena(array $usuarios) {
     if (isset($usuarios[0]) && is_array($usuarios[0])) {
         foreach ($usuarios as &$u) {
@@ -50,12 +50,6 @@ $usuarioSesionId = obtenerUsuarioSesionId();
 
 switch ($method) {
     case 'GET':
-        // Solo admins pueden ver todos los usuarios
-        if (!$usuarioSesionId || !validarPermiso($usuarioSesionId, 'admin')) {
-            http_response_code(403);
-            echo json_encode(["message" => "Permiso denegado"]);
-            exit;
-        }
 
         if ($id) {
             $data = $usuario->obtenerUsuarioPorId($id);
@@ -68,6 +62,12 @@ switch ($method) {
                 echo json_encode(["message" => "Usuario no encontrado"]);
             }
         } else {
+            // Solo admins pueden ver todos los usuarios
+            if (!$usuarioSesionId || !validarPermiso($usuarioSesionId, 'admin')) {
+                http_response_code(403);
+                echo json_encode(["message" => "Permiso denegado"]);
+                exit;
+            }
             $data = $usuario->obtenerUsuarios();
             if ($data && count($data) > 0) {
                 $data = ocultarContrasena($data);
