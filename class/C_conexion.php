@@ -85,5 +85,18 @@
             return false;
         }
     }
+
+  public function selectRaw($from, $fields = "*", $where = "1")
+  {
+    try {
+      $sql = "SELECT $fields FROM $from WHERE $where";
+      $stmt = $this->conexion->prepare($sql);
+      $stmt->execute();
+      return $stmt->fetchAll(PDO::FETCH_ASSOC); // ← Esto trae los datos correctamente
+    } catch (PDOException $e) {
+      // Puedes registrar el error si quieres para depurar
+      return []; // ← Devuelve un arreglo vacío en caso de error
+    }
   }
+}
 ?>

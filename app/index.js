@@ -79,6 +79,8 @@ function logout() {
 function loadAllNews() {
     const url = "../api/controllerNoticia.php"; // Traer todas las noticias sin filtro
 
+
+    
     fetch(url)
         .then((response) => response.json())
         .then((data) => {
@@ -238,7 +240,10 @@ function createFeaturedNewsCard(article, className) {
                 className === "main-news" ? 500 : 100
             )}...</p>
             <div class="news-meta">
-                <span>${article.autor}</span>
+                <span>${article.nombre_usuario} ${
+        article.apellido_usuario
+    }</span>
+
                 <span>${new Date(
                     article.fecha_creacion || article.fecha
                 ).toLocaleDateString()}</span>

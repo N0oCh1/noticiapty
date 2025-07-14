@@ -3,98 +3,111 @@ require_once "C_conexion.php";
 require_once "C_imagen.php";
 require_once "C_subirImagen.php";
 
-  class Noticia {
-    private $db;
-    private $db_conexion;
-    private int $id;
-    private string $titulo;
-    private string $contenido;
-    private string $autor;
-    private bool $activo;
-    private string $categoria;
-    private $imagen;
-    
-    public function __construct()
-    {
-      $this->db = new db();
-      $this->db_conexion = $this->db->getConexion();
+class Noticia
+{
+  private $db;
+  private $db_conexion;
+  private int $id;
+  private string $titulo;
+  private string $contenido;
+  private bool $activo;
+  private string $categoria;
+  private string $usuario;
+  private $imagen;
+
+  public function __construct()
+  {
+    $this->db = new db();
+    $this->db_conexion = $this->db->getConexion();
+  }
+
+  public function GuardarNoticia($titulo, $contenido, $categoria, $activo, $usuario, array $imagen = [])
+  {
+    $this->titulo = $titulo;
+    $this->contenido = $contenido;
+    $this->categoria = $categoria;
+    $this->activo = $activo;
+    $this->usuario = $usuario;
+    $this->imagen = $imagen;
+
+    $datos = array(
+      "titulo" => $this->titulo,
+      "contenido" => $this->contenido,
+      "categoria_id" => $this->categoria,
+      "activo" => $this->activo,
+      "usuario_id" => $this->usuario
+    );
+
+    try {
+      $this->db->insertSeguro("noticias", $datos);
+      $this->id = $this->db_conexion->lastInsertId();
+      $this->GuardarImagen($this->id, $this->imagen);
+      $this->db->disconnect();
+      return true;
+    } catch (Exception $e) {
+      // Puedes registrar el error o devolverlo
+      error_log("Error al guardar noticia: " . $e->getMessage());
+      $this->db->disconnect();
+      return false;
     }
-
-    public function GuardarNoticia($titulo, $contenido, $autor, $categoria, $activo, array $imagen=[]) {
-      $this->titulo = $titulo;
-      $this->contenido = $contenido;
-      $this->autor = $autor;
-      $this->categoria = $categoria;
-      $this->activo = $activo;
-      $this->imagen = $imagen;
+  }
 
 
-      $datos = array(
-        "titulo" => $this->titulo,
-        "contenido" => $this->contenido,
-        "autor" => $this->autor,
-        "categoria" => $this->categoria,
-        "activo" => $this->activo
-      );
-      try{
-        $this->db->insertSeguro("noticias", $datos);
-        $this->id = $this->db_conexion->lastInsertId();
-        $this->GuardarImagen($this->id, $this->imagen);
-        $this->db->disconnect();
-        return true;
-      }
-      catch(Exception $e){
-        throw new Exception("Error al guardar noticia");
-        $this->db->disconnect();
-        return false;
-      }
-    }
 
-    public function ObtenerNoticias($categoria = 'todas') {
+  public function ObtenerNoticias($categoria = 'todas')
+  {
     $classImagen = new Imagen();
     try {
-        $response = [];
-        
-        // Modificar la consulta para ordenar por ID descendente
-        if($categoria === 'todas') {
-            $data = $this->db->select("noticias", "*", "1 ORDER BY id DESC");
-        } else {
-            $data = $this->db->select("noticias", "*", "categoria = '$categoria' ORDER BY id DESC");
+      $response = [];
+
+      // JOIN con filtro para usuarios con rol 'publicador'
+      $selectFields = "n.*, u.nombre AS nombre_usuario, u.apellido AS apellido_usuario";
+      $fromTables = "noticias n 
+                       JOIN usuarios u ON n.usuario_id = u.id 
+                       AND u.rol = 'publicador'";
+
+      if ($categoria === 'todas') {
+        $data = $this->db->selectRaw($fromTables, $selectFields, "1 ORDER BY n.id DESC");
+      } else {
+        $data = $this->db->selectRaw($fromTables, $selectFields, "n.categoria_id = '$categoria' ORDER BY n.id DESC");
+      }
+
+      if (is_iterable($data)) {
+        foreach ($data as $noticia) {
+          $imagenes = $classImagen->ObtenerImagenes($noticia['id']);
+          $noticia['imagenes'] = $imagenes;
+          $response[] = $noticia;
         }
-        
-        foreach($data as $noticia){
-            $imagenes = $classImagen->ObtenerImagenes($noticia['id']);
-            $noticia['imagenes'] = $imagenes;
-            $response[] = $noticia;
-        }
-        
-        $this->db->disconnect();
-        return $response;
+      }
+
+      $this->db->disconnect();
+      return $response;
+    } catch (Exception $e) {
+      throw new Exception("Error al obtener noticias");
     }
-    catch(Exception $e){
-        throw new Exception("Error al obtener noticias");
-    }
-}
-    private function GuardarImagen($id_noticia,  $imagen) {
-      $total = count($imagen['name']);
-      $guardarImagen = new Imagen();
-      $procesar = new ImagenUploader();
-      
-      for($i = 0; $i < $total; $i++){
-        $file = [
-          'name' => $imagen['name'][$i],
-          'type' => $imagen['type'][$i],
-          'tmp_name' => $imagen['tmp_name'][$i],
-          'error' => $imagen['error'][$i],
-          'size' => $imagen['size'][$i]
-        ];
-        $imagen_procesada = $procesar->procesarImagen($file);
-        $guardarImagen->GuardarImagen($id_noticia, $imagen_procesada['ruta_original'], $imagen_procesada['tipo']);
-        if($i === 0) {
-          $rutaMinuatura = $procesar->generarMiniatura($imagen_procesada['ruta_original'], $imagen_procesada['tipo']);
-          $guardarImagen->GuardarImagen($id_noticia, $rutaMinuatura, $imagen_procesada['tipo']);
-        }
+  }
+
+
+  private function GuardarImagen($id_noticia,  $imagen)
+  {
+    $total = count($imagen['name']);
+    $guardarImagen = new Imagen();
+    $procesar = new ImagenUploader();
+
+    for ($i = 0; $i < $total; $i++) {
+      $file = [
+        'name' => $imagen['name'][$i],
+        'type' => $imagen['type'][$i],
+        'tmp_name' => $imagen['tmp_name'][$i],
+        'error' => $imagen['error'][$i],
+        'size' => $imagen['size'][$i]
+      ];
+      $imagen_procesada = $procesar->procesarImagen($file);
+      $guardarImagen->GuardarImagen($id_noticia, $imagen_procesada['ruta_original'], $imagen_procesada['tipo']);
+      if ($i === 0) {
+        $rutaMinuatura = $procesar->generarMiniatura($imagen_procesada['ruta_original'], $imagen_procesada['tipo']);
+        $guardarImagen->GuardarImagen($id_noticia, $rutaMinuatura, $imagen_procesada['tipo']);
       }
     }
   }
-?>
+}
