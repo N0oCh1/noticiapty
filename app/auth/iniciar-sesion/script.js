@@ -10,13 +10,15 @@ document
             fetch("../../../api/controllerLogin.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
+                credentials: "include", // ✅ Esto permite enviar cookies de sesión
                 body: JSON.stringify({ usuario, password }),
             })
                 .then((response) => response.json())
                 .then((data) => {
                     if (data.success) {
-                        sessionStorage.setItem("usuario", data.usuario);
+                        // Puedes usar sessionStorage para uso en frontend, pero ya la sesión está guardada en el backend
                         sessionStorage.setItem("usuario_id", data.usuario_id);
+                        sessionStorage.setItem("rol", data.rol);
 
                         Swal.fire({
                             icon: "success",

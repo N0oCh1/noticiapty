@@ -88,7 +88,7 @@ switch ($method) {
             exit;
         }
 
-        $rolSesion = obtenerRolPorId($usuarioSesionId);
+        $rolSesion = validarRolAdmin($usuarioSesionId) ? 'admin' : null;
         if ($rolSesion === null) {
             http_response_code(401);
             echo json_encode(["message" => "No autenticado"]);
