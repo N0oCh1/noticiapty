@@ -12,7 +12,7 @@ async function verificarSesionYPermiso() {
         title: "Acceso denegado",
         text: error.message || "No tienes permisos para acceder.",
       }).then(() => {
-        window.location.href = "../../login.html"; // o redirige a inicio
+        window.location.href = "../index.php"; // o redirige a inicio
       });
       return;
     }
