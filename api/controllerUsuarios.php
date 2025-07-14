@@ -2,7 +2,7 @@
 session_start(); // Inicio sesión para acceder a $_SESSION
 
 require_once "../class/C_usuario.php";
-require_once "../security.php"; // Archivo con las funciones validarRolAdmin, validarRolPeriodista, validarRolGeneral
+require_once "../utils/security.php"; // Archivo con las funciones validarRolAdmin, validarRolPeriodista, validarRolGeneral
 
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
