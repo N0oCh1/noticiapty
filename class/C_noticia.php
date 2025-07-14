@@ -54,6 +54,7 @@ class Noticia
 
 
 
+
   public function ObtenerNoticias($categoria = 'todas')
   {
     $classImagen = new Imagen();

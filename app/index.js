@@ -16,10 +16,16 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelector(".main-nav").addEventListener("click", (e) => {
         if (e.target.tagName === "A") {
             e.preventDefault();
-            currentCategory = e.target.dataset.category; // Actualiza la categoría
+
+            const selectedCategory = e.target.dataset.category;
+            currentCategory =
+                selectedCategory === "todas"
+                    ? "todas"
+                    : parseInt(selectedCategory);
+
             document.getElementById("newsGrid").innerHTML = "";
             currentPage = 1;
-            loadFilteredNews(); // Cargar noticias filtradas por categoría
+            loadFilteredNews();
         }
     });
 
@@ -62,8 +68,10 @@ function logout() {
                         // sessionStorage.removeItem("usuario_id"); // si usas ID también
 
                         // Paso 3: Actualizar la interfaz
-                        document.querySelector(".user-info").style.display = "none";
-                        document.querySelector(".nav-auth").style.display = "flex";
+                        document.querySelector(".user-info").style.display =
+                            "none";
+                        document.querySelector(".nav-auth").style.display =
+                            "flex";
 
                         // Paso 4: Mostrar mensaje de éxito y redirigir
                         Swal.fire({
@@ -71,12 +79,14 @@ function logout() {
                             title: "Sesión cerrada",
                             text: "Has cerrado sesión correctamente.",
                             timer: 2000,
-                            showConfirmButton: false
+                            showConfirmButton: false,
                         }).then(() => {
                             window.location.href = "../index.php";
                         });
                     } else {
-                        throw new Error(data.message || "No se pudo cerrar sesión.");
+                        throw new Error(
+                            data.message || "No se pudo cerrar sesión."
+                        );
                     }
                 })
                 .catch((error) => {
@@ -90,21 +100,21 @@ function logout() {
     });
 }
 
-
 // Función para cargar todas las noticias
 function loadAllNews() {
     const url = "../api/controllerNoticia.php"; // Traer todas las noticias sin filtro
 
-
-    
     fetch(url)
-        .then((response) => response.json())
+        .then((response) => response.text()) // Recibe como texto crudo
+        .then((text) => {
+            console.log("Respuesta cruda:", text);
+            return JSON.parse(text); // intenta parsear JSON manualmente para capturar el error
+        })
         .then((data) => {
-            // Almacenar todas las noticias
             allNews = data;
             console.log("All news loaded:", allNews);
             // Mostrar las noticias filtradas según la categoría inicial
-            loadFilteredNews();
+            console.log(loadFilteredNews());
         })
         .catch((error) => console.error("Error:", error));
 }
@@ -112,19 +122,31 @@ function loadAllNews() {
 // Función para cargar noticias filtradas por categoría
 function loadFilteredNews() {
     // Filtrar noticias según la categoría seleccionada y activo = 1
+
+    console.log("🟡 DEBUG de tipos y valores");
+
+    allNews.forEach((news) => {
+        console.log("Activo:", news.activo, "Tipo:", typeof news.activo);
+
+        console.log("Tipos:", typeof news.categoria_id, typeof currentCategory);
+        console.log("Valores:", news.categoria_id, currentCategory);
+    });
+
     const filteredNews =
         currentCategory === "todas"
-            ? allNews.filter((news) => news.activo === "1") // Filtrar por activo = 1
+            ? allNews.filter((news) => Number(news.activo) === 1)
             : allNews.filter(
                   (news) =>
-                      news.categoria_id === currentCategory &&
-                      news.activo === "1"
-              ); // Filtrar por categoría y activo = 1
+                      Number(news.categoria_id) === Number(currentCategory) &&
+                      Number(news.activo) === 1
+              );
 
+    console.log("Filtered news:", filteredNews);
     // Ordenar las noticias por fecha descendente
     const sortedNews = filteredNews.sort(
         (a, b) => new Date(b.fecha_creacion) - new Date(a.fecha_creacion)
     );
+    console.log("Sorted news:", sortedNews);
 
     // Verificar si no hay noticias después del filtrado
     if (sortedNews.length === 0) {
@@ -151,12 +173,12 @@ function loadMoreNews() {
     // Filtrar noticias según la categoría seleccionada y activo = 1
     const filteredNews =
         currentCategory === "todas"
-            ? allNews.filter((news) => news.activo === "1") // Filtrar por activo = 1
+            ? allNews.filter((news) => Number(news.activo) === 1)
             : allNews.filter(
                   (news) =>
-                      news.categoria_id === currentCategory &&
-                      news.activo === "1"
-              ); // Filtrar por categoría y activo = 1
+                      Number(news.categoria_id) === Number(currentCategory) &&
+                      Number(news.activo) === 1
+              );
 
     const nextNews = filteredNews.slice(startIndex, startIndex + newsPerPage);
 
