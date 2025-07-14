@@ -1,4 +1,5 @@
 <?php
+
 try {
     require_once "../class/C_usuario.php";
 

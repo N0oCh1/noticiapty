@@ -39,7 +39,8 @@ document
                         });
                     }
                 })
-                .catch(() => {
+                .catch((error) => {
+                    console.error("Error en la solicitud:", error);
                     Swal.fire({
                         icon: "error",
                         title: "Error",
