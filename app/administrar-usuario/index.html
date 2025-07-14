@@ -1,11 +1,65 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <meta charset="UTF-8" />
+  <title>Panel de Control Usuarios</title>
+  <link rel="stylesheet" href="../css/panel_usuarios.css" />
 </head>
 <body>
+
+  <h1>Panel de Control de Usuarios</h1>
+
+  <!-- Botón de regreso -->
+  <div style="margin-bottom: 20px;">
+    <button onclick="window.location.href='../index.php'" style="background-color: #6c757d;">
+      ← Volver al Inicio
+    </button>
+  </div>
   
+  <!-- Formulario para agregar usuario -->
+  <form id="formAddUser">
+    <h2>Agregar Nuevo Usuario</h2>
+    <label>Nombre:
+      <input type="text" name="nombre" required />
+    </label>
+    <label>Apellido:
+      <input type="text" name="apellido" required />
+    </label>
+    <label>Usuario:
+      <input type="text" name="usuario" required />
+    </label>
+    <label>Contraseña:
+      <input type="password" name="contrasena" required />
+    </label>
+    <label>Rol:
+      <select name="rol" required>
+        <option value="">Seleccione</option>
+        <option value="periodista">Periodista</option>
+        <option value="usuario">Usuario</option>
+      </select>
+    </label>
+    <button type="submit">Agregar Usuario</button>
+  </form>
+
+  <!-- Tabla con usuarios -->
+  <h2>Lista de Usuarios</h2>
+  <table id="usersTable">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Usuario</th>
+        <th>Rol</th>
+        <th>Activo</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Aquí se llenarán los usuarios -->
+    </tbody>
+  </table>
+
+  <script src="panel_usuarios.js"></script>
 </body>
 </html>

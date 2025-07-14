@@ -5,8 +5,8 @@
     public function __construct() {
       $sql_host="127.0.0.1";
       $sql_db = "noticiapty";
-      $sql_user="ruben";
-      $sql_pass="N0oCh1Feng";
+      $sql_user="root";
+      $sql_pass="demo";
 
       $url_conexion = "mysql:host=$sql_host;dbname=$sql_db;charset=utf8mb4";
       try{

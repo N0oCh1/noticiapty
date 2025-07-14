@@ -1,68 +1,160 @@
 <?php
-require_once "C_conexion.php"; // Asegúrate de que tu clase de conexión esté incluida correctamente
+require_once "C_conexion.php";
 
 class Usuario {
-    private int $id;
-    private string $nombre;
-    private string $apellido;
-    private string $usuario;
-    private string $contrasena;
-    private string $rol;
-    private bool $activo;
-    private $db; // Instancia de la clase db para acceso a la base de datos
+  private db $db;
+  private PDO $conexion;
 
-    // Constructor que recibe el usuario y la contraseña
-    public function __construct($usuario, $password) {
-        $this->usuario = $usuario;
-        $this->contrasena = $password;
-        $this->db = new db(); // Instancia de la clase db
+  private int $id;
+  private string $nombre;
+  private string $apellido;
+  private string $usuario;
+  private string $contrasena;
+  private string $rol;
+  private bool $activo;
+
+  public function __construct() {
+    $this->db = new db();
+    $this->conexion = $this->db->getConexion();
+  }
+
+  // ===========================
+  // MÉTODO: Verificar Login
+  // ===========================
+  public function verificarLogin(string $usuario, string $password): bool {
+    $resultado = $this->db->select("usuarios", "id, usuario, contrasena", "usuario = " . $this->conexion->quote($usuario));
+
+    if ($resultado && count($resultado) > 0) {
+      $usuarioData = $resultado[0];
+
+      if (password_verify($password, $usuarioData['contrasena'])) {
+        $this->id = $usuarioData['id'];
+        return true;
+      }
     }
 
-    // Método para verificar el inicio de sesión
-    public function verificarLogin() {
-        // Usamos el método select de db para obtener el usuario
-       
-        $user = $this->db->select("usuarios", "id, usuario, contrasena", "usuario = '$this->usuario'");
+    return false;
+  }
 
-        if ($user) {
-            $user = $user[0]; // Accedemos al primer elemento del array
-            if (password_verify($this->contrasena, $user['contrasena'])) {
-                // Si el usuario existe y la contraseña es correcta
-                $this->id = $user['id']; // Guardamos el ID del usuario
-                return true;
-            }
-        }
-
-        // Si no existe el usuario o la contraseña es incorrecta
-        return false;
-    }
-
-    // Método para obtener el ID del usuario (si se autenticó correctamente)
-    public function getId() {
-        return $this->id;
-    }
-
-    // Método para registrar un nuevo usuario
-    public function registrarUsuario($nombre, $apellido, $usuario, $contrasena, $rol = 'global') {
-    // 1. Verificar si el usuario ya existe
-    $existe = $this->db->select("usuarios", "*", "usuario = '$usuario'");
+  // ===========================
+  // MÉTODO: Insertar nuevo usuario
+  // ===========================
+  public function insertarUsuario(string $nombre, string $apellido, string $usuario, string $contrasena, string $rol): bool|string {
+    // Validar si ya existe
+    $existe = $this->db->select("usuarios", "*", "usuario = " . $this->conexion->quote($usuario));
     if ($existe && count($existe) > 0) {
-        return "duplicate"; // Usuario ya existe
+      return "duplicate";
     }
 
-    // 2. Encriptar la contraseña
-    $hashedPassword = password_hash($contrasena, PASSWORD_BCRYPT);
+    // Asignar valores y encriptar contraseña
+    $this->nombre = $nombre;
+    $this->apellido = $apellido;
+    $this->usuario = $usuario;
+    $this->contrasena = password_hash($contrasena, PASSWORD_BCRYPT);
+    $this->rol = $rol;
+    $this->activo = true;
 
-    // 3. Insertar nuevo usuario
-    $data = [
-        'nombre' => $nombre,
-        'apellido' => $apellido,
-        'usuario' => $usuario,
-        'contrasena' => $hashedPassword,
-        'rol' => $rol,
+    $datos = [
+      "nombre" => $this->nombre,
+      "apellido" => $this->apellido,
+      "usuario" => $this->usuario,
+      "contrasena" => $this->contrasena,
+      "rol" => $this->rol,
+      "activo" => $this->activo
     ];
 
-    return $this->db->insertSeguro('usuarios', $data); // true o false
+    try {
+      $this->db->insertSeguro("usuarios", $datos);
+      $this->id = $this->conexion->lastInsertId();
+      $this->db->disconnect();
+      return true;
+    } catch (Exception $e) {
+      $this->db->disconnect();
+      return false;
+    }
+  }
+
+  // ===========================
+  // MÉTODO: Obtener todos los usuarios
+  // ===========================
+  public function obtenerUsuarios(): array|false {
+    try {
+      $usuarios = $this->db->select("usuarios", "*");
+      $this->db->disconnect();
+      return $usuarios;
+    } catch (Exception $e) {
+      $this->db->disconnect();
+      return false;
+    }
+  }
+
+  // ===========================
+  // MÉTODO: Obtener usuario por ID
+  // ===========================
+  public function obtenerUsuarioPorId(int $id): array|false {
+    try {
+      $resultado = $this->db->select("usuarios", "*", "id = $id");
+      $this->db->disconnect();
+      return $resultado ? $resultado[0] : false;
+    } catch (Exception $e) {
+      $this->db->disconnect();
+      return false;
+    }
+  }
+
+  // ===========================
+  // MÉTODO: Actualizar usuario por ID
+  // ===========================
+  public function actualizarUsuario(int $id, array $nuevosDatos): bool {
+    try {
+      $campos = "";
+      foreach ($nuevosDatos as $clave => $valor) {
+        if ($clave == "contrasena") {
+          $valor = password_hash($valor, PASSWORD_DEFAULT);
+        }
+        $campos .= "$clave = " . $this->conexion->quote($valor) . ", ";
+      }
+      $campos = rtrim($campos, ", ");
+
+      $resultado = $this->db->update("usuarios", $campos, "id = $id");
+      $this->db->disconnect();
+      return $resultado;
+    } catch (Exception $e) {
+      $this->db->disconnect();
+      return false;
+    }
+  }
+
+  // ===========================
+  // MÉTODO: Desactivar usuario
+  // ===========================
+  public function desactivarUsuario(int $id): bool {
+    try {
+      $resultado = $this->db->update("usuarios", "activo = 0", "id = $id");
+      $this->db->disconnect();
+      return $resultado;
+    } catch (Exception $e) {
+      $this->db->disconnect();
+      return false;
+    }
+  }
+
+  // ===========================
+  // GETTERS opcionales
+  // ===========================
+  public function getId(): int {
+    return $this->id;
+  }
+
+  public function toArray(): array {
+    return [
+      'id' => $this->id,
+      'nombre' => $this->nombre,
+      'apellido' => $this->apellido,
+      'usuario' => $this->usuario,
+      'contrasena' => $this->contrasena,
+      'rol' => $this->rol,
+      'activo' => $this->activo,
+    ];
+  }
 }
-}
-?>
