@@ -7,7 +7,6 @@ async function cargarUsuarios() {
     if (!res.ok) throw new Error("Error al cargar usuarios");
     const usuarios = await res.json();
 
-    // Si el API devuelve un objeto con mensaje de error, lanzar error para manejarlo
     if (usuarios.message) throw new Error(usuarios.message);
 
     const tbody = document.querySelector("#usersTable tbody");
@@ -26,6 +25,8 @@ async function cargarUsuarios() {
           <select data-field="rol" data-id="${user.id}">
             <option value="usuario" ${user.rol === "usuario" ? "selected" : ""}>Usuario</option>
             <option value="periodista" ${user.rol === "periodista" ? "selected" : ""}>Periodista</option>
+            <!-- Si quieres incluir admin solo si el usuario tiene permiso -->
+            <!--<option value="admin" ${user.rol === "admin" ? "selected" : ""}>Admin</option>-->
           </select>
         </td>
         <td>${user.activo == 1 ? "Sí" : "No"}</td>
@@ -81,15 +82,18 @@ document.querySelector("#usersTable tbody").addEventListener("click", async e =>
   if (!tr) return;
 
   const id = target.dataset.id;
+  if (!id) {
+    alert("ID inválido");
+    return;
+  }
   const action = target.dataset.action;
 
   if (action === "toggle") {
-    // Aquí usamos PUT para actualizar el campo 'activo' (en tu API está en PUT para actualizar)
     const nuevoEstado = tr.classList.contains("active") ? 0 : 1;
 
     try {
       const res = await fetch(`${apiUrl}?id=${id}`, {
-        method: "PUT", // Cambié DELETE por PUT para actualizar estado activo
+        method: "PUT",  // Asegúrate que backend acepta PUT para esto
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ activo: nuevoEstado })
       });
@@ -105,10 +109,10 @@ document.querySelector("#usersTable tbody").addEventListener("click", async e =>
     }
 
   } else if (action === "guardar") {
-    // Guardar cambios editables (nombre, apellido, usuario, rol)
-    const nombre = tr.querySelector('[data-field="nombre"]').textContent.trim();
-    const apellido = tr.querySelector('[data-field="apellido"]').textContent.trim();
-    const usuario = tr.querySelector('[data-field="usuario"]').textContent.trim();
+    // Mejor usar innerText para evitar HTML
+    const nombre = tr.querySelector('[data-field="nombre"]').innerText.trim();
+    const apellido = tr.querySelector('[data-field="apellido"]').innerText.trim();
+    const usuario = tr.querySelector('[data-field="usuario"]').innerText.trim();
     const rol = tr.querySelector('[data-field="rol"]').value;
 
     if (!nombre || !apellido || !usuario || !rol) {
