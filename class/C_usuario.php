@@ -157,4 +157,20 @@ class Usuario {
       'activo' => $this->activo,
     ];
   }
+
+  //obtener rol por ID
+  public function obtenerRolPorId(int $id): ?string {
+      try {
+          $resultado = $this->db->select("usuarios", "rol", "id = $id");
+          $this->db->disconnect();
+          if ($resultado && count($resultado) > 0) {
+              return $resultado[0]['rol'];
+          }
+          return null;
+      } catch (Exception $e) {
+          $this->db->disconnect();
+          return null;
+      }
+  }
 }
+?>

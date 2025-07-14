@@ -2,6 +2,8 @@
 try {
     require_once "../class/C_usuario.php";
 
+    session_start(); // ¡Muy importante iniciar sesión!
+
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
         header("Content-Type: application/json; charset=utf-8");
 
@@ -14,6 +16,9 @@ try {
             $usuarioObj = new Usuario();
 
             if ($usuarioObj->verificarLogin($usuarioInput, $passwordInput)) {
+                // Guardar el ID del usuario en sesión
+                $_SESSION['usuario_id'] = $usuarioObj->getId();
+
                 echo json_encode([
                     'success' => true,
                     'usuario_id' => $usuarioObj->getId()
