@@ -1,5 +1,8 @@
 <?php
+session_start(); // Inicio sesión para acceder a $_SESSION
+
 require_once "../class/C_usuario.php";
+require_once "../utils/security.php"; // Archivo con las funciones validarRolAdmin, validarRolPeriodista, validarRolGeneral
 
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
@@ -10,24 +13,50 @@ $method = $_SERVER['REQUEST_METHOD'];
 $usuario = new Usuario();
 $id = isset($_GET['id']) ? intval($_GET['id']) : null;
 
-// Función para ocultar contraseña en la respuesta
+// Función para ocultar contraseña (igual que antes)
 function ocultarContrasena(array $usuarios) {
-    // Si es un array de usuarios (lista)
     if (isset($usuarios[0]) && is_array($usuarios[0])) {
         foreach ($usuarios as &$u) {
             unset($u['contrasena']);
         }
         return $usuarios;
     }
-    // Si es un solo usuario
     if (isset($usuarios['contrasena'])) {
         unset($usuarios['contrasena']);
     }
     return $usuarios;
 }
 
+// Obtener id usuario sesión
+function obtenerUsuarioSesionId() {
+    return $_SESSION['usuario_id'] ?? null;
+}
+
+// Validar autenticación y rol mínimo requerido
+function validarPermiso(int $usuarioId, string $permiso): bool {
+    switch ($permiso) {
+        case 'admin':
+            return validarRolAdmin($usuarioId);
+        case 'periodista':
+            return validarRolPeriodista($usuarioId);
+        case 'general':
+            return validarRolGeneral($usuarioId);
+        default:
+            return false;
+    }
+}
+
+$usuarioSesionId = obtenerUsuarioSesionId();
+
 switch ($method) {
     case 'GET':
+        // Solo admins pueden ver todos los usuarios
+        if (!$usuarioSesionId || !validarPermiso($usuarioSesionId, 'admin')) {
+            http_response_code(403);
+            echo json_encode(["message" => "Permiso denegado"]);
+            exit;
+        }
+
         if ($id) {
             $data = $usuario->obtenerUsuarioPorId($id);
             if ($data) {
@@ -52,6 +81,20 @@ switch ($method) {
         break;
 
     case 'POST':
+        // Solo usuarios autenticados pueden crear otros usuarios
+        if (!$usuarioSesionId) {
+            http_response_code(401);
+            echo json_encode(["message" => "No autenticado"]);
+            exit;
+        }
+
+        $rolSesion = obtenerRolPorId($usuarioSesionId);
+        if ($rolSesion === null) {
+            http_response_code(401);
+            echo json_encode(["message" => "No autenticado"]);
+            exit;
+        }
+
         $input = json_decode(file_get_contents("php://input"), true);
 
         if (!isset($input['nombre'], $input['apellido'], $input['usuario'], $input['contrasena'], $input['rol'])) {
@@ -59,6 +102,15 @@ switch ($method) {
             echo json_encode(["message" => "Datos incompletos"]);
             exit;
         }
+
+        // Validar permiso para crear usuario con rol admin o periodista (solo admins)
+        if (in_array($input['rol'], ['admin', 'periodista']) && $rolSesion !== 'admin') {
+            http_response_code(403);
+            echo json_encode(["message" => "No tienes permisos para crear usuarios con rol '{$input['rol']}'"]);
+            exit;
+        }
+
+        // Para roles distintos a admin o periodista, si quieres podrías agregar más lógica aquí
 
         $ok = $usuario->insertarUsuario(
             $input['nombre'],
@@ -81,11 +133,19 @@ switch ($method) {
         break;
 
     case 'PUT':
+        if (!$usuarioSesionId) {
+            http_response_code(401);
+            echo json_encode(["message" => "No autenticado"]);
+            exit;
+        }
         if (!$id) {
             http_response_code(400);
             echo json_encode(["message" => "Se requiere el ID para actualizar"]);
             exit;
         }
+
+        // Aquí podrías validar permisos más específicos según necesidad
+        // Por ejemplo, sólo admin puede actualizar ciertos campos
 
         $input = json_decode(file_get_contents("php://input"), true);
         if (!$input) {
@@ -104,17 +164,21 @@ switch ($method) {
         }
         break;
 
-    // Ahora DELETE sirve para cambiar activo a 0 o 1 (toggle)
     case 'DELETE':
+        // Solo admin puede activar/desactivar usuarios
+        if (!$usuarioSesionId || !validarPermiso($usuarioSesionId, 'admin')) {
+            http_response_code(403);
+            echo json_encode(["message" => "Permiso denegado"]);
+            exit;
+        }
+
         if (!$id) {
             http_response_code(400);
             echo json_encode(["message" => "Se requiere el ID para cambiar estado"]);
             exit;
         }
 
-        // Esperamos recibir en JSON el nuevo estado activo (0 o 1)
         $input = json_decode(file_get_contents("php://input"), true);
-
         if (!isset($input['activo'])) {
             http_response_code(400);
             echo json_encode(["message" => "Se requiere el estado activo (0 o 1)"]);
