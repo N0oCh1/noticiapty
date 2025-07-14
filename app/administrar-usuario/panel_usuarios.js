@@ -25,8 +25,7 @@ async function cargarUsuarios() {
           <select data-field="rol" data-id="${user.id}">
             <option value="usuario" ${user.rol === "usuario" ? "selected" : ""}>Usuario</option>
             <option value="periodista" ${user.rol === "periodista" ? "selected" : ""}>Periodista</option>
-            <!-- Si quieres incluir admin solo si el usuario tiene permiso -->
-            <!--<option value="admin" ${user.rol === "admin" ? "selected" : ""}>Admin</option>-->
+            <option value="admin" ${user.rol === "admin" ? "selected" : ""}>Admin</option>-->
           </select>
         </td>
         <td>${user.activo == 1 ? "Sí" : "No"}</td>

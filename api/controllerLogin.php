@@ -2,7 +2,7 @@
 try {
     require_once "../class/C_usuario.php";
 
-    session_start(); // ¡Muy importante iniciar sesión!
+    session_start();
 
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
         header("Content-Type: application/json; charset=utf-8");
