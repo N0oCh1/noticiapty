@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-// Función de logout con SweetAlert
+// Función de logout con SweetAlert y cierre de sesión en backend
 function logout() {
     Swal.fire({
         title: "¿Estás seguro?",
@@ -52,28 +52,44 @@ function logout() {
         cancelButtonText: "Cancelar",
     }).then((result) => {
         if (result.isConfirmed) {
-            // Eliminar datos de sesión
-            sessionStorage.removeItem("usuario");
-            // sessionStorage.removeItem("usuario_id"); // Si lo usas
+            // Paso 1: Llamar al backend para destruir la sesión del servidor
+            fetch("../api/logoutController.php")
+                .then((res) => res.json())
+                .then((data) => {
+                    if (data.success) {
+                        // Paso 2: Limpiar datos de sesión del navegador
+                        sessionStorage.removeItem("usuario");
+                        // sessionStorage.removeItem("usuario_id"); // si usas ID también
 
-            // Actualizar la interfaz
-            document.querySelector(".user-info").style.display = "none";
-            document.querySelector(".nav-auth").style.display = "flex";
+                        // Paso 3: Actualizar la interfaz
+                        document.querySelector(".user-info").style.display = "none";
+                        document.querySelector(".nav-auth").style.display = "flex";
 
-            // Mostrar mensaje de éxito
-            Swal.fire({
-                icon: "success",
-                title: "Sesión cerrada",
-                text: "Has cerrado sesión correctamente.",
-                timer: 2000,
-                showConfirmButton: false
-            }).then(() => {
-                // Redirigir después de cerrar la alerta
-                window.location.href = "../index.php";
-            });
+                        // Paso 4: Mostrar mensaje de éxito y redirigir
+                        Swal.fire({
+                            icon: "success",
+                            title: "Sesión cerrada",
+                            text: "Has cerrado sesión correctamente.",
+                            timer: 2000,
+                            showConfirmButton: false
+                        }).then(() => {
+                            window.location.href = "../index.php";
+                        });
+                    } else {
+                        throw new Error(data.message || "No se pudo cerrar sesión.");
+                    }
+                })
+                .catch((error) => {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error",
+                        text: error.message || "Error al cerrar sesión.",
+                    });
+                });
         }
     });
 }
+
 
 // Función para cargar todas las noticias
 function loadAllNews() {
