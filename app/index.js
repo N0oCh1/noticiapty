@@ -108,17 +108,15 @@ function logout() {
 
 // Cargar todas las noticias
 function loadAllNews() {
-    fetch("../api/controllerNoticia.php",{
-        method: "GET",
-    })
+    fetch("../api/controllerNoticia.php")
         .then((response) => response.text())
         .then((text) => {
             return JSON.parse(text);
         })
         .then((data) => {
             allNews = data;
-            console.log("Noticias cargadas:", data);
             loadFilteredNews();
+            console.log("Noticias cargadas:", data);
         })
         .catch((error) => console.error("Error:", error));
 }
