@@ -2,7 +2,7 @@
 try {
     require_once "../class/C_usuario.php";
 
-    session_start(); // ¡Muy importante iniciar sesión!
+    session_start(); 
 
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
         header("Content-Type: application/json; charset=utf-8");
@@ -18,10 +18,10 @@ try {
             if ($usuarioObj->verificarLogin($usuarioInput, $passwordInput)) {
                 // Guardar el ID del usuario en sesión
                 $_SESSION['usuario_id'] = $usuarioObj->getId();
-
+                
                 echo json_encode([
                     'success' => true,
-                    'usuario_id' => $usuarioObj->getId()
+                    'usuario_id' => $usuarioObj->getId(),
                 ]);
             } else {
                 http_response_code(401); // Unauthorized
