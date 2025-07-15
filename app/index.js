@@ -114,9 +114,9 @@ function loadAllNews() {
             return JSON.parse(text);
         })
         .then((data) => {
+            console.log("Noticias cargadas:", data);
             allNews = data;
             loadFilteredNews();
-            console.log("Noticias cargadas:", data);
         })
         .catch((error) => console.error("Error:", error));
 }
