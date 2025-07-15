@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Publicar Noticia</title>
+  <link rel="stylesheet" href="../css/formulario_noticias.css" />
+</head>
+<body>
+  <h1>Publicar Noticia</h1>
+
+  <form id="formNoticia" enctype="multipart/form-data">
+    <input type="hidden" id="usuario_id" name="usuario" />
+
+    <label for="titulo">Título:</label>
+    <input type="text" name="titulo" id="titulo" required>
+
+    <label for="contenido">Contenido:</label>
+    <textarea name="contenido" id="contenido" rows="10" required></textarea>
+
+    <label for="categoria">Categoría:</label>
+    <select name="categoria" id="categoria" required>
+      <option value="">Selecciona una categoría</option>
+      <option value="1">Deportes</option>
+      <option value="2">Política</option>
+      <option value="3">Tecnología</option>
+      <option value="4">Entretenimiento</option>
+    </select>
+
+    <label for="activo">¿Publicar inmediatamente?</label>
+    <select name="activo" id="activo">
+      <option value="1">Sí</option>
+      <option value="0">No</option>
+    </select>
+
+    <label for="imagen">Imágenes:</label>
+    <input type="file" name="imagen[]" id="imagen" accept="image/*" multiple required>
+
+    <button type="submit">Guardar Noticia</button>
+  </form>
+
+  <script src="formulario-noticia.js"></script>
+</body>
+</html>

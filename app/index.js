@@ -30,6 +30,16 @@ document.addEventListener("DOMContentLoaded", () => {
                         });
                     }
                 }
+
+                if (data.rol === "publicador") {
+                    const publicarBtn = document.getElementById("publicarBtn");
+                    if (publicarBtn) {
+                        publicarBtn.style.display = "inline-block";
+                        publicarBtn.addEventListener("click", () => {
+                            window.location.href = "../app/formulario-noticia/index.html";
+                        });
+                    }
+                }
             } else {
                 document.querySelector(".user-info").style.display = "none";
                 document.querySelector(".nav-auth").style.display = "flex";
