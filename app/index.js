@@ -4,7 +4,7 @@ const initialNewsCount = 3;
 const newsPerPage = 4;
 let currentCategory = "todas";
 let allNews = [];
-
+const usuario = sessionStorage.getItem("usuario");
 document.addEventListener("DOMContentLoaded", () => {
     // Verificar sesión desde el servidor
     fetch("../api/controllerSessionInfo.php", {
@@ -13,9 +13,18 @@ document.addEventListener("DOMContentLoaded", () => {
     })
         .then((res) => res.json())
         .then((data) => {
+
+            console.log("Datos de sesión:", data);
             if (data.success) {
                 sessionStorage.setItem("usuario_id", data.usuario_id);
                 sessionStorage.setItem("rol", data.rol);
+
+                // Mostrar nombre de usuario
+                const usernameDisplay =
+                    document.getElementById("usernameDisplay");
+                if (usernameDisplay) {
+                    usernameDisplay.textContent = `Hola, ${usuario}`;
+                }
 
                 document.querySelector(".user-info").style.display = "flex";
                 document.querySelector(".nav-auth").style.display = "none";
@@ -26,7 +35,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     if (adminBtn) {
                         adminBtn.style.display = "inline-block";
                         adminBtn.addEventListener("click", () => {
-                            window.location.href = "../app/administrar-usuario/index.html";
+                            window.location.href =
+                                "../app/administrar-usuario/index.html";
                         });
                     }
                 }
@@ -36,7 +46,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     if (publicarBtn) {
                         publicarBtn.style.display = "inline-block";
                         publicarBtn.addEventListener("click", () => {
-                            window.location.href = "../app/formulario-noticia/index.html";
+                            window.location.href =
+                                "../app/formulario-noticia/index.html";
                         });
                     }
                 }

@@ -98,5 +98,16 @@
       return []; // ← Devuelve un arreglo vacío en caso de error
     }
   }
+
+  public function delete($table, $condition)
+  {
+    $sql = "DELETE FROM $table WHERE $condition";
+    try {
+      return $this->conexion->exec($sql); // Devuelve cuántas filas fueron afectadas
+    } catch (PDOException $e) {
+      echo "Error al eliminar: " . $e->getMessage();
+      return false;
+    }
+  }
 }
 ?>
