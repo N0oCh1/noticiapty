@@ -1,7 +1,6 @@
 <?php
 session_start();
 header("Content-Type: application/json");
-
 if (isset($_SESSION['usuario_id'], $_SESSION['rol'])) {
     echo json_encode([
         "success" => true,

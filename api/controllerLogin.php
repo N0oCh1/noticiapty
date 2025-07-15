@@ -16,13 +16,21 @@ try {
 
             $usuarioObj = new Usuario();
 
-            if ($usuarioObj->verificarLogin($usuarioInput, $passwordInput)) {
-                // Guardar el ID del usuario en sesión
-                $_SESSION['usuario_id'] = $usuarioObj->getId();
-                
+            $datosLogin = $usuarioObj->verificarLogin($usuarioInput, $passwordInput);
+
+            if ($datosLogin) {
+                // Guardar el ID y rol del usuario en sesión
+                $_SESSION['usuario_id'] = $datosLogin['id'];
+                $_SESSION['rol'] = $datosLogin['rol'];
+
+                http_response_code(200); // OK
                 echo json_encode([
                     'success' => true,
-                    'usuario_id' => $usuarioObj->getId(),
+                    'usuario_id' => $datosLogin['id'],
+                    'nombre' => $datosLogin['nombre'],
+                    'apellido' => $datosLogin['apellido'],
+                    'usuario' => $datosLogin['usuario'],
+                    'rol' => $datosLogin['rol']
                 ]);
             } else {
                 http_response_code(401); // Unauthorized

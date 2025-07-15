@@ -21,20 +21,33 @@ class Usuario {
   // ===========================
   // MÉTODO: Verificar Login
   // ===========================
-  public function verificarLogin(string $usuario, string $password): bool {
-    $resultado = $this->db->select("usuarios", "id, usuario, contrasena", "usuario = " . $this->conexion->quote($usuario));
+  public function verificarLogin(string $usuario, string $password): array|false {
+    $resultado = $this->db->select("usuarios", "id, nombre, apellido, usuario, contrasena, rol", "usuario = " . $this->conexion->quote($usuario));
 
     if ($resultado && count($resultado) > 0) {
-      $usuarioData = $resultado[0];
+        $usuarioData = $resultado[0];
 
-      if (password_verify($password, $usuarioData['contrasena'])) {
-        $this->id = $usuarioData['id'];
-        return true;
-      }
+        if (password_verify($password, $usuarioData['contrasena'])) {
+            // Asignar valores internos por si se usan luego
+            $this->id = $usuarioData['id'];
+            $this->nombre = $usuarioData['nombre'];
+            $this->apellido = $usuarioData['apellido'];
+            $this->usuario = $usuarioData['usuario'];
+            $this->rol = $usuarioData['rol'];
+
+            // Devolver info útil al frontend o controlador
+            return [
+                "id" => $usuarioData['id'],
+                "nombre" => $usuarioData['nombre'],
+                "apellido" => $usuarioData['apellido'],
+                "usuario" => $usuarioData['usuario'],
+                "rol" => $usuarioData['rol']
+            ];
+        }
     }
-
     return false;
   }
+
 
   // ===========================
   // MÉTODO: Insertar nuevo usuario
@@ -144,6 +157,10 @@ class Usuario {
   // ===========================
   public function getId(): int {
     return $this->id;
+  }
+
+  public function getRol(): string {
+    return $this->rol;
   }
 
   public function toArray(): array {

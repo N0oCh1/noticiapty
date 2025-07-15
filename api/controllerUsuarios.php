@@ -27,10 +27,6 @@ function ocultarContrasena(array $usuarios) {
     return $usuarios;
 }
 
-// Obtener id usuario sesión
-function obtenerUsuarioSesionId() {
-    return $_SESSION['usuario_id'] ?? null;
-}
 
 // Validar autenticación y rol mínimo requerido
 function validarPermiso(int $usuarioId, string $permiso): bool {
@@ -46,7 +42,7 @@ function validarPermiso(int $usuarioId, string $permiso): bool {
     }
 }
 
-$usuarioSesionId = obtenerUsuarioSesionId();
+$usuarioSesionId = $_SESSION['usuario_id'] ?? null;
 
 switch ($method) {
     case 'GET':
@@ -88,7 +84,7 @@ switch ($method) {
             exit;
         }
 
-        $rolSesion = obtenerRolPorId($usuarioSesionId);
+        $rolSesion = validarRolAdmin($usuarioSesionId) ? 'admin' : null;
         if ($rolSesion === null) {
             http_response_code(401);
             echo json_encode(["message" => "No autenticado"]);
