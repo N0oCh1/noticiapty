@@ -43,10 +43,13 @@ $totalVisitas = $visita->ObtenerVisitas();
         </div>
 
         <div class="user-info" style="display: none;">
+            <!-- Mostrar nombre de usuario y rol -->
+            <button id="publicarBtn" style="display: none; margin-right: 10px;">
+                <i class="fas fa-newspaper"></i> Publicar Noticia</button>
+                
             <!-- Botón solo visible si el usuario es admin (se controla por JS) -->
             <button id="adminBtn" style="display: none; margin-right: 10px;">
-                <i class="fas fa-users-cog"></i> Administrar Usuarios
-            </button>
+                <i class="fas fa-users-cog"></i> Administrar Usuarios</button>
 
             <button id="logoutBtn" onclick="logout()">
                 <i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión
