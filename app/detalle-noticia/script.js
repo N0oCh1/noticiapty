@@ -1,51 +1,74 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // Verificar si hay un usuario en sessionStorage
-    const usuario = sessionStorage.getItem("usuario");
-    // const usuarioId = sessionStorage.getItem("usuario_id");
-
-    if (usuario) {
-        // Si hay un usuario, mostrar el botón de logout
-        document.querySelector(".user-info").style.display = "flex"; // Mostrar el área del usuario
-        document.querySelector(".nav-auth").style.display = "none"; // Ocultar los botones de autenticación
-        document.getElementById("logoutBtn").style.display = "block"; // Mostrar el botón de logout
-    } else {
-        // Si no hay un usuario, mostrar los botones de autenticación
-        document.querySelector(".user-info").style.display = "none"; // Ocultar el área del usuario
-        document.querySelector(".nav-auth").style.display = "flex"; // Mostrar los botones de login y registro
-    }
-
-    
-
+    const usuarioId = sessionStorage.getItem("usuario_id");
     const likeBtn = document.getElementById("likeBtn");
     const likeCount = document.getElementById("likeCount");
-    // Recuperamos los datos de la noticia desde localStorage
     const noticia = JSON.parse(localStorage.getItem("noticia"));
-    console.log("Noticia recuperada:", noticia);
+    const noticiaId = noticia ? noticia.id : null;
 
-    const noticiaId = noticia ? noticia.id : null; // Obtenemos el ID de la noticia
-
-    const usuarioId = getUsuarioIdFromSession(); // Función para obtener el ID del usuario desde la sesión
+    let yaDioLike = false;
 
     if (!noticiaId) {
         alert("No se pudo encontrar la noticia.");
         return;
     }
 
-    // Obtener los likes actuales al cargar la página
+    if (usuarioId) {
+        document.querySelector(".user-info").style.display = "flex";
+        document.querySelector(".nav-auth").style.display = "none";
+        document.getElementById("logoutBtn").style.display = "block";
+    } else {
+        document.querySelector(".user-info").style.display = "none";
+        document.querySelector(".nav-auth").style.display = "flex";
+    }
+
     obtenerLikes(noticiaId);
 
-    // Función para manejar el click en el botón de like
+    if (usuarioId) {
+        verificarSiUsuarioDioLike(usuarioId, noticiaId).then((dioLike) => {
+            yaDioLike = dioLike;
+            actualizarBotonLike();
+        });
+    }
+
     likeBtn.addEventListener("click", function () {
         if (!usuarioId) {
             alert("Debes estar logueado para dar like.");
             return;
         }
 
-        // Enviar solicitud para dar like
-        darLike(usuarioId, noticiaId);
+        if (!yaDioLike) {
+            darLike(usuarioId, noticiaId);
+        } else {
+            quitarLike(usuarioId, noticiaId);
+        }
     });
 
-    // Función para dar like a la noticia
+    function actualizarBotonLike() {
+        if (yaDioLike) {
+            likeBtn.innerHTML = `<i class="fas fa-thumbs-up"></i> Ya te gusta <span class="like-count">${likeCount.textContent}</span>`;
+            likeBtn.style.backgroundColor = "#6c757d";
+            likeBtn.disabled = false;
+        } else {
+            likeBtn.innerHTML = `<i class="fas fa-thumbs-up"></i> Like <span class="like-count">${likeCount.textContent}</span>`;
+            likeBtn.style.backgroundColor = "#28a745";
+            likeBtn.disabled = false;
+        }
+    }
+
+
+
+    function verificarSiUsuarioDioLike(usuarioId, noticiaId) {
+        return fetch(
+            `../../api/controllerLike.php?usuario_id=${usuarioId}&noticia_id=${noticiaId}`
+        )
+            .then((res) => res.json())
+            .then((data) => data.ya_dio_like || false)
+            .catch((err) => {
+                console.error("Error verificando si ya dio like:", err);
+                return false;
+            });
+    }
+
     function darLike(usuarioId, noticiaId) {
         fetch("../../api/controllerLike.php", {
             method: "POST",
@@ -57,69 +80,84 @@ document.addEventListener("DOMContentLoaded", () => {
                 noticia_id: noticiaId,
             }),
         })
-            .then((response) => response.json())
+            .then((res) => res.json())
             .then((data) => {
-                if (data.message === "Like registrado correctamente") {
-                    // Actualizamos el contador de likes
+                if (data.message.includes("Like registrado")) {
+                    yaDioLike = true;
+                    actualizarBotonLike();
                     obtenerLikes(noticiaId);
                 } else {
-                    alert(data.message); // En caso de que el like ya haya sido dado
+                    alert(data.message);
                 }
             })
-            .catch((error) => console.error("Error al dar like:", error));
+            .catch((err) => console.error("Error al dar like:", err));
     }
 
-    // Función para obtener los likes de la noticia
-    function obtenerLikes(noticiaId) {
-        fetch(`../../api/controllerLike.php?noticia_id=${noticiaId}`)
-            .then((response) => response.json())
+    function quitarLike(usuarioId, noticiaId) {
+        fetch("../../api/controllerLike.php", {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                usuario_id: usuarioId,
+                noticia_id: noticiaId,
+            }),
+        })
+            .then((res) => res.json())
             .then((data) => {
-                likeCount.textContent = data.total_likes; // Actualizamos el contador de likes
-            })
-            .catch((error) => console.error("Error al obtener likes:", error));
-    }
-
-    // Función para obtener el ID del usuario desde la sesión (simulado)
-    function getUsuarioIdFromSession() {
-        fetch("getUsuarioId.php")
-            .then((response) => response.json())
-            .then((data) => {
-                if (data.usuario_id) {
-                    const usuarioId = data.usuario_id;
-                    console.log("ID de usuario desde la sesión:", usuarioId);
+                if (data.message.includes("eliminado")) {
+                    yaDioLike = false;
+                    actualizarBotonLike();
+                    obtenerLikes(noticiaId);
                 } else {
-                    console.log("El usuario no está logueado.");
+                    alert(data.message);
                 }
             })
-            .catch((error) =>
-                console.error("Error al obtener usuario_id:", error)
-            );
+            .catch((err) => console.error("Error al quitar like:", err));
     }
+
+    function obtenerLikes(noticiaId) {
+    fetch(`../../api/controllerLike.php?noticia_id=${noticiaId}`)
+        .then((res) => res.json())
+        .then((data) => {
+            const totalLikes = data.total_likes || 0;
+            likeCount.textContent = totalLikes;
+
+            // Actualizar el texto del botón para mostrar el contador actualizado
+            actualizarBotonLike();
+        })
+        .catch((err) => console.error("Error al obtener likes:", err));
+}
+
 
     if (noticia) {
-        // Mostramos los detalles de la noticia en el HTML
         document.getElementById("titulo").innerText = noticia.titulo;
         document.getElementById("contenido").innerText = noticia.contenido;
-        document.getElementById("autor").innerText = noticia.autor;
-        // Formateamos la fecha para que solo muestre el día, mes y año
+        document.getElementById(
+            "autor"
+        ).innerText = `${noticia.nombre_usuario} ${noticia.apellido_usuario}`;
+
         const fecha = new Date(noticia.fecha_creacion || noticia.fecha);
         document.getElementById("fecha_creacion").innerText =
-            fecha.toLocaleDateString("es-ES"); // Solo fecha sin hora
+            fecha.toLocaleDateString("es-ES");
 
-        // Mostrar las tres imágenes asociadas
         if (noticia.imagenes && noticia.imagenes.length > 0) {
             document.getElementById("imagen1").src =
-                "../" + noticia.imagenes[0].imagen;
+                "../../" + noticia.imagenes[0].imagen;
             document.getElementById("imagen2").src =
-                "../" + noticia.imagenes[1]?.imagen ||
-                "../imagenDB/default.png";
+                "../../" +
+                (noticia.imagenes[1]?.imagen || "imagenDB/default.png");
             document.getElementById("imagen3").src =
-                "../" + noticia.imagenes[2]?.imagen ||
-                "../imagenDB/default.png";
+                "../../" +
+                (noticia.imagenes[2]?.imagen || "imagenDB/default.png");
         } else {
-            document.getElementById("imagen1").src = "../imagenDB/default.png";
-            document.getElementById("imagen2").src = "../imagenDB/default.png";
-            document.getElementById("imagen3").src = "../imagenDB/default.png";
+            document.getElementById("imagen1").src =
+                "../../imagenDB/default.png";
+            document.getElementById("imagen2").src =
+                "../../imagenDB/default.png";
+            document.getElementById("imagen3").src =
+                "../../imagenDB/default.png";
         }
     } else {
         document.getElementById("titulo").innerText = "Noticia no encontrada.";
@@ -139,25 +177,38 @@ function logout() {
         cancelButtonText: "Cancelar",
     }).then((result) => {
         if (result.isConfirmed) {
-            // Eliminar datos de sesión
-            sessionStorage.removeItem("usuario");
-            // sessionStorage.removeItem("usuario_id"); // Si lo usas
+            fetch("../../api/logoutController.php")
+                .then((res) => res.json())
+                .then((data) => {
+                    if (data.success) {
+                        sessionStorage.clear();
+                        document.querySelector(".user-info").style.display =
+                            "none";
+                        document.querySelector(".nav-auth").style.display =
+                            "flex";
 
-            // Actualizar la interfaz
-            document.querySelector(".user-info").style.display = "none";
-            document.querySelector(".nav-auth").style.display = "flex";
-
-            // Mostrar mensaje de éxito
-            Swal.fire({
-                icon: "success",
-                title: "Sesión cerrada",
-                text: "Has cerrado sesión correctamente.",
-                timer: 2000,
-                showConfirmButton: false
-            }).then(() => {
-                // Redirigir después de cerrar la alerta
-                window.location.href = "../index.php";
-            });
+                        Swal.fire({
+                            icon: "success",
+                            title: "Sesión cerrada",
+                            text: "Has cerrado sesión correctamente.",
+                            timer: 2000,
+                            showConfirmButton: false,
+                        }).then(() => {
+                            window.location.href = "../index.php";
+                        });
+                    } else {
+                        throw new Error(
+                            data.message || "No se pudo cerrar sesión."
+                        );
+                    }
+                })
+                .catch((error) => {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error",
+                        text: error.message || "Error al cerrar sesión.",
+                    });
+                });
         }
     });
 }

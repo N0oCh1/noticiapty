@@ -137,20 +137,51 @@ body {
 }
 
 .like-btn {
-    background-color: #219a52;
+    background-color: #28a745; /* verde moderno */
     color: white;
-    padding: 0.5rem 1rem;
+    padding: 0.6rem 1.2rem;
     border: none;
-    border-radius: 4px;
+    border-radius: 30px; /* botón pill */
     cursor: pointer;
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    transition: background 0.3s ease;
+    gap: 20px;
+    font-weight: 600;
+    font-size: 1rem;
+    box-shadow: 0 4px 8px rgb(40 167 69 / 0.3);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    user-select: none;
+}
+
+.like-btn i {
+    font-size: 1.2rem;
 }
 
 .like-btn:hover {
-    background-color: #27ae60;
+    background-color: #218838;
+    box-shadow: 0 6px 12px rgb(33 136 56 / 0.5);
 }
+
+.like-btn:disabled, 
+.like-btn[disabled] {
+    background-color: #6c757d !important; /* gris desactivado */
+    cursor: default;
+    box-shadow: none;
+}
+
+.like-btn .like-count {
+    background-color: rgba(255, 255, 255, 0.25);
+    padding: 2px 8px;
+    border-radius: 15px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    min-width: 30px;
+    text-align: center;
+    color: white;
+    user-select: none;
+    
+}
+
 
 .comment-count {
     font-size: 1rem;

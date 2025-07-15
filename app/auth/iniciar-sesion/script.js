@@ -17,7 +17,9 @@ document
                 .then((data) => {
                     if (data.success) {
                         // Puedes usar sessionStorage para uso en frontend, pero ya la sesión está guardada en el backend
+                        sessionStorage.setItem("usuario", usuario);
                         sessionStorage.setItem("usuario_id", data.usuario_id);
+                        console.log("Usuario ID:", data.usuario_id);
                         sessionStorage.setItem("rol", data.rol);
 
                         Swal.fire({

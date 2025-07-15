@@ -22,8 +22,7 @@ class Likes {
             ];
             $this->db->insertSeguro('likes', $data); // Insertamos el like en la tabla `likes`
             
-            // Ahora actualizamos el contador de likes de la noticia
-            $this->db->update('noticias', 'likes_count = likes_count + 1', "id = $noticia_id");
+           
             return true; // Se ha dado like correctamente
         } else {
             // El usuario ya dio like, no hacer nada o devolver un error si lo deseas
@@ -31,11 +30,27 @@ class Likes {
         }
     }
 
+    // ✅ Nueva función para quitar like a una noticia
+    public function quitarLike($usuario_id, $noticia_id)
+    {
+        $condicion = "usuario_id = $usuario_id AND noticia_id = $noticia_id";
+        return $this->db->delete("likes", $condicion);
+    }
+
     // Función para obtener la cantidad total de likes de una noticia
     public function obtenerLikes($noticia_id) {
         // Seleccionar la cantidad total de likes de la noticia
         $likes = $this->db->select("likes", "COUNT(*) as total_likes", "noticia_id = $noticia_id");
         return $likes[0]['total_likes']; // Devolver el total de likes
+    }
+
+    // Función para verificar si un usuario ya dio like a una noticia
+    public function verificarLike($usuario_id, $noticia_id)
+    {
+        // Usamos el método select personalizado para consultar si existe el like
+        $resultado = $this->db->select("likes", "COUNT(*) as total", "usuario_id = $usuario_id AND noticia_id = $noticia_id");
+
+        return $resultado[0]['total'] > 0; // Retorna true si ya dio like, false si no
     }
 }
 ?>
