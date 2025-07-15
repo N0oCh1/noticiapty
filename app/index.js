@@ -1,51 +1,66 @@
 // Variables globales
 let currentPage = 1;
-const initialNewsCount = 3; // Número inicial de noticias a mostrar
-const newsPerPage = 4; // Noticias a cargar en "cargar más"
+const initialNewsCount = 3;
+const newsPerPage = 4;
 let currentCategory = "todas";
-let allNews = []; // Almacenar todas las noticias
+let allNews = [];
 
 document.addEventListener("DOMContentLoaded", () => {
-    // Carga inicial de noticias
+    // Verificar sesión desde el servidor
+    fetch("../api/controllerSessionInfo.php", {
+        method: "GET",
+        credentials: "include"
+    })
+        .then((res) => res.json())
+        .then((data) => {
+            if (data.success) {
+                sessionStorage.setItem("usuario_id", data.usuario_id);
+                sessionStorage.setItem("rol", data.rol);
+
+                document.querySelector(".user-info").style.display = "flex";
+                document.querySelector(".nav-auth").style.display = "none";
+                document.getElementById("logoutBtn").style.display = "block";
+
+                if (data.rol === "admin") {
+                    const adminBtn = document.getElementById("adminBtn");
+                    if (adminBtn) {
+                        adminBtn.style.display = "inline-block";
+                        adminBtn.addEventListener("click", () => {
+                            window.location.href = "../app/administrar-usuario/index.html";
+                        });
+                    }
+                }
+            } else {
+                document.querySelector(".user-info").style.display = "none";
+                document.querySelector(".nav-auth").style.display = "flex";
+            }
+        })
+        .catch((error) => {
+            console.error("Error al verificar sesión:", error);
+        });
+
+    // Cargar noticias
     loadAllNews();
 
-    // Event listeners
+    // Eventos
     document.getElementById("loadMore").addEventListener("click", loadMoreNews);
 
-    // Event delegation para categorías
     document.querySelector(".main-nav").addEventListener("click", (e) => {
         if (e.target.tagName === "A") {
             e.preventDefault();
-
             const selectedCategory = e.target.dataset.category;
-            currentCategory =
-                selectedCategory === "todas"
-                    ? "todas"
-                    : parseInt(selectedCategory);
-
+            currentCategory = selectedCategory === "todas" ? "todas" : parseInt(selectedCategory);
             document.getElementById("newsGrid").innerHTML = "";
             currentPage = 1;
             loadFilteredNews();
         }
     });
 
-    // Verificar si hay un usuario en sessionStorage
-    const usuario = sessionStorage.getItem("usuario");
-    // const usuarioId = sessionStorage.getItem("usuario_id");
-
-    if (usuario) {
-        // Si hay un usuario, mostrar el botón de logout
-        document.querySelector(".user-info").style.display = "flex"; // Mostrar el área del usuario
-        document.querySelector(".nav-auth").style.display = "none"; // Ocultar los botones de autenticación
-        document.getElementById("logoutBtn").style.display = "block"; // Mostrar el botón de logout
-    } else {
-        // Si no hay un usuario, mostrar los botones de autenticación
-        document.querySelector(".user-info").style.display = "none"; // Ocultar el área del usuario
-        document.querySelector(".nav-auth").style.display = "flex"; // Mostrar los botones de login y registro
-    }
+    // Logout
+    document.getElementById("logoutBtn").addEventListener("click", logout);
 });
 
-// Función de logout con SweetAlert y cierre de sesión en backend
+// Cerrar sesión
 function logout() {
     Swal.fire({
         title: "¿Estás seguro?",
@@ -58,22 +73,15 @@ function logout() {
         cancelButtonText: "Cancelar",
     }).then((result) => {
         if (result.isConfirmed) {
-            // Paso 1: Llamar al backend para destruir la sesión del servidor
             fetch("../api/logoutController.php")
                 .then((res) => res.json())
                 .then((data) => {
                     if (data.success) {
-                        // Paso 2: Limpiar datos de sesión del navegador
-                        sessionStorage.removeItem("usuario");
-                        // sessionStorage.removeItem("usuario_id"); // si usas ID también
+                        sessionStorage.clear();
 
-                        // Paso 3: Actualizar la interfaz
-                        document.querySelector(".user-info").style.display =
-                            "none";
-                        document.querySelector(".nav-auth").style.display =
-                            "flex";
+                        document.querySelector(".user-info").style.display = "none";
+                        document.querySelector(".nav-auth").style.display = "flex";
 
-                        // Paso 4: Mostrar mensaje de éxito y redirigir
                         Swal.fire({
                             icon: "success",
                             title: "Sesión cerrada",
@@ -84,9 +92,7 @@ function logout() {
                             window.location.href = "../index.php";
                         });
                     } else {
-                        throw new Error(
-                            data.message || "No se pudo cerrar sesión."
-                        );
+                        throw new Error(data.message || "No se pudo cerrar sesión.");
                     }
                 })
                 .catch((error) => {
@@ -100,38 +106,23 @@ function logout() {
     });
 }
 
-// Función para cargar todas las noticias
+// Cargar todas las noticias
 function loadAllNews() {
-    const url = "../api/controllerNoticia.php"; // Traer todas las noticias sin filtro
-
-    fetch(url)
-        .then((response) => response.text()) // Recibe como texto crudo
+    fetch("../api/controllerNoticia.php")
+        .then((response) => response.text())
         .then((text) => {
-            console.log("Respuesta cruda:", text);
-            return JSON.parse(text); // intenta parsear JSON manualmente para capturar el error
+            return JSON.parse(text);
         })
         .then((data) => {
+            console.log("Noticias cargadas:", data);
             allNews = data;
-            console.log("All news loaded:", allNews);
-            // Mostrar las noticias filtradas según la categoría inicial
-            console.log(loadFilteredNews());
+            loadFilteredNews();
         })
         .catch((error) => console.error("Error:", error));
 }
 
-// Función para cargar noticias filtradas por categoría
+// Cargar noticias filtradas
 function loadFilteredNews() {
-    // Filtrar noticias según la categoría seleccionada y activo = 1
-
-    console.log("🟡 DEBUG de tipos y valores");
-
-    allNews.forEach((news) => {
-        console.log("Activo:", news.activo, "Tipo:", typeof news.activo);
-
-        console.log("Tipos:", typeof news.categoria_id, typeof currentCategory);
-        console.log("Valores:", news.categoria_id, currentCategory);
-    });
-
     const filteredNews =
         currentCategory === "todas"
             ? allNews.filter((news) => Number(news.activo) === 1)
@@ -141,36 +132,25 @@ function loadFilteredNews() {
                       Number(news.activo) === 1
               );
 
-    console.log("Filtered news:", filteredNews);
-    // Ordenar las noticias por fecha descendente
     const sortedNews = filteredNews.sort(
         (a, b) => new Date(b.fecha_creacion) - new Date(a.fecha_creacion)
     );
-    console.log("Sorted news:", sortedNews);
 
-    // Verificar si no hay noticias después del filtrado
     if (sortedNews.length === 0) {
-        // Mostrar el mensaje de "No hay noticias para esta categoría"
         document.getElementById("newsGrid").innerHTML =
             "<p style='text-align: center; font-size: 18px; margin-top: 15rem; color: #2c3e50;'>No hay noticias para esta categoría.</p>";
-        document.getElementById("loadMore").style.display = "none"; // Ocultar el botón de cargar más
+        document.getElementById("loadMore").style.display = "none";
     } else {
-        // Código para cargar noticias...
-
-        // Renderizar las noticias
         renderNews(sortedNews.slice(0, initialNewsCount));
-
-        // Mostrar botón "Cargar más" si hay más noticias
         document.getElementById("loadMore").style.display =
             sortedNews.length > initialNewsCount ? "block" : "none";
     }
 }
 
-// Función para cargar más noticias
+// Cargar más noticias
 function loadMoreNews() {
     const startIndex = document.querySelectorAll(".news-card").length;
 
-    // Filtrar noticias según la categoría seleccionada y activo = 1
     const filteredNews =
         currentCategory === "todas"
             ? allNews.filter((news) => Number(news.activo) === 1)
@@ -186,81 +166,63 @@ function loadMoreNews() {
         renderNews(nextNews);
     }
 
-    // Ocultar botón si no hay más noticias
     if (startIndex + nextNews.length >= filteredNews.length) {
         document.getElementById("loadMore").style.display = "none";
     }
 }
 
-// Función para renderizar las noticias
+// Renderizar noticias
 function renderNews(news) {
-    console.log("Rendering news:", news);
     const newsGrid = document.getElementById("newsGrid");
     const defaultImage = "../imagenDB/default.png";
 
-    // Para las primeras 3 noticias, usar diseño destacado
     if (document.querySelectorAll(".news-card").length === 0) {
-        // Primera noticia (más importante)
         if (news.length > 0) {
-            const mainNews = news[0];
-            const mainCard = createFeaturedNewsCard(mainNews, "main-news");
+            const mainCard = createFeaturedNewsCard(news[0], "main-news");
             newsGrid.appendChild(mainCard);
         }
 
-        // Dos noticias secundarias
         if (news.length > 1) {
-            const secondaryNewsContainer = document.createElement("div");
-            secondaryNewsContainer.className = "secondary-news";
-
+            const secondaryContainer = document.createElement("div");
+            secondaryContainer.className = "secondary-news";
             news.slice(1, 3).forEach((article) => {
-                const card = createFeaturedNewsCard(
-                    article,
-                    "secondary-news-card"
-                );
-                secondaryNewsContainer.appendChild(card);
+                const card = createFeaturedNewsCard(article, "secondary-news-card");
+                secondaryContainer.appendChild(card);
             });
-
-            newsGrid.appendChild(secondaryNewsContainer);
+            newsGrid.appendChild(secondaryContainer);
         }
 
-        // Resto de noticias
         if (news.length > 3) {
-            const secondaryNewsContainer = document.createElement("div");
-            secondaryNewsContainer.className = "secondary-news";
+            const extraContainer = document.createElement("div");
+            extraContainer.className = "secondary-news";
             news.slice(3).forEach((article) => {
-                const card = createFeaturedNewsCard(
-                    article,
-                    "secondary-news-card"
-                );
-                secondaryNewsContainer.appendChild(card);
+                const card = createFeaturedNewsCard(article, "secondary-news-card");
+                extraContainer.appendChild(card);
             });
-
-            newsGrid.appendChild(secondaryNewsContainer);
+            newsGrid.appendChild(extraContainer);
         }
     } else {
-        // Para cargar más noticias, usarlas en bloques de dos
-        const secondaryNewsContainer = document.createElement("div");
-        secondaryNewsContainer.className = "secondary-news";
+        const moreContainer = document.createElement("div");
+        moreContainer.className = "secondary-news";
         news.forEach((article) => {
             const card = createFeaturedNewsCard(article, "secondary-news-card");
-            secondaryNewsContainer.appendChild(card);
+            moreContainer.appendChild(card);
         });
-
-        newsGrid.appendChild(secondaryNewsContainer);
+        newsGrid.appendChild(moreContainer);
     }
 }
 
-// Función para crear las tarjetas de noticias
+// Crear tarjeta de noticia
 function createFeaturedNewsCard(article, className) {
-    const card = document.createElement("a"); // Usamos <a> en lugar de <div>
+    const card = document.createElement("a");
     card.className = `news-card ${className}`;
-    card.href = "#"; // Evitamos que el enlace se redirija automáticamente
+    card.href = "#";
 
-    // Al hacer clic en el card, almacenamos los datos de la noticia en localStorage
     card.addEventListener("click", () => {
         localStorage.setItem("noticia", JSON.stringify(article));
-        window.location.href = "../app/detalle-noticia/index.html"; // Redirigimos a la página de detalles
+        window.location.href = "../app/detalle-noticia/index.html";
     });
+
     const imageUrl =
         article.imagenes && article.imagenes.length > 0
             ? article.imagenes[0].imagen
@@ -278,13 +240,8 @@ function createFeaturedNewsCard(article, className) {
                 className === "main-news" ? 500 : 100
             )}...</p>
             <div class="news-meta">
-                <span>${article.nombre_usuario} ${
-        article.apellido_usuario
-    }</span>
-
-                <span>${new Date(
-                    article.fecha_creacion || article.fecha
-                ).toLocaleDateString()}</span>
+                <span>${article.nombre_usuario} ${article.apellido_usuario}</span>
+                <span>${new Date(article.fecha_creacion || article.fecha).toLocaleDateString()}</span>
             </div>
         </div>
     `;
