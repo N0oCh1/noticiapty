@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Jul 14, 2025 at 05:05 AM
+-- Generation Time: Jul 15, 2025 at 06:30 AM
 -- Server version: 9.1.0
--- PHP Version: 8.4.0
+-- PHP Version: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -53,15 +53,32 @@ INSERT INTO `categorias` (`id`, `nombre`) VALUES
 DROP TABLE IF EXISTS `comentarios`;
 CREATE TABLE IF NOT EXISTS `comentarios` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `noticia_id` int DEFAULT NULL,
-  `comentario_id` int DEFAULT NULL,
-  `comentario` text,
-  `autor` varchar(50) DEFAULT NULL,
+  `noticia_id` int NOT NULL,
+  `usuario_id` int NOT NULL,
+  `contenido` text NOT NULL,
   `fecha_creacion` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `noticia_id` (`noticia_id`),
-  KEY `comentario_id` (`comentario_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Comentarios';
+  KEY `usuario_id` (`usuario_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Comentarios';
+
+--
+-- Dumping data for table `comentarios`
+--
+
+INSERT INTO `comentarios` (`id`, `noticia_id`, `usuario_id`, `contenido`, `fecha_creacion`) VALUES
+(1, 36, 5, 'ss', '2025-07-15 00:10:20'),
+(2, 36, 5, 'dsaasd', '2025-07-15 00:16:24'),
+(3, 36, 5, 'adadad', '2025-07-15 00:16:26'),
+(4, 36, 5, 'fsffsdfs', '2025-07-15 00:25:26'),
+(5, 36, 5, 'sdfsfsfs', '2025-07-15 00:25:28'),
+(6, 36, 5, 'sdfdsfs', '2025-07-15 00:25:31'),
+(7, 36, 5, 'asdaa', '2025-07-15 00:29:37'),
+(8, 36, 13, 'dfsfsfs', '2025-07-15 00:38:09'),
+(9, 36, 13, 'SSss', '2025-07-15 00:38:53'),
+(10, 36, 13, 'daad', '2025-07-15 00:44:08'),
+(11, 36, 13, 'ss', '2025-07-15 01:05:44'),
+(12, 34, 13, 'dfgfd', '2025-07-15 01:29:11');
 
 -- --------------------------------------------------------
 
@@ -106,14 +123,26 @@ CREATE TABLE IF NOT EXISTS `likes` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `usuario_id` (`usuario_id`,`noticia_id`),
   KEY `noticia_id` (`noticia_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=69 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `likes`
 --
 
 INSERT INTO `likes` (`id`, `usuario_id`, `noticia_id`, `fecha`) VALUES
-(1, 1, 36, '2025-07-13 16:50:05');
+(1, 1, 36, '2025-07-13 16:50:05'),
+(67, 5, 36, '2025-07-15 04:47:29'),
+(3, 4, 36, '2025-07-15 04:03:29'),
+(4, 4, 35, '2025-07-15 04:08:57'),
+(5, 4, 34, '2025-07-15 04:09:32'),
+(6, 4, 31, '2025-07-15 04:11:32'),
+(7, 4, 28, '2025-07-15 04:13:19'),
+(8, 4, 33, '2025-07-15 04:14:39'),
+(9, 3, 36, '2025-07-15 04:17:14'),
+(10, 3, 35, '2025-07-15 04:19:37'),
+(24, 3, 34, '2025-07-15 04:35:57'),
+(57, 3, 28, '2025-07-15 04:45:42'),
+(68, 13, 36, '2025-07-15 04:47:41');
 
 -- --------------------------------------------------------
 
@@ -173,6 +202,7 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   `rol` varchar(25) DEFAULT NULL,
   `activo` tinyint(1) DEFAULT '1',
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT 'Create Time',
+  `Column 9` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `UQ_usuario` (`usuario`)
 ) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Usuarios';
@@ -181,19 +211,19 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
 -- Dumping data for table `usuarios`
 --
 
-INSERT INTO `usuarios` (`id`, `nombre`, `apellido`, `usuario`, `contrasena`, `rol`, `activo`, `create_time`) VALUES
-(1, 'kelvin', 'he', 'kelvin', '123456', 'global', 1, '2025-07-13 11:55:01'),
-(3, 'juan', 'juan', 'juan', '$2y$10$Lc7GhD7PtMsdZCsxNHZl9efqobieXfeSimHW3BAQDJmgMD8AOs4nC', 'global', 1, '2025-07-13 13:35:10'),
-(4, 'aldo', 'aldo', 'aldo', '$2y$10$tQjYSswfNU9gCLIDufWNfOHJ5m8ePeDy./yTwfmX123qD5N6fW1oe', 'global', 1, '2025-07-13 13:43:13'),
-(5, 'a', 'a', 'a', '$2y$10$i3QXxRVVterHKIzuZ4sF6.dA5jLiT5DomMWK5Bzl2yx7coJeUhae.', 'global', 1, '2025-07-13 16:41:41'),
-(6, 'f', 'f', 'f', '$2y$10$np3.EbSbbgSlPEKDXRTr5OUTrtgghUlLu7Q7vfCTFkd/.YDxRLH1y', 'global', 1, '2025-07-13 16:42:24'),
-(7, 'a', 'a', 'as', '$2y$10$kSuwhzV..na63gpRohGDZOkZY1EG0d7fWsU2G0pyGhhfxhGr0WMXG', 'global', 1, '2025-07-13 16:47:23'),
-(8, 'hgffhf', 'fghfh', 'fff', '$2y$10$4RI6zQLqipGJ7NRhrYZNB.ZywakESnDCnC5RQk3rhHfxxk1aiN2KW', 'global', 1, '2025-07-13 17:50:35'),
-(9, 'hgffhfdfsd', 'fghfh', 'fffsfsd', '$2y$10$tsmDXOluiMYnjUMLG7Abzun3lkFUmnVum6gpiT3zmjl.vPfC0kuzS', 'global', 1, '2025-07-13 17:50:57'),
-(10, 'adadasdas', 'asdadas', 'asdadasda', '$2y$10$pNJW29swHEziRjlKXD9W0.f5aZnIgTvOrEQdsskdSssyGmll1tqwe', 'publicador', 1, '2025-07-13 17:51:21'),
-(11, 'gggg', 'gggg', 'ggg', '$2y$10$.H1Xa4ELx0819jePDpuELOFIaRq6KyyE0WkKuaDBJ5pN7ykKn5tMW', 'global', 1, '2025-07-13 19:03:19'),
-(12, 'v', 'v', 'v', '$2y$12$9z3db42jskJvOdsJtzVWI.kEnK7nuQU0BChJptoZYWYyny23nI0Qi', 'global', 1, '2025-07-13 23:13:04'),
-(13, 'q', 'q', 'q', '$2y$12$45wT/aQ1Mls7uZwPQaygCem/kI5Jh0gBvySjlPHem3dLClW6zW8D.', 'global', 1, '2025-07-13 23:24:43');
+INSERT INTO `usuarios` (`id`, `nombre`, `apellido`, `usuario`, `contrasena`, `rol`, `activo`, `create_time`, `Column 9`) VALUES
+(1, 'kelvin', 'he', 'kelvin', '123456', 'global', 1, '2025-07-13 11:55:01', NULL),
+(3, 'juan', 'juan', 'juan', '$2y$10$Lc7GhD7PtMsdZCsxNHZl9efqobieXfeSimHW3BAQDJmgMD8AOs4nC', 'global', 1, '2025-07-13 13:35:10', NULL),
+(4, 'aldo', 'aldo', 'aldo', '$2y$10$tQjYSswfNU9gCLIDufWNfOHJ5m8ePeDy./yTwfmX123qD5N6fW1oe', 'global', 1, '2025-07-13 13:43:13', NULL),
+(5, 'a', 'a', 'a', '$2y$10$i3QXxRVVterHKIzuZ4sF6.dA5jLiT5DomMWK5Bzl2yx7coJeUhae.', 'global', 1, '2025-07-13 16:41:41', NULL),
+(6, 'f', 'f', 'f', '$2y$10$np3.EbSbbgSlPEKDXRTr5OUTrtgghUlLu7Q7vfCTFkd/.YDxRLH1y', 'global', 1, '2025-07-13 16:42:24', NULL),
+(7, 'a', 'a', 'as', '$2y$10$kSuwhzV..na63gpRohGDZOkZY1EG0d7fWsU2G0pyGhhfxhGr0WMXG', 'global', 1, '2025-07-13 16:47:23', NULL),
+(8, 'hgffhf', 'fghfh', 'fff', '$2y$10$4RI6zQLqipGJ7NRhrYZNB.ZywakESnDCnC5RQk3rhHfxxk1aiN2KW', 'global', 1, '2025-07-13 17:50:35', NULL),
+(9, 'hgffhfdfsd', 'fghfh', 'fffsfsd', '$2y$10$tsmDXOluiMYnjUMLG7Abzun3lkFUmnVum6gpiT3zmjl.vPfC0kuzS', 'global', 1, '2025-07-13 17:50:57', NULL),
+(10, 'adadasdas', 'asdadas', 'asdadasda', '$2y$10$pNJW29swHEziRjlKXD9W0.f5aZnIgTvOrEQdsskdSssyGmll1tqwe', 'publicador', 1, '2025-07-13 17:51:21', NULL),
+(11, 'gggg', 'gggg', 'ggg', '$2y$10$.H1Xa4ELx0819jePDpuELOFIaRq6KyyE0WkKuaDBJ5pN7ykKn5tMW', 'global', 1, '2025-07-13 19:03:19', NULL),
+(12, 'v', 'v', 'v', '$2y$12$9z3db42jskJvOdsJtzVWI.kEnK7nuQU0BChJptoZYWYyny23nI0Qi', 'publicador', 1, '2025-07-13 23:13:04', NULL),
+(13, 'q', 'q', 'q', '$2y$12$45wT/aQ1Mls7uZwPQaygCem/kI5Jh0gBvySjlPHem3dLClW6zW8D.', 'admin', 1, '2025-07-13 23:24:43', NULL);
 
 -- --------------------------------------------------------
 
@@ -213,7 +243,7 @@ CREATE TABLE IF NOT EXISTS `visitas` (
 --
 
 INSERT INTO `visitas` (`id`, `cantidad`) VALUES
-(1, 1337);
+(1, 1541);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
