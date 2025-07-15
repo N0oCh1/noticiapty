@@ -342,6 +342,29 @@ body {
     outline: none; /* Eliminar el borde de enfoque predeterminado */
 }
 
+/*bootn de admin */
+#adminBtn {
+  display: none; /* Se mostrará dinámicamente si el rol es admin */
+  background-color: #2c3e50;
+  color: #ecf0f1;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-left: 15px;
+}
+
+#adminBtn:hover {
+  background-color: #34495e;
+  transform: scale(1.05);
+}
+
+#adminBtn:active {
+  transform: scale(0.98);
+}
 
 
 /* Responsive design */
