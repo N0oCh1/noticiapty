@@ -1,9 +1,99 @@
 document.addEventListener("DOMContentLoaded", () => {
+    const usuario = sessionStorage.getItem("usuario");
+
     const usuarioId = sessionStorage.getItem("usuario_id");
+    console.log("Usuario ID:", usuarioId);
     const likeBtn = document.getElementById("likeBtn");
     const likeCount = document.getElementById("likeCount");
     const noticia = JSON.parse(localStorage.getItem("noticia"));
     const noticiaId = noticia ? noticia.id : null;
+    console.log("Noticia ID:", noticiaId);
+
+    // Comentarios
+    const commentForm = document.getElementById("commentForm");
+    const commentText = document.getElementById("commentText");
+    const commentCount = document.getElementById("commentCount");
+    cargarComentarios();
+
+    function cargarComentarios() {
+        if (!noticiaId) return;
+
+        fetch(`../../api/controllerComentario.php?noticia_id=${noticiaId}`)
+            .then((res) => res.json())
+            .then((data) => {
+                commentCount.textContent = data.length;
+
+                const commentsContainer =
+                    document.getElementById("commentsContainer");
+                commentsContainer.innerHTML = ""; // Limpiar antes de agregar
+
+                data.forEach((comentario) => {
+                    const div = document.createElement("div");
+                    div.className = "comentario";
+
+                    console.log("Comentario:", comentario.usuario_id);
+                    console.log("Usuario ID:", usuarioId);
+
+
+                    // Solo aplicar clase si es del usuario actual
+                    if (comentario.usuario_id == usuarioId) {
+                        div.classList.add("comentario-propio");
+                    }
+
+                    const fecha = new Date(
+                        comentario.fecha_creacion
+                    ).toLocaleString("es-ES");
+
+                    div.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <p><strong>${comentario.usuario}</strong></p>
+            <p class="fecha">${fecha}</p>
+        </div>
+        <p>${comentario.contenido}</p>
+    `;
+
+                    commentsContainer.appendChild(div);
+                });
+            })
+            .catch((err) => console.error("Error cargando comentarios:", err));
+    }
+
+    commentForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        if (!usuarioId) {
+            alert("Debes iniciar sesión para comentar.");
+            return;
+        }
+
+        const contenido = commentText.value.trim();
+        if (contenido.length === 0) {
+            alert("Comentario vacío.");
+            return;
+        }
+
+        fetch("../../api/controllerComentario.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                noticia_id: noticiaId,
+                usuario_id: usuarioId,
+                contenido: contenido,
+            }),
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.success) {
+                    commentText.value = "";
+                    cargarComentarios();
+                } else {
+                    alert("Error al enviar comentario.");
+                }
+            })
+            .catch((err) => console.error("Error enviando comentario:", err));
+    });
 
     let yaDioLike = false;
 
@@ -16,6 +106,12 @@ document.addEventListener("DOMContentLoaded", () => {
         document.querySelector(".user-info").style.display = "flex";
         document.querySelector(".nav-auth").style.display = "none";
         document.getElementById("logoutBtn").style.display = "block";
+
+        // Mostrar nombre de usuario
+    const usernameDisplay = document.getElementById("usernameDisplay");
+    if (usernameDisplay) {
+        usernameDisplay.textContent = `Hola, ${usuario}`;
+    }
     } else {
         document.querySelector(".user-info").style.display = "none";
         document.querySelector(".nav-auth").style.display = "flex";
@@ -54,8 +150,6 @@ document.addEventListener("DOMContentLoaded", () => {
             likeBtn.disabled = false;
         }
     }
-
-
 
     function verificarSiUsuarioDioLike(usuarioId, noticiaId) {
         return fetch(
@@ -118,18 +212,17 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function obtenerLikes(noticiaId) {
-    fetch(`../../api/controllerLike.php?noticia_id=${noticiaId}`)
-        .then((res) => res.json())
-        .then((data) => {
-            const totalLikes = data.total_likes || 0;
-            likeCount.textContent = totalLikes;
+        fetch(`../../api/controllerLike.php?noticia_id=${noticiaId}`)
+            .then((res) => res.json())
+            .then((data) => {
+                const totalLikes = data.total_likes || 0;
+                likeCount.textContent = totalLikes;
 
-            // Actualizar el texto del botón para mostrar el contador actualizado
-            actualizarBotonLike();
-        })
-        .catch((err) => console.error("Error al obtener likes:", err));
-}
-
+                // Actualizar el texto del botón para mostrar el contador actualizado
+                actualizarBotonLike();
+            })
+            .catch((err) => console.error("Error al obtener likes:", err));
+    }
 
     if (noticia) {
         document.getElementById("titulo").innerText = noticia.titulo;

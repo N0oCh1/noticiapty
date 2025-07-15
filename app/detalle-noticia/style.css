@@ -192,12 +192,66 @@ body {
     margin-top: 30px;
     border-top: 1px solid #eee;
     padding-top: 20px;
+
 }
 
 .comment-section h2 {
     font-size: 1.6rem;
     color: #2c3e50;
 }
+.comment-section {
+    margin-top: 30px;
+    border-top: 2px solid #e0e0e0;
+    padding-top: 20px;
+}
+
+.comment-section h2 {
+    font-size: 1.8rem;
+    color: #2c3e50;
+    margin-bottom: 1.2rem;
+}
+
+.comments-list {
+    margin: 20px 0px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Cada comentario individual */
+.comentario {
+    background-color: #ffffff;
+    border-left: 4px solid #219a52;
+    padding: 1rem 1.2rem;
+    border-radius: 6px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease;
+}
+
+.comentario-propio {
+    border-left: 4px solid #23219a !important; /* Azul, puedes cambiarlo a otro si prefieres */
+    background-color: #f0f8ff; /* Azul clarito opcional para distinguir */
+}
+
+
+
+
+.comentario p {
+    margin: 0.3rem 0;
+}
+
+.comentario strong {
+    font-size: 1.1rem;
+    color: #2c3e50;
+}
+
+/* Fecha del comentario */
+.comentario .fecha {
+    font-size: 0.8rem;
+    color: #999;
+    text-align: right;
+}
+
 
 textarea {
     width: 100%;
@@ -226,7 +280,7 @@ textarea {
 
 
 #logoutBtn {
-    flex: 1;
+   
     background-color: #ff5733;
     color: white;
     border: none;
@@ -253,6 +307,101 @@ textarea {
 #logoutBtn:focus {
     outline: none; /* Eliminar el borde de enfoque predeterminado */
 }
+
+#logoutBtn {
+    background-color: #ff5733;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 5px; /* Bordes redondeados */
+    transition: all 0.3s ease-in-out; /* Transición suave */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+}
+
+#logoutBtn:hover {
+    background-color: #e74c3c; /* Cambio de color al pasar el mouse */
+    transform: translateY(-2px); /* Desplazamiento hacia arriba para efecto de hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Sombra más prominente al hacer hover */
+}
+
+#logoutBtn:active {
+    background-color: #c0392b; /* Color más oscuro al hacer clic */
+    transform: translateY(0); /* Eliminar el efecto de desplazamiento al hacer clic */
+}
+
+#logoutBtn:focus {
+    outline: none; /* Eliminar el borde de enfoque predeterminado */
+}
+
+/*bootn de admin */
+#adminBtn {
+  display: none; /* Se mostrará dinámicamente si el rol es admin */
+  background-color: #2c3e50;
+  color: #ecf0f1;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-left: 15px;
+}
+
+#adminBtn:hover {
+  background-color: #34495e;
+  transform: scale(1.05);
+}
+
+#adminBtn:active {
+  transform: scale(0.98);
+}
+/*bootn de publicar */
+#publicarBtn {
+  display: none; /* Se mostrará dinámicamente si el rol es publicador */
+  background-color: #2c3e50;
+  color: #ecf0f1;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-left: 15px;
+}
+
+#publicarBtn:hover {
+  background-color: #34495e;
+  transform: scale(1.05);
+}
+
+#publicarBtn:active {
+  transform: scale(0.98);
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    flex: 1.1;
+    justify-content: flex-end;
+    
+
+}
+
+.username-text {
+    color: white;
+    font-weight: bold;
+    margin: 0;
+
+   
+    border-radius: 6px;
+}
+
 
 /* Responsive Design */
 @media (max-width: 768px) {

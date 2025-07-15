@@ -21,11 +21,25 @@
             <div class="nav-brand">
                 <a href="../../index.php">NoticiaPTY</a>
             </div>
-            <div class="user-info" style="display: none">
-                <button id="logoutBtn" onclick="logout()">
-                    <i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión
-                </button>
+            <div class="user-info" style="display: none;">
+    <div class="username">
+                <p id="usernameDisplay" class="username-text"></p>
+
+
             </div>
+
+            <!-- Mostrar nombre de usuario y rol -->
+            <button id="publicarBtn" style="display: none; margin-right: 10px;">
+                <i class="fas fa-newspaper"></i> Publicar Noticia</button>
+
+            <!-- Botón solo visible si el usuario es admin (se controla por JS) -->
+            <button id="adminBtn" style="display: none; margin-right: 10px;">
+                <i class="fas fa-users-cog"></i> Administrar Usuarios</button>
+    <button id="logoutBtn" onclick="logout()">
+        <i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión
+    </button>
+</div>
+
             <div class="nav-auth">
                 <a
                     href="../auth/iniciar-sesion/index.html"
@@ -33,12 +47,14 @@
                 >
                     <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
                 </a>
-                <a href="../auth/registro/index.html" class="auth-btn register-btn">
+                <a
+                    href="../auth/registro/index.html"
+                    class="auth-btn register-btn"
+                >
                     <i class="fas fa-user-plus"></i> Registrarse
                 </a>
             </div>
         </nav>
-        
 
         <!-- Contenedor de la noticia -->
         <div class="noticia-detalle">
@@ -77,18 +93,25 @@
             </div>
 
             <!-- Sección de comentarios -->
+
+             
             <div class="comment-section">
-                <h2>Deja un comentario</h2>
+                <h2>Comentarios</h2>
+
+                <div id="commentsContainer" class="comments-list">
+                    <!-- Comentarios aparecerán aquí -->
+                </div>
+
                 <form id="commentForm">
                     <textarea
                         id="commentText"
                         placeholder="Escribe tu comentario..."
-                        rows="5"
+                        required
                     ></textarea>
-                    <button type="submit" class="submit-comment">
-                        Comentar
-                    </button>
+                    <button class="submit-comment" type="submit">Enviar</button>
                 </form>
+
+                
             </div>
         </div>
 
