@@ -1,15 +1,21 @@
 <?php
+session_start();
 require_once "../class/visita.php";
 
-// Crear una nueva instancia de la clase Visita
+// Verificar si ya se contó la visita en esta sesión
+if (!isset($_SESSION['visita_contada'])) {
+    $visita = new Visita();
+    $visita->GuardarVisita();
+
+    // Marcar que ya se contó la visita
+    $_SESSION['visita_contada'] = true;
+}
+
+// Obtener el total de visitas (esto se puede mostrar siempre)
 $visita = new Visita();
-
-// Guardar un nuevo visitante cada vez que alguien carga la página
-$visita->GuardarVisita();
-
-// Obtener la cantidad total de visitas
 $totalVisitas = $visita->ObtenerVisitas();
 ?>
+
 
 
 <!DOCTYPE html>
