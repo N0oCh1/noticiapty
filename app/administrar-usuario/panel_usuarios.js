@@ -53,7 +53,7 @@ function renderizarUsuarios(usuarios) {
       <td>${user.activo == 1 ? "Sí" : "No"}</td>
       <td>
         <button data-action="toggle" data-id="${user.id}">${user.activo == 1 ? "Desactivar" : "Activar"}</button>
-        <button data-action="guardar" data-id="${user.id}">Guardar Cambios</button>
+        <button data-action="guarda r" data-id="${user.id}">Guardar Cambios</button>
       </td>
     `;
     tbody.appendChild(tr);
