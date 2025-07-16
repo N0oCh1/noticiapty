@@ -93,17 +93,29 @@ document.addEventListener("DOMContentLoaded", () => {
                         div.classList.add("comentario-propio");
                     }
 
-                    const fecha = new Date(
-                        comentario.fecha_creacion
-                    ).toLocaleString("es-ES");
+                    const fechaObj = new Date(comentario.fecha_creacion);
+
+                    const fecha = fechaObj.toLocaleDateString("es-ES"); // Ej: 16/07/2025
+                    const hora = fechaObj.toLocaleTimeString("es-ES", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: true,
+                    });
 
                     div.innerHTML = `
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <p><strong>${comentario.usuario}</strong></p>
-            <p class="fecha">${fecha}</p>
+    <div class="comentario-header">
+        <div>
+            <p class="comentario-usuario"><strong>${comentario.usuario}</strong></p>
         </div>
-        <p>${comentario.contenido}</p>
-    `;
+        <div class="comentario-fecha-hora">
+            <p class="comentario-fecha">${fecha}</p>
+            <p class="comentario-hora">${hora}</p>
+        </div>
+    </div>
+    <p class="comentario-texto">${comentario.contenido}</p>
+`;
+
+
 
                     commentsContainer.appendChild(div);
                 });
@@ -265,8 +277,9 @@ document.addEventListener("DOMContentLoaded", () => {
     if (noticia) {
         document.getElementById("titulo").innerText = noticia.titulo;
         document.getElementById("contenido").innerText = noticia.contenido;
+        document.getElementById("autor").innerText = noticia.autor;
         document.getElementById(
-            "autor"
+            "publicador"
         ).innerText = `${noticia.nombre_usuario} ${noticia.apellido_usuario}`;
 
         const fecha = new Date(noticia.fecha_creacion || noticia.fecha);
@@ -293,6 +306,7 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
         document.getElementById("titulo").innerText = "Noticia no encontrada.";
     }
+
 });
 
 // Función de logout con SweetAlert

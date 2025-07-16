@@ -9,11 +9,10 @@ document.addEventListener("DOMContentLoaded", () => {
     // Verificar sesión desde el servidor
     fetch("../api/controllerSessionInfo.php", {
         method: "GET",
-        credentials: "include"
+        credentials: "include",
     })
         .then((res) => res.json())
         .then((data) => {
-
             console.log("Datos de sesión:", data);
             if (data.success) {
                 sessionStorage.setItem("usuario_id", data.usuario_id);
@@ -70,7 +69,10 @@ document.addEventListener("DOMContentLoaded", () => {
         if (e.target.tagName === "A") {
             e.preventDefault();
             const selectedCategory = e.target.dataset.category;
-            currentCategory = selectedCategory === "todas" ? "todas" : parseInt(selectedCategory);
+            currentCategory =
+                selectedCategory === "todas"
+                    ? "todas"
+                    : parseInt(selectedCategory);
             document.getElementById("newsGrid").innerHTML = "";
             currentPage = 1;
             loadFilteredNews();
@@ -100,8 +102,10 @@ function logout() {
                     if (data.success) {
                         sessionStorage.clear();
 
-                        document.querySelector(".user-info").style.display = "none";
-                        document.querySelector(".nav-auth").style.display = "flex";
+                        document.querySelector(".user-info").style.display =
+                            "none";
+                        document.querySelector(".nav-auth").style.display =
+                            "flex";
 
                         Swal.fire({
                             icon: "success",
@@ -113,7 +117,9 @@ function logout() {
                             window.location.href = "../index.php";
                         });
                     } else {
-                        throw new Error(data.message || "No se pudo cerrar sesión.");
+                        throw new Error(
+                            data.message || "No se pudo cerrar sesión."
+                        );
                     }
                 })
                 .catch((error) => {
@@ -207,7 +213,10 @@ function renderNews(news) {
             const secondaryContainer = document.createElement("div");
             secondaryContainer.className = "secondary-news";
             news.slice(1, 3).forEach((article) => {
-                const card = createFeaturedNewsCard(article, "secondary-news-card");
+                const card = createFeaturedNewsCard(
+                    article,
+                    "secondary-news-card"
+                );
                 secondaryContainer.appendChild(card);
             });
             newsGrid.appendChild(secondaryContainer);
@@ -217,7 +226,10 @@ function renderNews(news) {
             const extraContainer = document.createElement("div");
             extraContainer.className = "secondary-news";
             news.slice(3).forEach((article) => {
-                const card = createFeaturedNewsCard(article, "secondary-news-card");
+                const card = createFeaturedNewsCard(
+                    article,
+                    "secondary-news-card"
+                );
                 extraContainer.appendChild(card);
             });
             newsGrid.appendChild(extraContainer);
@@ -226,6 +238,7 @@ function renderNews(news) {
         const moreContainer = document.createElement("div");
         moreContainer.className = "secondary-news";
         news.forEach((article) => {
+            console.log(article);
             const card = createFeaturedNewsCard(article, "secondary-news-card");
             moreContainer.appendChild(card);
         });
@@ -250,22 +263,26 @@ function createFeaturedNewsCard(article, className) {
             : "../imagenDB/default.png";
 
     card.innerHTML = `
-        <img src="${imageUrl}" 
-             alt="${article.titulo}" 
-             class="news-image"
-             onerror="this.src='../imagenDB/default.png'">
-        <div class="news-content">
-            <h3 class="news-title">${article.titulo}</h3>
-            <p class="news-excerpt">${article.contenido.substring(
-                0,
-                className === "main-news" ? 500 : 100
-            )}...</p>
-            <div class="news-meta">
-                <span>${article.nombre_usuario} ${article.apellido_usuario}</span>
-                <span>${new Date(article.fecha_creacion || article.fecha).toLocaleDateString()}</span>
-            </div>
+    <img src="${imageUrl}" 
+         alt="${article.titulo}" 
+         class="news-image"
+         onerror="this.src='../imagenDB/default.png'">
+    <div class="news-content">
+        <h3 class="news-title">${article.titulo}</h3>
+        <p class="news-excerpt">${article.contenido.substring(
+            0,
+            className === "main-news" ? 500 : 100
+        )}...</p>
+        <div class="news-meta">
+            <span><strong>Autor:</strong> ${article.autor}</span>
+            
+    </span>
+            <span>${new Date(
+                article.fecha_creacion || article.fecha
+            ).toLocaleDateString()}</span>
         </div>
-    `;
+    </div>
+`;
 
     return card;
 }
