@@ -18,7 +18,7 @@ function validarRolGeneral(int $id_usuario): bool {
     $rol = obtenerRolPorId($id_usuario);
     if ($rol === null) return false;
 
-    $rolesValidos = ['admin', 'periodista', 'lglobal'];
+    $rolesValidos = ['admin', 'publicador', 'lglobal'];
     return in_array($rol, $rolesValidos);
 }
 
@@ -35,5 +35,5 @@ function validarRolAdmin(int $id_usuario): bool {
 // ===========================
 function validarRolPeriodista(int $id_usuario): bool {
     $rol = obtenerRolPorId($id_usuario);
-    return $rol === 'periodista';
+    return $rol === 'publicador';
 }

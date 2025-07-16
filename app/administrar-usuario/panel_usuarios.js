@@ -33,7 +33,7 @@ async function verificarSesionYPermiso() {
 function renderizarUsuarios(usuarios) {
   const tbody = document.querySelector("#usersTable tbody");
   tbody.innerHTML = "";
-
+  console.log(usuarios);
   usuarios.forEach(user => {
     const tr = document.createElement("tr");
     tr.className = user.activo == 1 ? "active" : "inactive";
@@ -45,8 +45,8 @@ function renderizarUsuarios(usuarios) {
       <td contenteditable="true" data-field="usuario" data-id="${user.id}">${user.usuario}</td>
       <td>
         <select data-field="rol" data-id="${user.id}">
-          <option value="usuario" ${user.rol === "usuario" ? "selected" : ""}>Usuario</option>
-          <option value="periodista" ${user.rol === "periodista" ? "selected" : ""}>Periodista</option>
+          <option value="global" ${user.rol === "global" ? "selected" : ""}>Global</option>
+          <option value="publicador" ${user.rol === "publicador" ? "selected" : ""}>Publicador</option>
           <option value="admin" ${user.rol === "admin" ? "selected" : ""}>Admin</option>
         </select>
       </td>

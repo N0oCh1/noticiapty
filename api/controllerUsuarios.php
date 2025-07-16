@@ -33,9 +33,9 @@ function validarPermiso(int $usuarioId, string $permiso): bool {
     switch ($permiso) {
         case 'admin':
             return validarRolAdmin($usuarioId);
-        case 'periodista':
+        case 'publicador':
             return validarRolPeriodista($usuarioId);
-        case 'general':
+        case 'global':
             return validarRolGeneral($usuarioId);
         default:
             return false;
@@ -100,7 +100,7 @@ switch ($method) {
         }
 
         // Validar permiso para crear usuario con rol admin o periodista (solo admins)
-        if (in_array($input['rol'], ['admin', 'periodista']) && $rolSesion !== 'admin') {
+        if (in_array($input['rol'], ['admin', 'publicador']) && $rolSesion !== 'admin') {
             http_response_code(403);
             echo json_encode(["message" => "No tienes permisos para crear usuarios con rol '{$input['rol']}'"]);
             exit;
