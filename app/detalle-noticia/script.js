@@ -1,18 +1,72 @@
+const usuario = sessionStorage.getItem("usuario");
+
+const usuarioId = sessionStorage.getItem("usuario_id");
+console.log("Usuario ID:", usuarioId);
+const likeBtn = document.getElementById("likeBtn");
+const likeCount = document.getElementById("likeCount");
+const noticia = JSON.parse(localStorage.getItem("noticia"));
+const noticiaId = noticia ? noticia.id : null;
+console.log("Noticia ID:", noticiaId);
+
+// Comentarios
+const commentForm = document.getElementById("commentForm");
+const commentText = document.getElementById("commentText");
+const commentCount = document.getElementById("commentCount");
+
 document.addEventListener("DOMContentLoaded", () => {
-    const usuario = sessionStorage.getItem("usuario");
+    // Verificar sesión desde el servidor
+    fetch("../../api/controllerSessionInfo.php", {
+        method: "GET",
+        credentials: "include",
+    })
+        .then((res) => res.json())
+        .then((data) => {
+            console.log("Datos de sesión:", data);
+            if (data.success) {
+                sessionStorage.setItem("usuario_id", data.usuario_id);
+                sessionStorage.setItem("rol", data.rol);
 
-    const usuarioId = sessionStorage.getItem("usuario_id");
-    console.log("Usuario ID:", usuarioId);
-    const likeBtn = document.getElementById("likeBtn");
-    const likeCount = document.getElementById("likeCount");
-    const noticia = JSON.parse(localStorage.getItem("noticia"));
-    const noticiaId = noticia ? noticia.id : null;
-    console.log("Noticia ID:", noticiaId);
+                // Mostrar nombre de usuario
+                const usernameDisplay =
+                    document.getElementById("usernameDisplay");
+                if (usernameDisplay) {
+                    usernameDisplay.textContent = `Hola, ${usuario}`;
+                }
 
-    // Comentarios
-    const commentForm = document.getElementById("commentForm");
-    const commentText = document.getElementById("commentText");
-    const commentCount = document.getElementById("commentCount");
+                document.querySelector(".user-info").style.display = "flex";
+                document.querySelector(".nav-auth").style.display = "none";
+                document.getElementById("logoutBtn").style.display = "block";
+
+                if (data.rol === "admin") {
+                    const adminBtn = document.getElementById("adminBtn");
+                    if (adminBtn) {
+                        adminBtn.style.display = "inline-block";
+                        adminBtn.addEventListener("click", () => {
+                            window.location.href =
+                                "../../app/administrar-usuario/index.html";
+                        });
+                    }
+                }
+
+                if (data.rol === "publicador") {
+                    const publicarBtn = document.getElementById("publicarBtn");
+                    if (publicarBtn) {
+                        publicarBtn.style.display = "inline-block";
+                        publicarBtn.addEventListener("click", () => {
+                            window.location.href =
+                                "../../app/formulario-noticia/index.html";
+                        });
+                    }
+                }
+            } else {
+                document.querySelector(".user-info").style.display = "none";
+                document.querySelector(".nav-auth").style.display = "flex";
+            }
+        })
+        .catch((error) => {
+            console.error("Error al verificar sesión:", error);
+        });
+
     cargarComentarios();
 
     function cargarComentarios() {
@@ -33,7 +87,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     console.log("Comentario:", comentario.usuario_id);
                     console.log("Usuario ID:", usuarioId);
-
 
                     // Solo aplicar clase si es del usuario actual
                     if (comentario.usuario_id == usuarioId) {
@@ -100,21 +153,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!noticiaId) {
         alert("No se pudo encontrar la noticia.");
         return;
-    }
-
-    if (usuarioId) {
-        document.querySelector(".user-info").style.display = "flex";
-        document.querySelector(".nav-auth").style.display = "none";
-        document.getElementById("logoutBtn").style.display = "block";
-
-        // Mostrar nombre de usuario
-    const usernameDisplay = document.getElementById("usernameDisplay");
-    if (usernameDisplay) {
-        usernameDisplay.textContent = `Hola, ${usuario}`;
-    }
-    } else {
-        document.querySelector(".user-info").style.display = "none";
-        document.querySelector(".nav-auth").style.display = "flex";
     }
 
     obtenerLikes(noticiaId);
