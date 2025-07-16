@@ -93,10 +93,12 @@ body {
     color: #7f8c8d;
     margin-bottom: 20px;
 }
-
-#autor {
-    font-weight: bold;
+.meta-info p {
+    
+    margin-bottom: 10px;
 }
+
+
 
 /* Estilos para las imágenes */
 .imagenes {
@@ -231,6 +233,40 @@ body {
 .comentario-propio {
     border-left: 4px solid #23219a !important; /* Azul, puedes cambiarlo a otro si prefieres */
     background-color: #f0f8ff; /* Azul clarito opcional para distinguir */
+}
+.comentario-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 5px;
+}
+
+.comentario-usuario {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.comentario-fecha-hora {
+    text-align: right;
+    font-size: 0.85rem;
+    color: #888;
+    line-height: 1.2;
+}
+
+.comentario-fecha {
+    font-weight: bold;
+}
+
+.comentario-hora {
+    font-size: 0.75rem;
+}
+
+.comentario-texto {
+    font-size: 1rem;
+    color: #444;
+    line-height: 1.4;
+    margin-top: 0.5rem;
 }
 
 
