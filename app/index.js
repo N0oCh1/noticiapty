@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         publicarBtn.style.display = "inline-block";
                         publicarBtn.addEventListener("click", () => {
                             window.location.href =
-                                "../app/formulario-noticia/index.html";
+                                "../app/crear-noticia/index.html";
                         });
                     }
                 }
