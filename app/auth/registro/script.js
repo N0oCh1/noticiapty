@@ -8,6 +8,7 @@ document
         const apellido = document.getElementById("apellido").value;
         const usuario = document.getElementById("usuario").value;
         const password = document.getElementById("password").value;
+        const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9]).{8,}$/;
 
         // Crear el objeto con los datos del formulario
         const data = {
@@ -16,6 +17,14 @@ document
             usuario: usuario,
             password: password,
         };
+        if (!passwordRegex.test(password)) {
+            Swal.fire({
+                icon: "error",
+                title: "Contraseña inválida",
+                text: "La contraseña debe tener al menos 8 caracteres, una letra mayúscula y un número.",
+            });
+            return;
+        }
 
         // Enviar los datos al backend mediante fetch (POST)
         fetch("../../../api/controllerRegistroUsuario.php", {
@@ -26,14 +35,9 @@ document
             body: JSON.stringify(data),
         })
             .then((response) => {
-                console.log("Respuesta del servidor:", response);
-                if (!response.ok) {
-                    return response.text();
-                }
-                return response.json();
+                return response.json(); // Siempre intenta parsear JSON, incluso si el status es error
             })
             .then((data) => {
-                console.log("Datos recibidos:", data);
                 if (data.success) {
                     Swal.fire({
                         icon: "success",
@@ -43,8 +47,7 @@ document
                         timerProgressBar: true,
                         showConfirmButton: false,
                     }).then(() => {
-                        window.location.href =
-                            "../iniciar-sesion/index.html";
+                        window.location.href = "../iniciar-sesion/index.html";
                     });
                 } else {
                     Swal.fire({
@@ -56,6 +59,7 @@ document
                     });
                 }
             })
+
             .catch((error) => {
                 console.error("Error:", error);
                 Swal.fire({
