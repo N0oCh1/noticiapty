@@ -93,7 +93,7 @@ class Noticia
   }
 
 
-  private function GuardarImagen($id_noticia,  $imagen)
+  public function GuardarImagen($id_noticia,  $imagen)
   {
     $total = count($imagen['name']);
     $guardarImagen = new Imagen();
@@ -114,5 +114,13 @@ class Noticia
         $guardarImagen->GuardarImagen($id_noticia, $rutaMinuatura, $imagen_procesada['tipo']);
       }
     }
+  }
+
+  public function CambiarEstado($id, $estado) {
+    $tb_name = "noticias";
+    $string = "activo = $estado";
+    $astriction = "id = $id";
+
+    return $this->db->update($tb_name, $string, $astriction);
   }
 }
