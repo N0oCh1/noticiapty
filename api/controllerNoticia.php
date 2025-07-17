@@ -9,10 +9,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   $titulo = $_POST["titulo"];
   $contenido = $_POST["contenido"];
   $categoria = $_POST["categoria"];
-  $activo = $_POST["activo"];
   $usuario = $_POST["usuario"];
   $imagen = $_FILES["imagen"];
-
+  $activo = 3; // Por defecto, 3 significa "en espera"
   $result = $noticia->GuardarNoticia($titulo, $contenido, $categoria, $activo, $usuario, $imagen);
   if ($result) {
     http_response_code(201);
