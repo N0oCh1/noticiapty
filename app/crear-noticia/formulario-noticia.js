@@ -7,8 +7,13 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(res => res.json())
     .then(data => {
       if (!data.success || data.rol !== "publicador") {
-        alert("Acceso denegado. Solo los periodistas pueden publicar noticias.");
-        window.location.href = "../index.php";
+        Swal.fire({
+          icon: 'error',
+          title: 'Acceso denegado',
+          text: 'Solo los periodistas pueden publicar noticias.',
+        }).then(() => {
+          window.location.href = "../index.php";
+        });
       } else {
         document.getElementById("usuario_id").value = data.usuario_id;
       }
@@ -51,7 +56,11 @@ document.addEventListener("DOMContentLoaded", () => {
   form.addEventListener("submit", function (e) {
     if (inputImagen.files.length < 3) {
       e.preventDefault();
-      alert("Por favor, selecciona al menos 3 imágenes.");
+      Swal.fire({
+        icon: 'warning',
+        title: 'Imágenes insuficientes',
+        text: 'Por favor, selecciona al menos 3 imágenes.',
+      });
       return;
     }
 
@@ -65,14 +74,23 @@ document.addEventListener("DOMContentLoaded", () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        alert(data.message);
-        if (data.message.includes("correctamente")) {
-          window.location.href = "../index.php";
-        }
+        Swal.fire({
+          icon: data.message.includes("correctamente") ? 'success' : 'info',
+          title: 'Noticia en estado de espera',
+          text: data.message,
+        }).then(() => {
+          if (data.message.includes("correctamente")) {
+            window.location.href = "../index.php";
+          }
+        });
       })
       .catch((error) => {
         console.error("Error al guardar noticia:", error);
-        alert("Error al guardar la noticia");
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Ocurrió un error al guardar la noticia.',
+        });
       });
   });
 });
