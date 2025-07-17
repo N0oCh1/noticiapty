@@ -128,9 +128,20 @@ document.addEventListener("DOMContentLoaded", () => {
         e.preventDefault();
 
         if (!usuarioId) {
-            alert("Debes iniciar sesión para comentar.");
+            Swal.fire({
+                icon: "warning",
+                title: "Debes iniciar sesión",
+                text: "Inicia sesión para poder comentar.",
+                confirmButtonColor: "#3085d6",
+                confirmButtonText: "Iniciar sesión",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "../auth/iniciar-sesion/index.html"; // Ajusta la ruta si es necesario
+                }
+            });
             return;
         }
+
 
         const contenido = commentText.value.trim();
         if (contenido.length === 0) {
@@ -179,9 +190,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
     likeBtn.addEventListener("click", function () {
         if (!usuarioId) {
-            alert("Debes estar logueado para dar like.");
+            Swal.fire({
+                icon: "warning",
+                title: "Inicia sesión",
+                text: "Debes estar logueado para dar like.",
+                confirmButtonColor: "#3085d6",
+                confirmButtonText: "Iniciar sesión",
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "../auth/iniciar-sesion/index.html"; // Ajusta la ruta si es diferente
+                }
+            });
             return;
         }
+
 
         if (!yaDioLike) {
             darLike(usuarioId, noticiaId);
@@ -293,10 +315,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 "../" + noticia.imagenes[1].imagen;
             document.getElementById("imagen2").src =
                 "../" +
-                (noticia.imagenes[0]?.imagen || "imagenDB/default.png");
+                (noticia.imagenes[0]?.imagen || "../../imagenDB/default.png");
             document.getElementById("imagen3").src =
                 "../" +
-                (noticia.imagenes[2]?.imagen || "imagenDB/default.png");
+                (noticia.imagenes[2]?.imagen || "../../imagenDB/default.png");
         } else {
             document.getElementById("imagen1").src =
                 "../../imagenDB/default.png";

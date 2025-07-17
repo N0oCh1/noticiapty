@@ -306,20 +306,92 @@ textarea {
     margin-bottom: 15px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
-
 .submit-comment {
-    padding: 0.5rem 1rem;
-    background-color: #219a52;
+    padding: 0.6rem 1.5rem;
+    background: linear-gradient(135deg, #219a52, #27ae60);
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 600;
     cursor: pointer;
-    transition: background 0.3s ease;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(39, 174, 96, 0.4);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
 }
 
 .submit-comment:hover {
-    background-color: #27ae60;
+    background: linear-gradient(135deg, #1e874b, #219a52);
+    box-shadow: 0 6px 14px rgba(33, 150, 83, 0.6);
+    transform: translateY(-2px);
 }
+
+.submit-comment:active {
+    transform: scale(0.97);
+    box-shadow: 0 3px 8px rgba(33, 150, 83, 0.4);
+}
+#commentForm {
+    background-color: #f0f4f8;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-top: 1rem;
+}
+
+#commentForm textarea {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    resize: vertical;
+    margin-bottom: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+#commentForm textarea:focus {
+    outline: none;
+    border-color: #27ae60;
+    box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.2);
+}
+
+/* Botón mejorado */
+.submit-comment {
+    padding: 0.6rem 1.5rem;
+    background: linear-gradient(135deg, #219a52, #27ae60);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(39, 174, 96, 0.4);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.submit-comment i {
+    font-size: 1rem;
+}
+
+.submit-comment:hover {
+    background: linear-gradient(135deg, #1e874b, #219a52);
+    box-shadow: 0 6px 14px rgba(33, 150, 83, 0.6);
+    transform: translateY(-2px);
+}
+
+.submit-comment:active {
+    transform: scale(0.97);
+    box-shadow: 0 3px 8px rgba(33, 150, 83, 0.4);
+}
+
 
 
 #logoutBtn {
