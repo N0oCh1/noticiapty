@@ -8,7 +8,8 @@ document
         const apellido = document.getElementById("apellido").value;
         const usuario = document.getElementById("usuario").value;
         const password = document.getElementById("password").value;
-        const passwordRegex = /^(?=.*[A-Z])(?=.*[0-9]).{8,}$/;
+        const passwordRegex =
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[-_!@#$%^&*]).{8,}$/;
 
         // Crear el objeto con los datos del formulario
         const data = {
@@ -21,7 +22,7 @@ document
             Swal.fire({
                 icon: "error",
                 title: "Contraseña inválida",
-                text: "La contraseña debe tener al menos 8 caracteres, una letra mayúscula y un número.",
+                text: "La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula, un número y un carácter especial (-_!@#$%^&*).",
             });
             return;
         }

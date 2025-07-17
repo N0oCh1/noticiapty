@@ -11,8 +11,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   $categoria = $_POST["categoria"];
   $usuario = $_POST["usuario"];
   $imagen = $_FILES["imagen"];
+  $autor = $_POST["autor"];
+
   $activo = 3; // Por defecto, 3 significa "en espera"
-  $result = $noticia->GuardarNoticia($titulo, $contenido, $categoria, $activo, $usuario, $imagen);
+  $result = $noticia->GuardarNoticia($titulo, $contenido, $categoria, $activo, $usuario, $imagen, $autor);
   if ($result) {
     http_response_code(201);
     echo json_encode([

@@ -14,6 +14,7 @@ class Noticia
   private string $categoria;
   private string $usuario;
   private $imagen;
+  private $autor;
 
   public function __construct()
   {
@@ -21,7 +22,7 @@ class Noticia
     $this->db_conexion = $this->db->getConexion();
   }
 
-  public function GuardarNoticia($titulo, $contenido, $categoria, $activo, $usuario, array $imagen = [])
+  public function GuardarNoticia($titulo, $contenido, $categoria, $activo, $usuario, array $imagen = [], $autor = '')
   {
     $this->titulo = $titulo;
     $this->contenido = $contenido;
@@ -29,13 +30,16 @@ class Noticia
     $this->activo = $activo;
     $this->usuario = $usuario;
     $this->imagen = $imagen;
+    $this->autor = $autor;
+
 
     $datos = array(
       "titulo" => $this->titulo,
       "contenido" => $this->contenido,
       "categoria_id" => $this->categoria,
       "activo" => $this->activo,
-      "usuario_id" => $this->usuario
+      "usuario_id" => $this->usuario,
+      "autor" => $this->autor  
     );
 
     try {
