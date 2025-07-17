@@ -5,6 +5,7 @@ console.log("Usuario ID:", usuarioId);
 const likeBtn = document.getElementById("likeBtn");
 const likeCount = document.getElementById("likeCount");
 const noticia = JSON.parse(localStorage.getItem("noticia"));
+console.log(noticia);
 const noticiaId = noticia ? noticia.id : null;
 console.log("Noticia ID:", noticiaId);
 
@@ -273,6 +274,7 @@ document.addEventListener("DOMContentLoaded", () => {
             })
             .catch((err) => console.error("Error al obtener likes:", err));
     }
+    console.log("noticia:",noticia);
 
     if (noticia) {
         document.getElementById("titulo").innerText = noticia.titulo;
@@ -288,12 +290,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (noticia.imagenes && noticia.imagenes.length > 0) {
             document.getElementById("imagen1").src =
-                "../../" + noticia.imagenes[0].imagen;
+                "../" + noticia.imagenes[1].imagen;
             document.getElementById("imagen2").src =
-                "../../" +
-                (noticia.imagenes[1]?.imagen || "imagenDB/default.png");
+                "../" +
+                (noticia.imagenes[0]?.imagen || "imagenDB/default.png");
             document.getElementById("imagen3").src =
-                "../../" +
+                "../" +
                 (noticia.imagenes[2]?.imagen || "imagenDB/default.png");
         } else {
             document.getElementById("imagen1").src =
