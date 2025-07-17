@@ -14,9 +14,47 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-  // Envío del formulario
+  // Variables para form y input de imágenes
   const form = document.getElementById("formNoticia");
+  const inputImagen = document.getElementById("imagen");
+
+  // Crear contenedor para previsualizar imágenes
+  const previewContainer = document.createElement("div");
+  previewContainer.id = "previewContainer";
+  previewContainer.style.display = "flex";
+  previewContainer.style.gap = "10px";
+  previewContainer.style.marginTop = "10px";
+  inputImagen.parentNode.insertBefore(previewContainer, inputImagen.nextSibling);
+
+  // Mostrar previsualización cuando se seleccionan imágenes
+  inputImagen.addEventListener("change", () => {
+    previewContainer.innerHTML = ""; // limpiar previsualización
+    const files = inputImagen.files;
+
+    Array.from(files).forEach(file => {
+      const reader = new FileReader();
+      reader.onload = e => {
+        const img = document.createElement("img");
+        img.src = e.target.result;
+        img.style.width = "100px";
+        img.style.height = "100px";
+        img.style.objectFit = "cover";
+        img.style.border = "1px solid #ccc";
+        img.style.borderRadius = "4px";
+        previewContainer.appendChild(img);
+      };
+      reader.readAsDataURL(file);
+    });
+  });
+
+  // Validar mínimo 3 imágenes y enviar formulario
   form.addEventListener("submit", function (e) {
+    if (inputImagen.files.length < 3) {
+      e.preventDefault();
+      alert("Por favor, selecciona al menos 3 imágenes.");
+      return;
+    }
+
     e.preventDefault();
 
     const formData = new FormData(form);
