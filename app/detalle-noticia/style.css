@@ -19,6 +19,11 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 999;
 }
 
 .nav-brand a {
@@ -63,8 +68,10 @@ body {
 
 /* Contenedor principal de la noticia */
 .noticia-detalle {
+    
     max-width: 1000px;
-    margin: 2rem auto;
+    margin: 3rem auto;
+    margin-top: 7.5rem;
     background-color: white;
     padding: 2rem;
     border-radius: 8px;

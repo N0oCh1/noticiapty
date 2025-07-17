@@ -165,7 +165,7 @@ function loadFilteredNews() {
 
     if (sortedNews.length === 0) {
         document.getElementById("newsGrid").innerHTML =
-            "<p style='text-align: center; font-size: 18px; margin-top: 15rem; color: #2c3e50;'>No hay noticias para esta categoría.</p>";
+            "<p style='text-align: center; font-size: 18px; margin-top: 16rem; color: #2c3e50;'>No hay noticias para esta categoría.</p>";
         document.getElementById("loadMore").style.display = "none";
     } else {
         renderNews(sortedNews.slice(0, initialNewsCount));
@@ -259,7 +259,7 @@ function createFeaturedNewsCard(article, className) {
 
     const imageUrl =
         article.imagenes && article.imagenes.length > 0
-            ? article.imagenes[0].imagen
+            ? article.imagenes[1].imagen
             : "../imagenDB/default.png";
 
     card.innerHTML = `
