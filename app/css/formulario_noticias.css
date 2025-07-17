@@ -1,66 +1,69 @@
- * {
-      box-sizing: border-box;
-    }
 
-    body {
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f0f2f5;
-      margin: 0;
-      padding: 0;
-    }
+/* Formulario */
+form {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
 
-    h1 {
-      text-align: center;
-      margin-top: 2rem;
-      color: #2c3e50;
-    }
+/* Etiquetas */
+label {
+  display: block;
+  margin-top: 12px;
+  font-weight: bold;
+}
 
-    form {
-      max-width: 600px;
-      margin: 2rem auto;
-      padding: 2rem;
-      background-color: #ffffff;
-      border-radius: 8px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    }
+/* Inputs y textarea */
+input[type="text"],
+textarea,
+select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 4px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
 
-    label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: 600;
-      color: #34495e;
-    }
+textarea {
+  resize: vertical;
+}
 
-    input[type="text"],
-    textarea,
-    select,
-    input[type="file"] {
-      width: 100%;
-      padding: 0.7rem;
-      margin-bottom: 1.5rem;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 1rem;
-    }
+/* Botón principal */
+button[type="submit"] {
+  display: block;
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
 
-    textarea {
-      resize: vertical;
-    }
+button[type="submit"]:hover {
+  background-color: #2980b9;
+}
 
-    button {
-      display: block;
-      width: 100%;
-      padding: 0.75rem;
-      background-color: #3498db;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      font-size: 1rem;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
+/* Botones generales */
+button {
+  margin-top: 15px;
+  padding: 10px 15px;
+  background-color: #2980b9;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
 
-    button:hover {
-      background-color: #2980b9;
-    }
+button:hover {
+  background-color: #1c5980;
+}

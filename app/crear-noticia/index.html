@@ -3,10 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <title>Publicar Noticia</title>
-  <link rel="stylesheet" href="../css/formulario_noticias.css" />
+  <link rel="stylesheet" href="../css/paneles-comunes.css" />
+  <link rel="stylesheet" href="../css/formulario_noticias.css"/>
 </head>
-<body>
+<header>
   <h1>Publicar Noticia</h1>
+</header>
+<body>
+  <!-- Botón de regreso -->
+  <div style="margin-bottom: 20px;">
+    <button class="volver-btn" onclick="window.location.href='../index.php'" style="background-color: #6c757d;">
+      ← Volver al Inicio
+    </button>
+  </div>
 
   <form id="formNoticia" enctype="multipart/form-data">
     <input type="hidden" id="usuario_id" name="usuario" />
@@ -26,18 +35,16 @@
       <option value="4">Entretenimiento</option>
     </select>
 
-    <label for="activo">¿Publicar inmediatamente?</label>
-    <select name="activo" id="activo">
-      <option value="1">Sí</option>
-      <option value="0">No</option>
-    </select>
-
     <label for="imagen">Imágenes:</label>
     <input type="file" name="imagen[]" id="imagen" accept="image/*" multiple required>
 
+    <label for="autor">Autor (nombre apellido):</label>
+    <input type="text" name="autor" id="autor" required
+           pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ]+(?:\s[A-Za-zÁÉÍÓÚáéíóúÑñ]+)+$"
+           title="Debe ingresar nombre y apellido separados por un espacio.">
+
     <button type="submit">Guardar Noticia</button>
   </form>
-
-  <script src="formulario-noticia.js"></script>
+  <script src ="formulario-noticia.js"></script>
 </body>
 </html>

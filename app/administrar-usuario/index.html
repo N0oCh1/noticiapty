@@ -3,20 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <title>Panel de Control Usuarios</title>
+  <link rel="stylesheet" href="../css/paneles-comunes.css" />
   <link rel="stylesheet" href="../css/panel_usuarios.css" />
 </head>
+<header>
+  <h1>Administrar Usuarios</h1>
+</header>
 <body>
-
-  <h1>Panel de Control de Usuarios</h1>
-
   <!-- Botón de regreso -->
   <div style="margin-bottom: 20px;">
-    <button onclick="window.location.href='../index.php'" style="background-color: #6c757d;">
+    <button class="volver-btn" onclick="window.location.href='../index.php'">
       ← Volver al Inicio
     </button>
   </div>
-  
-  <!-- Formulario para agregar usuario -->
+  <div class="container">
+    <!-- Formulario para agregar usuario -->
   <form id="formAddUser">
     <h2>Agregar Nuevo Usuario</h2>
     <label>Nombre:
@@ -60,6 +61,8 @@
       <!-- Aquí se llenarán los usuarios -->
     </tbody>
   </table>
+  </div>
+  
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="panel_usuarios.js"></script>
 </body>

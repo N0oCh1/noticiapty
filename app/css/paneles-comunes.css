@@ -1,0 +1,64 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f0f2f5;
+  color: #333;
+  margin: 0;           /* Sin separación externa */
+}
+
+/* Header superior */
+header {
+  background-color: #2c3e50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+  width: 100%;
+  padding: 50px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+/* Título a la izquierda */
+h1 {
+  font-size: 2rem;
+  font-weight: bold;
+  color: white;
+}
+
+h2 {
+  color: #2c3e50;
+}
+
+.container {
+  max-width: 1000px;        /* o 1200px si quieres más ancho */
+  margin: 30px auto;        /* centrar horizontal + separación vertical */
+  padding: 20px;            /* separación interna */
+  background-color: #ffffff;  /* opcional para destacar el contenido */
+  border-radius: 8px;         /* opcional */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05); /* opcional */
+}
+
+/* Botón de volver */
+.volver-btn {
+  background-color: #6c757d;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 0.9rem;
+  margin-left: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.volver-btn:hover {
+  background-color: #5a6268;
+}
