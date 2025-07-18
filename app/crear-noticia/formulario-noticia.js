@@ -6,11 +6,11 @@ document.addEventListener("DOMContentLoaded", () => {
   })
     .then(res => res.json())
     .then(data => {
-      if (!data.success || data.rol !== "publicador") {
+      if (!data.success || (data.rol !== "supervisor" && data.rol !== "admin" && data.rol !== "editor")) {
         Swal.fire({
           icon: 'error',
           title: 'Acceso denegado',
-          text: 'Solo los periodistas pueden publicar noticias.',
+          text: 'Solo los supervisores, administradores y editores pueden crear noticias.',
         }).then(() => {
           window.location.href = "../index.php";
         });

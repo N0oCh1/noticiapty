@@ -71,10 +71,6 @@ $totalVisitas = $visita->ObtenerVisitas();
             </button>
         </div>
 
-
-
-
-
         <div class="nav-auth">
             <div class="auth-btn-container">
                 <a href="auth/iniciar-sesion/index.html" class="auth-btn login-btn">

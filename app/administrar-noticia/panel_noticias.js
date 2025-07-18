@@ -9,10 +9,10 @@ function verificarSesion() {
   })
     .then(res => res.json())
     .then(data => {
-      if (data.success && data.rol === "supervisor") {
+      if (data.success && (data.rol === "supervisor" || data.rol === "admin")) {
         cargarNoticias();
       } else {
-        redirigir("Solo los supervisores pueden acceder.");
+        redirigir("Solo los supervisores y administradores pueden acceder.");
       }
     })
     .catch(() => {
@@ -26,7 +26,7 @@ function redirigir(mensaje) {
     title: "Acceso denegado",
     text: mensaje
   }).then(() => {
-    window.location.href = "../../index.html";
+    window.location.href = "../index.html";
   });
 }
 
@@ -44,6 +44,7 @@ function cargarNoticias() {
 }
 
 function mostrarNoticias(noticias) {
+  
   const tbody = document.querySelector("#noticiasTable tbody");
   tbody.innerHTML = "";
 
