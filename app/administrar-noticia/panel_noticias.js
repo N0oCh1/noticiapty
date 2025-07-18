@@ -44,6 +44,7 @@ function cargarNoticias() {
 }
 
 function mostrarNoticias(noticias) {
+  
   const tbody = document.querySelector("#noticiasTable tbody");
   tbody.innerHTML = "";
 
