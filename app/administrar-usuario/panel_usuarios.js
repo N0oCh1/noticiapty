@@ -48,12 +48,14 @@ function renderizarUsuarios(usuarios) {
           <option value="global" ${user.rol === "global" ? "selected" : ""}>Global</option>
           <option value="publicador" ${user.rol === "publicador" ? "selected" : ""}>Publicador</option>
           <option value="admin" ${user.rol === "admin" ? "selected" : ""}>Admin</option>
+          <option value="supervisor" ${user.rol === "supervisor" ? "selected" : ""}>Supervisor</option>
         </select>
       </td>
+
       <td>${user.activo == 1 ? "Sí" : "No"}</td>
       <td>
         <button data-action="toggle" data-id="${user.id}">${user.activo == 1 ? "Desactivar" : "Activar"}</button>
-        <button data-action="guarda r" data-id="${user.id}">Guardar Cambios</button>
+        <button data-action="guardar" data-id="${user.id}">Guardar Cambios</button>
       </td>
     `;
     tbody.appendChild(tr);
@@ -68,7 +70,11 @@ document.getElementById("formAddUser").addEventListener("submit", async e => {
   const data = Object.fromEntries(formData.entries());
 
   if (!data.nombre || !data.apellido || !data.usuario || !data.contrasena || !data.rol) {
-    alert("Complete todos los campos");
+    Swal.fire({
+      icon: "warning",
+      title: "Campos incompletos",
+      text: "Complete todos los campos",
+    });
     return;
   }
 
@@ -82,14 +88,26 @@ document.getElementById("formAddUser").addEventListener("submit", async e => {
     const result = await res.json();
 
     if (res.status === 201) {
-      alert("Usuario agregado correctamente");
+      Swal.fire({
+        icon: "success",
+        title: "Usuario agregado",
+        text: "El usuario fue agregado correctamente",
+      });
       e.target.reset();
       verificarSesionYPermiso(); // recarga usuarios
     } else {
-      alert(result.message || "Error al agregar usuario");
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: result.message || "Error al agregar usuario",
+      });
     }
   } catch (error) {
-    alert("Error de red");
+    Swal.fire({
+      icon: "error",
+      title: "Error de red",
+      text: "No se pudo conectar con el servidor.",
+    });
   }
 });
 
@@ -108,15 +126,31 @@ document.querySelector("#usersTable tbody").addEventListener("click", async e =>
 
     try {
       const res = await fetch(`${apiUrl}?id=${id}`, {
-        method: "DELETE", // para cambiar estado activo
+        method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ activo: nuevoEstado })
       });
       const result = await res.json();
-      if (res.ok) verificarSesionYPermiso();
-      else alert(result.message || "Error al cambiar estado");
+      if (res.ok) {
+        Swal.fire({
+          icon: "success",
+          title: "Estado actualizado",
+          text: "El estado del usuario ha sido actualizado.",
+        });
+        verificarSesionYPermiso();
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: result.message || "Error al cambiar estado",
+        });
+      }
     } catch (error) {
-      alert("Error de red");
+      Swal.fire({
+        icon: "error",
+        title: "Error de red",
+        text: "No se pudo conectar con el servidor.",
+      });
     }
 
   } else if (action === "guardar") {
@@ -126,7 +160,11 @@ document.querySelector("#usersTable tbody").addEventListener("click", async e =>
     const rol = tr.querySelector('[data-field="rol"]').value;
 
     if (!nombre || !apellido || !usuario || !rol) {
-      alert("Complete todos los campos antes de guardar");
+      Swal.fire({
+        icon: "warning",
+        title: "Campos incompletos",
+        text: "Complete todos los campos antes de guardar",
+      });
       return;
     }
 
@@ -137,10 +175,26 @@ document.querySelector("#usersTable tbody").addEventListener("click", async e =>
         body: JSON.stringify({ nombre, apellido, usuario, rol })
       });
       const result = await res.json();
-      if (res.ok) verificarSesionYPermiso();
-      else alert(result.message || "Error al actualizar");
+      if (res.ok) {
+        Swal.fire({
+          icon: "success",
+          title: "Actualizado",
+          text: "El usuario fue actualizado correctamente.",
+        });
+        verificarSesionYPermiso();
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: result.message || "Error al actualizar usuario",
+        });
+      }
     } catch (error) {
-      alert("Error de red");
+      Swal.fire({
+        icon: "error",
+        title: "Error de red",
+        text: "No se pudo conectar con el servidor.",
+      });
     }
   }
 });
