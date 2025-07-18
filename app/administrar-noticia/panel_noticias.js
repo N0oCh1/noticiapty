@@ -1,121 +1,112 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // Verifica si el usuario es un supervisor
+  verificarSesion();
+});
+
+function verificarSesion() {
   fetch("../../api/controllerSessionInfo.php", {
     method: "GET",
     credentials: "include"
   })
     .then(res => res.json())
     .then(data => {
-      if (!data.success || data.rol !== "supervisor") {
-        Swal.fire({
-          icon: "error",
-          title: "Acceso denegado",
-          text: "Solo los supervisores pueden acceder.",
-          confirmButtonText: "OK"
-        }).then(() => {
-          window.location.href = "../../login.html";
-        });
+      if (data.success && data.rol === "supervisor") {
+        cargarNoticias();
       } else {
-        cargarNoticias(); // Carga noticias si tiene acceso
+        redirigir("Solo los supervisores pueden acceder.");
       }
     })
-    .catch(error => {
-      console.error("Error al verificar sesión:", error);
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Error al verificar sesión",
-        confirmButtonText: "OK"
-      }).then(() => {
-        window.location.href = "../../login.html";
-      });
+    .catch(() => {
+      redirigir("Error al verificar sesión.");
     });
-});
+}
+
+function redirigir(mensaje) {
+  Swal.fire({
+    icon: "error",
+    title: "Acceso denegado",
+    text: mensaje
+  }).then(() => {
+    window.location.href = "../../index.html";
+  });
+}
 
 function cargarNoticias() {
   fetch("../../api/controllerNoticia.php")
     .then(res => res.json())
-    .then(noticias => {
-      const tabla = document.getElementById("noticiasTable");
-      const tbody = tabla.querySelector("tbody");
-      tbody.innerHTML = ""; // Limpiar contenido anterior
-      console.log(noticias);
-      noticias.forEach(noticia => {
-        const fila = document.createElement("tr");
-        fila.innerHTML = `
-          <td>${noticia.id}</td>
-          <td>${noticia.titulo}</td>
-          <td>${noticia.contenido}</td>
-          <td>${noticia.categoria}</td>
-          <td>${noticia.autor}</td>
-          <td>
-            <select data-id="${noticia.id}" class="estado-select">
-              <option value="1" ${noticia.activo == 1 ? "selected" : ""}>Activo</option>
-              <option value="2" ${noticia.activo == 2 ? "selected" : ""}>Inactivo</option>
-              <option value="3" ${noticia.activo == 3 ? "selected" : ""}>En espera</option>
-            </select>
-          </td>
-          <td>
-            <button class="btn-guardar" data-id="${noticia.id}">Guardar</button>
-          </td>
-        `;
-        tbody.appendChild(fila);
-      });
-
-      document.querySelectorAll(".btn-guardar").forEach(boton => {
-        boton.addEventListener("click", () => {
-          const id = boton.dataset.id;
-          const select = document.querySelector(`select.estado-select[data-id="${id}"]`);
-          const nuevoEstado = select.value;
-          cambiarEstado(id, nuevoEstado);
-        });
-      });
-    })
-    .catch(err => {
-      console.error("Error al cargar noticias:", err);
+    .then(noticias => mostrarNoticias(noticias))
+    .catch(() => {
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: "Error al cargar noticias"
+        text: "No se pudieron cargar las noticias."
       });
     });
 }
 
-function cambiarEstado(id, nuevoEstado) {
-  console.log(`Cambiando estado de la noticia ${id} a ${nuevoEstado}`);
+function mostrarNoticias(noticias) {
+  const tbody = document.querySelector("#noticiasTable tbody");
+  tbody.innerHTML = "";
+
+  noticias.forEach(noticia => {
+    const fila = document.createElement("tr");
+    fila.innerHTML = `
+      <td>${noticia.id}</td>
+      <td>${noticia.titulo}</td>
+      <td>${noticia.contenido}</td>
+      <td>${noticia.categoria}</td>
+      <td>${noticia.autor}</td>
+      <td class="imagenes-container">
+        ${(noticia.imagenes || [])
+          .map(
+            obj =>
+              `<img src="../${obj.imagen}" alt="Imagen noticia" class="imagen-noticia"
+                onerror="this.src='../../imagenDB/default.png'; this.onerror=null;">`
+          )
+          .join("")}
+      </td>
+      <td>
+        <select data-id="${noticia.id}" class="estado-select">
+          <option value="1" ${noticia.activo == 1 ? "selected" : ""}>Activo</option>
+          <option value="2" ${noticia.activo == 2 ? "selected" : ""}>Inactivo</option>
+          <option value="3" ${noticia.activo == 3 ? "selected" : ""}>En espera</option>
+        </select>
+      </td>
+      <td><button class="btn-guardar" data-id="${noticia.id}">Guardar</button></td>
+    `;
+    tbody.appendChild(fila);
+  });
+
+  document.querySelectorAll(".btn-guardar").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const id = btn.dataset.id;
+      const select = document.querySelector(`select.estado-select[data-id="${id}"]`);
+      actualizarEstado(id, select.value);
+    });
+  });
+}
+
+function actualizarEstado(id, estado) {
   fetch("../../api/controllerNoticia.php", {
     method: "PUT",
     headers: {
       "Content-Type": "application/json"
     },
     credentials: "include",
-    body: JSON.stringify({
-      id: parseInt(id),
-      estado: parseInt(nuevoEstado)
-    })
+    body: JSON.stringify({ id: parseInt(id), estado: parseInt(estado) })
   })
     .then(res => res.json())
     .then(data => {
-      if (data.success) {
-        Swal.fire({
-          icon: "success",
-          title: "Actualizado",
-          text: "Estado actualizado correctamente"
-        }).then(() => cargarNoticias());
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: data.message || "Error al actualizar estado"
-        });
-      }
+      Swal.fire({
+        icon: data.success ? "success" : "error",
+        title: data.success ? "Actualizado" : "Error",
+        text: data.message || "Error al actualizar estado"
+      });
     })
-    .catch(error => {
-      console.error("Error al actualizar estado:", error);
+    .catch(() => {
       Swal.fire({
         icon: "error",
         title: "Error",
-        text: "Error al actualizar estado"
+        text: "No se pudo actualizar el estado."
       });
     });
 }
