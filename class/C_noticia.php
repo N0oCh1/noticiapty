@@ -69,7 +69,7 @@ class Noticia
       $selectFields = "n.*, u.nombre AS nombre_usuario, u.apellido AS apellido_usuario";
       $fromTables = "noticias n 
                        JOIN usuarios u ON n.usuario_id = u.id 
-                       AND u.rol = 'publicador'";
+                       AND u.rol = 'editor'";
 
       if ($categoria === 'todas') {
         $data = $this->db->selectRaw($fromTables, $selectFields, "1 ORDER BY n.id DESC");
