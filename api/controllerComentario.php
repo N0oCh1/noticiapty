@@ -19,18 +19,16 @@ switch ($method) {
     case 'POST':
         $input = json_decode(file_get_contents("php://input"), true);
         if (isset($input['noticia_id'], $input['usuario_id'], $input['contenido'])) {
+            $comentario_padre_id = isset($input['comentario_padre_id']) ? $input['comentario_padre_id'] : null;
             $exito = $comentario->insertarComentario(
                 $input['noticia_id'],
                 $input['usuario_id'],
-                $input['contenido']
+                $input['contenido'],
+                $comentario_padre_id
             );
             echo json_encode(["success" => $exito]);
         } else {
             echo json_encode(["error" => "Faltan datos"]);
         }
-        break;
-
-    default:
-        echo json_encode(["error" => "Método no permitido"]);
         break;
 }

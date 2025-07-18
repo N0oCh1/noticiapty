@@ -11,24 +11,27 @@ class Comentario
     }
 
     // Insertar nuevo comentario de forma segura
-    public function insertarComentario($noticia_id, $usuario_id, $contenido)
+    public function insertarComentario($noticia_id, $usuario_id, $contenido, $comentario_padre_id = null)
     {
         $data = [
             "noticia_id" => $noticia_id,
             "usuario_id" => $usuario_id,
-            "contenido" => $contenido
+            "contenido" => $contenido,
+            "comentario_padre_id" => $comentario_padre_id
         ];
         return $this->db->insertSeguro("comentarios", $data);
     }
 
+
     // Obtener todos los comentarios de una noticia, incluyendo el nombre del usuario
     public function obtenerComentarios($noticia_id)
     {
-        $sql = "SELECT c.id, c.contenido, c.fecha_creacion, c.usuario_id, u.nombre AS usuario
-            FROM comentarios c
-            JOIN usuarios u ON c.usuario_id = u.id
-            WHERE c.noticia_id = :noticia_id
-            ORDER BY c.fecha_creacion DESC";
+         $sql = "SELECT c.id, c.contenido, c.fecha_creacion, c.usuario_id, c.comentario_padre_id, u.nombre AS usuario
+        FROM comentarios c
+        JOIN usuarios u ON c.usuario_id = u.id
+        WHERE c.noticia_id = :noticia_id
+        ORDER BY c.fecha_creacion ASC";
+
 
         try {
             $stmt = $this->db->getConexion()->prepare($sql);

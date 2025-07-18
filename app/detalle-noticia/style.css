@@ -392,6 +392,22 @@ textarea {
     box-shadow: 0 3px 8px rgba(33, 150, 83, 0.4);
 }
 
+.responder-btn {
+    background-color: transparent;
+    border: none;
+    color: #219a52;
+    cursor: pointer;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    padding: 0;
+    font-weight: 600;
+}
+
+.responder-btn:hover {
+    text-decoration: underline;
+}
+
+
 
 
 #logoutBtn {
@@ -517,6 +533,77 @@ textarea {
     border-radius: 6px;
 }
 
+/* Comentarios anidados con indentación */
+/* Comentario raíz con borde y fondo diferente */
+.comentario {
+    background-color: #f4fff6; /* verde muy claro */
+    border: 2px solid #cce5d2;
+    padding: 1rem 1.2rem;
+    border-radius: 8px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease;
+    margin-bottom: 1rem;
+}
+.respuestas .comentario {
+    margin-top: 1.5rem;
+    margin-left: 1.5rem; /* opcional: para que se vean más anidados */
+    background-color: #f7f9fa; /* opcional: diferente color para distinguir */
+    border-left: 3px solid #27ae60;
+}
+
+
+/* Comentarios hijos indentados */
+.comentario .respuestas .comentario {
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    margin-left: 2rem;
+    padding-left: 1rem;
+    border-left: 3px solid #27ae60;
+    border-radius: 6px;
+}
+.comentario .respuestas .comentario {
+    background-color: #f9f9f9;
+}
+.comentario .respuestas .comentario .respuestas .comentario {
+    background-color: #f0f0f0;
+}
+.comentario .respuestas .comentario .respuestas .comentario .respuestas .comentario {
+    background-color: #e9e9e9;
+}
+
+
+/* Botón de Responder con estilo */
+.responder-btn {
+    display: inline-block;
+    margin-top: 0.5rem;
+    padding: 0.4rem 1rem;
+    background-color: #e1f5e5;
+    color: #219a52;
+    font-size: 0.9rem;
+    border: 1px solid #27ae60;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.responder-btn:hover {
+    background-color: #27ae60;
+    color: white;
+    transform: translateY(-1px);
+}
+
+.responder-btn:active {
+    transform: scale(0.97);
+}
+
+/* Formulario de respuesta indentado */
+.form-respuesta {
+    margin-top: 0.8rem;
+    margin-left: 2rem;
+    padding-left: 1rem;
+    border-left: 2px dashed #ccc;
+}
 
 /* Responsive Design */
 @media (max-width: 768px) {
