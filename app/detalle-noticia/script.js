@@ -80,49 +80,137 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 const commentsContainer =
                     document.getElementById("commentsContainer");
-                commentsContainer.innerHTML = ""; // Limpiar antes de agregar
+                commentsContainer.innerHTML = ""; // Limpiar contenedor
 
-                data.forEach((comentario) => {
-                    const div = document.createElement("div");
-                    div.className = "comentario";
+                // Mapeo y organización jerárquica
+                const comentariosMap = {};
+                data.forEach((c) => {
+                    c.children = [];
+                    comentariosMap[c.id] = c;
+                });
 
-                    console.log("Comentario:", comentario.usuario_id);
-                    console.log("Usuario ID:", usuarioId);
-
-                    // Solo aplicar clase si es del usuario actual
-                    if (comentario.usuario_id == usuarioId) {
-                        div.classList.add("comentario-propio");
+                const comentariosRaiz = [];
+                data.forEach((c) => {
+                    if (c.comentario_padre_id) {
+                        if (comentariosMap[c.comentario_padre_id]) {
+                            comentariosMap[c.comentario_padre_id].children.push(
+                                c
+                            );
+                        }
+                    } else {
+                        comentariosRaiz.push(c);
                     }
+                });
 
-                    const fechaObj = new Date(comentario.fecha_creacion);
-
-                    const fecha = fechaObj.toLocaleDateString("es-ES"); // Ej: 16/07/2025
-                    const hora = fechaObj.toLocaleTimeString("es-ES", {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        hour12: true,
-                    });
-
-                    div.innerHTML = `
-    <div class="comentario-header">
-        <div>
-            <p class="comentario-usuario"><strong>${comentario.usuario}</strong></p>
-        </div>
-        <div class="comentario-fecha-hora">
-            <p class="comentario-fecha">${fecha}</p>
-            <p class="comentario-hora">${hora}</p>
-        </div>
-    </div>
-    <p class="comentario-texto">${comentario.contenido}</p>
-`;
-
-
-
+                // Renderiza los comentarios raíz recursivamente
+                comentariosRaiz.forEach((comentario) => {
+                    const div = renderComentario(comentario);
                     commentsContainer.appendChild(div);
                 });
             })
             .catch((err) => console.error("Error cargando comentarios:", err));
     }
+
+    // Función recursiva para renderizar un comentario y sus hijos
+    function renderComentario(comentario) {
+        const div = document.createElement("div");
+        div.className = "comentario";
+
+        if (comentario.usuario_id == usuarioId) {
+            div.classList.add("comentario-propio");
+        }
+
+        const fechaObj = new Date(comentario.fecha_creacion);
+        const fecha = fechaObj.toLocaleDateString("es-ES");
+        const hora = fechaObj.toLocaleTimeString("es-ES", {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: true,
+        });
+
+        div.innerHTML = `
+        <div class="comentario-header">
+            <div>
+                <p class="comentario-usuario"><strong>${comentario.usuario}</strong></p>
+            </div>
+            <div class="comentario-fecha-hora">
+                <p class="comentario-fecha">${fecha}</p>
+                <p class="comentario-hora">${hora}</p>
+            </div>
+        </div>
+        <p class="comentario-texto">${comentario.contenido}</p>
+        <button class="responder-btn" data-id="${comentario.id}">Responder</button>
+        <div class="respuestas"></div> <!-- Aquí se insertan hijos -->
+    `;
+
+        // Botón de responder
+        div.querySelector(".responder-btn").addEventListener("click", (e) => {
+            const respuestaForm = crearFormularioRespuesta(comentario.id);
+            const contenedorRespuestas = div.querySelector(".respuestas");
+
+            // Evitar múltiples formularios
+            contenedorRespuestas.innerHTML = "";
+            contenedorRespuestas.appendChild(respuestaForm);
+        });
+
+        // Recursividad para hijos
+        const contenedorRespuestas = div.querySelector(".respuestas");
+        comentario.children.forEach((child) => {
+            const childDiv = renderComentario(child);
+            contenedorRespuestas.appendChild(childDiv);
+        });
+
+        return div;
+    }
+
+    // Formulario para responder comentarios
+    function crearFormularioRespuesta(comentarioPadreId) {
+        const form = document.createElement("form");
+        form.className = "form-respuesta";
+
+        const textarea = document.createElement("textarea");
+        textarea.placeholder = "Escribe una respuesta...";
+        textarea.required = true;
+
+        const btn = document.createElement("button");
+        btn.type = "submit";
+        btn.textContent = "Enviar respuesta";
+        btn.className = "submit-comment";
+
+        form.appendChild(textarea);
+        form.appendChild(btn);
+
+        form.addEventListener("submit", function (e) {
+            console.log("responder")
+            e.preventDefault();
+            const texto = textarea.value.trim();
+            if (!texto || !usuarioId) return;
+
+            fetch("../../api/controllerComentario.php", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    noticia_id: noticiaId,
+                    usuario_id: usuarioId,
+                    contenido: texto,
+                    comentario_padre_id: comentarioPadreId,
+                }),
+            })
+                .then((res) => res.json())
+                .then((data) => {
+                    if (data.success) {
+                        cargarComentarios(); // Recargar todos los comentarios
+                    }
+                })
+                .catch((err) => console.error("Error al responder:", err));
+        });
+
+        return form;
+    }
+
+
 
     commentForm.addEventListener("submit", function (e) {
         e.preventDefault();
