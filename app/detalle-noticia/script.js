@@ -400,13 +400,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (noticia.imagenes && noticia.imagenes.length > 0) {
             document.getElementById("imagen1").src =
-                "../" + noticia.imagenes[1].imagen;
+                "../" + noticia.imagenes[0].imagen;
             document.getElementById("imagen2").src =
                 "../" +
-                (noticia.imagenes[0]?.imagen || "../../imagenDB/default.png");
+                (noticia.imagenes[2]?.imagen || "../../imagenDB/default.png");
             document.getElementById("imagen3").src =
                 "../" +
-                (noticia.imagenes[2]?.imagen || "../../imagenDB/default.png");
+                (noticia.imagenes[3]?.imagen || "../../imagenDB/default.png");
         } else {
             document.getElementById("imagen1").src =
                 "../../imagenDB/default.png";
