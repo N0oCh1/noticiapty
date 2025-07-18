@@ -37,12 +37,12 @@ h2 {
 }
 
 .container {
-  max-width: 1000px;        /* o 1200px si quieres más ancho */
-  margin: 30px auto;        /* centrar horizontal + separación vertical */
-  padding: 20px;            /* separación interna */
-  background-color: #ffffff;  /* opcional para destacar el contenido */
-  border-radius: 8px;         /* opcional */
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05); /* opcional */
+  max-width: 1200px;      
+  margin: 30px auto;        
+  padding: 20px;            
+  background-color: #ffffff;  
+  border-radius: 8px;         
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
 /* Botón de volver */
@@ -56,6 +56,7 @@ h2 {
   text-decoration: none;
   font-size: 0.9rem;
   margin-left: 10px;
+  margin-top: 10px;
   transition: background-color 0.3s ease;
 }
 

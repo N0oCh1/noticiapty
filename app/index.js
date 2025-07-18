@@ -40,6 +40,16 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                 }
 
+                if (data.rol === "supervisor") {
+                    const supervisorBtn = document.getElementById("supervisorPanelBtn");
+                    if (supervisorBtn) {
+                        supervisorBtn.style.display = "inline-block";
+                        supervisorBtn.addEventListener("click", () => {
+                            window.location.href = "../app/administrar-noticia/index.html";
+                        });
+                    }
+                }
+
                 if (data.rol === "publicador") {
                     const publicarBtn = document.getElementById("publicarBtn");
                     if (publicarBtn) {

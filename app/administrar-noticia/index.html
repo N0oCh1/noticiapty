@@ -1,11 +1,47 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <meta charset="UTF-8" />
+  <title>Panel de Control Noticias</title>
+  <link rel="stylesheet" href="../css/paneles-comunes.css" />
+  <link rel="stylesheet" href="../css/panel_aprobacion.css" />
 </head>
 <body>
-  
+  <header>
+    <h1>Administrar Noticias</h1>
+  </header>
+
+  <!-- Botón de regreso -->
+  <div style="margin-bottom: 20px;">
+    <button class="volver-btn" onclick="window.location.href='../index.php'">
+      ← Volver al Inicio
+    </button>
+  </div>
+
+  <div class="container">
+    <!-- Tabla con noticias -->
+    <h2>Lista de Noticias</h2>
+    <table id="noticiasTable">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Título</th>
+      <th>Contenido</th>
+      <th>Categoría</th>
+      <th>Autor</th>
+      <th>Imagen</th>
+      <th>Estado</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- Se cargan filas aquí -->
+  </tbody>
+</table>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="panel_noticias.js"></script>
 </body>
 </html>
