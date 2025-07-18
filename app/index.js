@@ -269,7 +269,7 @@ function createFeaturedNewsCard(article, className) {
 
     const imageUrl =
         article.imagenes && article.imagenes.length > 0
-            ? article.imagenes[1].imagen
+            ? article.imagenes[0].imagen
             : "../imagenDB/default.png";
 
     card.innerHTML = `
