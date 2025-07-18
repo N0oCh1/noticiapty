@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                 }
 
-                if (data.rol === "supervisor") {
+                if (data.rol === "supervisor" || data.rol === "admin") {
                     const supervisorBtn = document.getElementById("supervisorPanelBtn");
                     if (supervisorBtn) {
                         supervisorBtn.style.display = "inline-block";
@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                 }
 
-                if (data.rol === "publicador") {
+                if (data.rol === "editor" || data.rol === "admin" || data.rol === "supervisor") {
                     const publicarBtn = document.getElementById("publicarBtn");
                     if (publicarBtn) {
                         publicarBtn.style.display = "inline-block";
