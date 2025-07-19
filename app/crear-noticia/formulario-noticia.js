@@ -63,6 +63,15 @@ document.addEventListener("DOMContentLoaded", () => {
       });
       return;
     }
+    if (inputImagen.files.length > 3) {
+        e.preventDefault();
+        Swal.fire({
+            icon: "warning",
+            title: "Demasiadas imágenes",
+            text: "Solo se permiten 3 imágenes como máximo.",
+        });
+        return;
+    }
 
     e.preventDefault();
 
