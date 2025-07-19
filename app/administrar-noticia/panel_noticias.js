@@ -9,7 +9,7 @@ function verificarSesion() {
   })
     .then(res => res.json())
     .then(data => {
-      if (data.success && (data.rol === "supervisor" || data.rol === "admin")) {
+      if (data.success && (data.rol === "supervisor" || data.rol === "admin" || data.rol === "editor")) {
         cargarNoticias();
       } else {
         redirigir("Solo los supervisores y administradores pueden acceder.");
