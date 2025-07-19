@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                 }
 
-                if (data.rol === "supervisor"  || data.rol === "admin") {
+                if (data.rol === "supervisor"  || data.rol === "admin" || data.rol === "editor") {
                     const supervisorBtn = document.getElementById("supervisorPanelBtn");
                     if (supervisorBtn) {
                         supervisorBtn.style.display = "inline-block";
