@@ -1,4 +1,5 @@
 const apiUrl = "../../api/controllerUsuarios.php";
+let usuariosCargados = []; // Para almacenar todos los usuarios una sola vez
 
 // Verifica si el usuario logueado es admin al intentar obtener la lista
 async function verificarSesionYPermiso() {
@@ -18,6 +19,7 @@ async function verificarSesionYPermiso() {
     }
 
     const usuarios = await res.json();
+    usuariosCargados = usuarios; 
     renderizarUsuarios(usuarios);
 
   } catch (error) {
@@ -197,6 +199,23 @@ document.querySelector("#usersTable tbody").addEventListener("click", async e =>
       });
     }
   }
+});
+
+document.getElementById("buscadorUsuarios").addEventListener("input", function () {
+  const palabra = this.value.trim().toLowerCase();
+
+  if (palabra === "") {
+    renderizarUsuarios(usuariosCargados); // muestra todos si no hay texto
+    return;
+  }
+
+  const filtrados = usuariosCargados.filter(user =>
+    user.nombre.toLowerCase().includes(palabra) ||
+    user.apellido.toLowerCase().includes(palabra) ||
+    user.usuario.toLowerCase().includes(palabra)
+  );
+
+  renderizarUsuarios(filtrados);
 });
 
 // Inicia validación al cargar
