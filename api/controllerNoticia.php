@@ -8,6 +8,19 @@ $noticia = new Noticia();
 $method = $_SERVER["REQUEST_METHOD"];
 
 if ($method === "POST") {
+  if(isset($_POST["buscar"])) {
+    // Buscar noticias por palabra clave
+    $palabraClave = $_POST["buscar"] ?? "";
+    $resultados = $noticia->buscarNoticias($palabraClave);
+    if ($resultados) {
+      http_response_code(200);
+      echo json_encode($resultados);
+    } else {
+      http_response_code(404);
+      echo json_encode(["message" => "No se encontraron noticias"]);
+    }
+    exit();
+  }
   // Guardar noticia
   $titulo = $_POST["titulo"] ?? "";
   $contenido = $_POST["contenido"] ?? "";

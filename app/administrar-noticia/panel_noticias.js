@@ -57,16 +57,25 @@ function mostrarNoticias(noticias) {
   const tbody = document.querySelector("#noticiasTable tbody");
   tbody.innerHTML = "";
 
+  if (!noticias || noticias.length === 0) {
+    const filaVacia = document.createElement("tr");
+    filaVacia.innerHTML = `
+      <td colspan="9" style="text-align: center; font-weight: bold; padding: 20px;">
+        No hay noticias disponibles.
+      </td>
+    `;
+    tbody.appendChild(filaVacia);
+    return;
+  }
+
   noticias.forEach(noticia => {
-    console.log(noticia);
     const fila = document.createElement("tr");
     fila.innerHTML = `
       <td>${noticia.id}</td>
       <td>${noticia.titulo}</td>
       <td class="contenido-celda" data-contenido="${noticia.contenido.replace(/"/g, '&quot;')}">
-    ${noticia.contenido.slice(0, 100)}...
-  </td>
-
+        ${noticia.contenido.slice(0, 100)}...
+      </td>
       <td>${noticia.categoria_nombre}</td>
       <td>${noticia.autor}</td>
       <td class="imagenes-container">
@@ -81,22 +90,20 @@ function mostrarNoticias(noticias) {
       </td>
       <td>${noticia.fecha_creacion}</td>
       <td>
-  <select data-id="${noticia.id}" class="estado-select" ${rolUsuario === "editor" ? "disabled" : ""}>
-    <option value="1" ${noticia.activo == 1 ? "selected" : ""}>Activo</option>
-    <option value="2" ${noticia.activo == 2 ? "selected" : ""}>Inactivo</option>
-    <option value="3" ${noticia.activo == 3 ? "selected" : ""}>En espera</option>
-  </select>
-</td>
-<td>
-  <button class="btn-guardar" data-id="${noticia.id}" ${rolUsuario === "editor" ? "disabled" : ""}>Guardar</button>
-</td>
-</tr>
+        <select data-id="${noticia.id}" class="estado-select" ${rolUsuario === "editor" ? "disabled" : ""}>
+          <option value="1" ${noticia.activo == 1 ? "selected" : ""}>Activo</option>
+          <option value="2" ${noticia.activo == 2 ? "selected" : ""}>Inactivo</option>
+          <option value="3" ${noticia.activo == 3 ? "selected" : ""}>En espera</option>
+        </select>
+      </td>
+      <td>
+        <button class="btn-guardar" data-id="${noticia.id}" ${rolUsuario === "editor" ? "disabled" : ""}>Guardar</button>
+      </td>
     `;
     tbody.appendChild(fila);
-
-
   });
 
+  // Agregar listeners a botones "Guardar"
   document.querySelectorAll(".btn-guardar").forEach(btn => {
     btn.addEventListener("click", () => {
       const id = btn.dataset.id;
@@ -105,6 +112,7 @@ function mostrarNoticias(noticias) {
     });
   });
 }
+
 
 function actualizarEstado(id, estado) {
   fetch("../../api/controllerNoticia.php", {
@@ -200,3 +208,37 @@ document.addEventListener("click", function (e) {
     });
   }
 });
+
+document.getElementById("buscadorNoticias").addEventListener("input", function () {
+  const palabra = this.value.trim();
+
+  // Si está vacío, volver a cargar todas
+  if (palabra === "") {
+    cargarNoticias();
+    return;
+  }
+
+  buscarNoticias(palabra);
+});
+
+function buscarNoticias(palabra) {
+  const formData = new FormData();
+  formData.append("buscar", palabra);
+
+  fetch("../../api/controllerNoticia.php", {
+    method: "POST",
+    credentials: "include",
+    body: formData
+  })
+    .then(res => res.json())
+    .then(noticias => {
+      mostrarNoticias(noticias);
+    })
+    .catch(() => {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "No se pudieron buscar las noticias."
+      });
+    });
+}
