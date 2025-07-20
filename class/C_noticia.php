@@ -66,10 +66,11 @@ class Noticia
       $response = [];
 
       // JOIN con filtro para usuarios con rol 'publicador'
-      $selectFields = "n.*, u.nombre AS nombre_usuario, u.apellido AS apellido_usuario";
+      $selectFields = "n.*, c.nombre AS categoria_nombre, u.nombre AS nombre_usuario, u.apellido AS apellido_usuario";
       $fromTables = "noticias n 
-                       JOIN usuarios u ON n.usuario_id = u.id 
-                       AND (u.rol = 'editor' OR u.rol = 'supervisor' OR u.rol = 'admin')";
+                    LEFT JOIN categorias c ON n.categoria_id = c.id
+                    JOIN usuarios u ON n.usuario_id = u.id 
+                    AND (u.rol = 'editor' OR u.rol = 'supervisor' OR u.rol = 'admin')";
 
       if ($categoria === 'todas') {
         $data = $this->db->selectRaw($fromTables, $selectFields, "1 ORDER BY n.id DESC");

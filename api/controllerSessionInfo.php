@@ -13,3 +13,4 @@ if (isset($_SESSION['usuario_id'], $_SESSION['rol'])) {
         "message" => "No hay sesión activa"
     ]);
 }
+?>
