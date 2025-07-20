@@ -123,4 +123,34 @@ class Noticia
 
     return $this->db->update($tb_name, $string, $astriction);
   }
+  
+  public function ObtenerNoticiasPorUsuario($usuario_id) {
+    $classImagen = new Imagen();
+    $response = [];
+
+    try {
+      $selectFields = "n.*, c.nombre AS categoria_nombre, u.nombre AS nombre_usuario, u.apellido AS apellido_usuario";
+      $fromTables = "noticias n 
+                      LEFT JOIN categorias c ON n.categoria_id = c.id
+                      LEFT JOIN usuarios u ON n.usuario_id = u.id";
+      $where = "n.usuario_id = '$usuario_id' ORDER BY n.fecha_creacion DESC";
+
+      $noticias = $this->db->selectRaw($fromTables, $selectFields, $where);
+
+      if (is_iterable($noticias)) {
+        foreach ($noticias as $noticia) {
+          $imagenes = $classImagen->ObtenerImagenes($noticia['id']);
+          $noticia['imagenes'] = $imagenes;
+          $response[] = $noticia;
+        }
+      }
+
+      $this->db->disconnect();
+      return $response;
+    } catch (Exception $e) {
+      // Puedes loguear si necesitas
+      return [];
+    }
+  }
 }
+?>

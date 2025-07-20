@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   verificarSesion();
 });
 
+let rolUsuario = "";
 function verificarSesion() {
   fetch("../../api/controllerSessionInfo.php", {
     method: "GET",
@@ -9,8 +10,9 @@ function verificarSesion() {
   })
     .then(res => res.json())
     .then(data => {
-      if (data.success && (data.rol === "supervisor" || data.rol === "admin" || data.rol === "editor")) {
-        cargarNoticias();
+      if (data.success && ["supervisor", "admin", "editor"].includes(data.rol)) {
+        rolUsuario = data.rol;
+        cargarNoticias(); // Llama a la función una vez identificado el rol
       } else {
         redirigir("Solo los supervisores y administradores pueden acceder.");
       }
@@ -26,12 +28,20 @@ function redirigir(mensaje) {
     title: "Acceso denegado",
     text: mensaje
   }).then(() => {
-    window.location.href = "../index.html";
+    window.location.href = "../index.php";
   });
 }
 
 function cargarNoticias() {
-  fetch("../../api/controllerNoticia.php")
+  // Si es editor, solo carga sus propias noticias
+  const endpoint =
+    rolUsuario === "editor"
+      ? "../../api/controllerNoticia.php?mis_noticias=true"
+      : "../../api/controllerNoticia.php";
+
+  fetch(endpoint, {
+    credentials: "include"
+  })
     .then(res => res.json())
     .then(noticias => mostrarNoticias(noticias))
     .catch(() => {
@@ -44,7 +54,6 @@ function cargarNoticias() {
 }
 
 function mostrarNoticias(noticias) {
-  
   const tbody = document.querySelector("#noticiasTable tbody");
   tbody.innerHTML = "";
 
