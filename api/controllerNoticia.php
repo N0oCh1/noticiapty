@@ -8,7 +8,40 @@ $noticia = new Noticia();
 $method = $_SERVER["REQUEST_METHOD"];
 
 if ($method === "POST") {
-  // Guardar noticia
+  // Detectar simulación de PUT con POST (_method=PUT)
+  if (isset($_POST['_method']) && $_POST['_method'] === 'PUT') {
+    // Actualizar noticia
+
+    $id = $_POST["noticia_id"] ?? 0;
+    $titulo = $_POST["titulo"] ?? "";
+    $contenido = $_POST["contenido"] ?? "";
+    $categoria = $_POST["categoria"] ?? "";
+    $usuario = $_POST["usuario"] ?? "";
+    $autor = $_POST["autor"] ?? "";
+    $imagen = $_FILES["imagen"] ?? null;
+
+    $id = intval($id);
+    if ($id <= 0) {
+      http_response_code(400);
+      echo json_encode(["success" => false, "message" => "ID de noticia inválido"]);
+      exit();
+    }
+
+    // Aquí llamas al método para actualizar noticia, 
+    // que debes implementar en tu clase Noticia
+    $result = $noticia->ActualizarNoticia($id, $titulo, $contenido, $categoria, $usuario, $imagen, $autor);
+
+    if ($result) {
+      http_response_code(200);
+      echo json_encode(["success" => true, "message" => "Noticia actualizada correctamente"]);
+    } else {
+      http_response_code(500);
+      echo json_encode(["success" => false, "message" => "Error al actualizar noticia"]);
+    }
+    exit();
+  }
+
+  // Guardar noticia (crear)
   $titulo = $_POST["titulo"] ?? "";
   $contenido = $_POST["contenido"] ?? "";
   $categoria = $_POST["categoria"] ?? "";

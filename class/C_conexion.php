@@ -109,36 +109,5 @@
       return false;
     }
   }
-
-  // Obtiene una noticia por su ID
-public function ObtenerNoticiaPorId(int $id)
-{
-    $classImagen = new Imagen();
-
-    try {
-        $selectFields = "n.*, c.nombre AS categoria_nombre, u.nombre AS nombre_usuario, u.apellido AS apellido_usuario";
-        $fromTables = "noticias n 
-                      LEFT JOIN categorias c ON n.categoria_id = c.id
-                      LEFT JOIN usuarios u ON n.usuario_id = u.id";
-        $where = "n.id = $id";
-
-        $resultado = $this->db->selectRaw($fromTables, $selectFields, $where);
-
-        if (count($resultado) === 1) {
-            $noticia = $resultado[0];
-            $imagenes = $classImagen->ObtenerImagenes($noticia['id']);
-            $noticia['imagenes'] = $imagenes;
-            $this->db->disconnect();
-            return $noticia;
-        } else {
-            $this->db->disconnect();
-            return null; // No se encontró la noticia
-        }
-    } catch (Exception $e) {
-        error_log("Error al obtener noticia por ID: " . $e->getMessage());
-        $this->db->disconnect();
-        return null;
-    }
-  }
 }
 ?>

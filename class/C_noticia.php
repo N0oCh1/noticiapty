@@ -153,7 +153,7 @@ class Noticia
       return [];
     }
   }
-  
+
   public function ObtenerNoticiaPorId($id)
   {
     $classImagen = new Imagen();
@@ -179,5 +179,68 @@ class Noticia
       return null;
     }
   }
+ public function ActualizarNoticia($id, $titulo, $contenido, $categoria, $usuario, $imagen = null, $autor = '')
+{
+    $this->id = intval($id);
+    $this->titulo = $titulo;
+    $this->contenido = $contenido;
+    $this->categoria = $categoria;
+    $this->usuario = $usuario;
+    $this->autor = $autor;
+
+    try {
+        // 1. Actualizar usando el método update de la clase db
+        $campos = [
+            "titulo" => $this->titulo,
+            "contenido" => $this->contenido,
+            "categoria_id" => $this->categoria,
+            "usuario_id" => $this->usuario,
+            "autor" => $this->autor
+        ];
+
+        // Construye el string de actualización tipo: titulo = '...', contenido = '...', etc.
+        $setString = implode(", ", array_map(function ($k, $v) {
+            return "$k = " . (is_numeric($v) ? $v : "'$v'");
+        }, array_keys($campos), $campos));
+
+        // Ejecutar update con la clase db
+        $this->db->update("noticias", $setString, "id = $this->id");
+
+        // 2. Si hay imágenes nuevas, eliminar las anteriores y subir las nuevas
+        if ($imagen && isset($imagen['name']) && count($imagen['name']) > 0 && $imagen['name'][0] !== '') {
+            $this->EliminarImagenesPorNoticia($this->id);
+            $this->GuardarImagen($this->id, $imagen);
+        }
+
+        $this->db->disconnect();
+        return true;
+    } catch (Exception $e) {
+        error_log("Error al actualizar noticia: " . $e->getMessage());
+        $this->db->disconnect();
+        return false;
+    }
+}
+/**
+ * Eliminar imágenes relacionadas a una noticia (para reemplazar con nuevas).
+ */
+private function EliminarImagenesPorNoticia($id_noticia)
+{
+    try {
+        // Primero obtén las rutas de las imágenes para borrarlas físicamente si quieres (opcional)
+        $imagenes = $this->db->select("imagenes", "ruta", "noticia_id = $id_noticia");
+        if ($imagenes) {
+            foreach ($imagenes as $img) {
+                $ruta = $img['ruta'];
+                if (file_exists($ruta)) {
+                    unlink($ruta); // borra el archivo
+                }
+            }
+        }
+        // Luego elimina las filas de la tabla imagenes
+        $this->db->delete("imagenes", "noticia_id = $id_noticia");
+    } catch (Exception $e) {
+        error_log("Error al eliminar imágenes de noticia: " . $e->getMessage());
+    }
+}
 }
 ?>

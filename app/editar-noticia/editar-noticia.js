@@ -60,67 +60,65 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Función para cargar noticia por id y rellenar formulario
   function cargarNoticia(id) {
-  fetch(`../../api/controllerNoticia.php?id=${id}`, {
-    credentials: "include",
-  })
-    .then((res) => res.json())
-    .then((data) => {
-      console.log(data);
-      if (!data.success || !data.noticia) {
+    fetch(`../../api/controllerNoticia.php?id=${id}`, {
+      credentials: "include",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        if (!data.success || !data.noticia) {
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: data.message || "No se encontró la noticia.",
+          }).then(() => {
+            window.location.href = "panel_noticias.php";
+          });
+          return;
+        }
+
+        const noticia = data.noticia;
+
+        // Setear id en el hidden input
+        document.getElementById("noticia_id").value = noticia.id;
+
+        // Rellenar campos
+        document.getElementById("titulo").value = noticia.titulo;
+        document.getElementById("contenido").value = noticia.contenido;
+        document.getElementById("categoria").value = noticia.categoria_id; // ✅ cambio aquí
+        document.getElementById("autor").value = noticia.autor;
+
+        // Mostrar previsualización de imágenes actuales (filtrar thumbnails)
+        previewContainer.innerHTML = "";
+        if (noticia.imagenes && noticia.imagenes.length > 0) {
+          const imagenesPrincipales = noticia.imagenes.filter(
+            (imgObj) => !imgObj.imagen.includes("thumb_")
+          );
+
+          imagenesPrincipales.forEach((imgObj) => {
+            const img = document.createElement("img");
+
+            // Ajustar ruta: reemplazar "../imagenDB" por "../../imagenDB"
+            const rutaAjustada = imgObj.imagen.replace("../imagenDB", "../../imagenDB");
+
+            img.src = rutaAjustada;
+            img.style.width = "100px";
+            img.style.height = "100px";
+            img.style.objectFit = "cover";
+            img.style.border = "1px solid #ccc";
+            img.style.borderRadius = "4px";
+            previewContainer.appendChild(img);
+          });
+        }
+      })
+      .catch(() => {
         Swal.fire({
           icon: "error",
           title: "Error",
-          text: data.message || "No se encontró la noticia.",
-        }).then(() => {
-          window.location.href = "panel_noticias.php";
+          text: "Error cargando datos de la noticia.",
         });
-        return;
-      }
-
-      const noticia = data.noticia;
-
-      // Setear id en el hidden input
-      document.getElementById("noticia_id").value = noticia.id;
-
-      // Rellenar campos
-      document.getElementById("titulo").value = noticia.titulo;
-      document.getElementById("contenido").value = noticia.contenido;
-      document.getElementById("categoria").value = noticia.categoria_id; // ✅ cambio aquí
-      document.getElementById("autor").value = noticia.autor;
-
-      // Mostrar previsualización de imágenes actuales (filtrar thumbnails)
-      previewContainer.innerHTML = "";
-      if (noticia.imagenes && noticia.imagenes.length > 0) {
-        const imagenesPrincipales = noticia.imagenes.filter(
-          (imgObj) => !imgObj.imagen.includes("thumb_")
-        );
-
-        imagenesPrincipales.forEach((imgObj) => {
-        const img = document.createElement("img");
-
-        // Ajustar ruta: reemplazar "../imagenDB" por "../../imagenDB"
-        const rutaAjustada = imgObj.imagen.replace("../imagenDB", "../../imagenDB");
-
-        img.src = rutaAjustada;
-        img.style.width = "100px";
-        img.style.height = "100px";
-        img.style.objectFit = "cover";
-        img.style.border = "1px solid #ccc";
-        img.style.borderRadius = "4px";
-        previewContainer.appendChild(img);
       });
-
-      }
-    })
-    .catch(() => {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Error cargando datos de la noticia.",
-      });
-    });
-}
-
+  }
 
   // Previsualizar imágenes nuevas al cambiar input
   inputImagen.addEventListener("change", () => {
@@ -143,12 +141,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Manejo del submit para actualizar noticia con PUT
+  // Manejo del submit para actualizar noticia con confirmación
   form.addEventListener("submit", (e) => {
     e.preventDefault();
 
+    const nuevasImagenes = inputImagen.files;
+
     // Validar cantidad de imágenes si se seleccionan
-    if (inputImagen.files.length > 0 && inputImagen.files.length !== 3) {
+    if (nuevasImagenes.length > 0 && nuevasImagenes.length !== 3) {
       Swal.fire({
         icon: "warning",
         title: "Cantidad de Imágenes",
@@ -157,90 +157,51 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    const formData = new FormData(form);
-
-    // Para PUT con FormData no estándar, se usa POST con _method=PUT o similar (depende del backend)
-    // Aquí agregamos campo _method para indicar actualización
-    formData.append("_method", "PUT");
-
-    fetch("../../api/controllerNoticia.php", {
-      method: "POST", // Cambiar según tu backend (o usar PUT si soporta FormData)
-      credentials: "include",
-      body: formData,
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        Swal.fire({
-          icon: data.success ? "success" : "error",
-          title: data.success ? "Noticia Actualizada" : "Error",
-          text: data.message || (data.success ? "Actualización exitosa." : "Error al actualizar."),
-        }).then(() => {
-          if (data.success) {
-            window.location.href = "panel_noticias.php";
-          }
-        });
-      })
-      .catch(() => {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: "No se pudo actualizar la noticia.",
-        });
-      });
-  });
-});
-
-// Manejo del submit para actualizar noticia con confirmación
-form.addEventListener("submit", (e) => {
-  e.preventDefault();
-
-  // Validar cantidad de imágenes si se seleccionan
-  if (inputImagen.files.length > 0 && inputImagen.files.length !== 3) {
+    // Confirmación antes de enviar
     Swal.fire({
-      icon: "warning",
-      title: "Cantidad de Imágenes",
-      text: "Debes seleccionar exactamente 3 imágenes o dejar el campo vacío para mantener las actuales.",
-    });
-    return;
-  }
+      title: "¿Estás seguro?",
+      text: "Se actualizarán los datos de la noticia.",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Sí, actualizar",
+      cancelButtonText: "Cancelar",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const formData = new FormData(form);
 
-  // Mostrar alerta de confirmación antes de enviar
-  Swal.fire({
-    title: "¿Estás seguro?",
-    text: "Se actualizarán los datos de la noticia.",
-    icon: "question",
-    showCancelButton: true,
-    confirmButtonText: "Sí, actualizar",
-    cancelButtonText: "Cancelar",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      const formData = new FormData(form);
-      formData.append("_method", "PUT");
+        // Si no seleccionaron nuevas imágenes, no enviar campo "imagen"
+        if (nuevasImagenes.length === 0) {
+          formData.delete("imagen");
+        }
 
-      fetch("../../api/controllerNoticia.php", {
-        method: "POST", // O PUT si el backend lo permite directamente con FormData
-        credentials: "include",
-        body: formData,
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          Swal.fire({
-            icon: data.success ? "success" : "error",
-            title: data.success ? "Noticia Actualizada" : "Error",
-            text: data.message || (data.success ? "Actualización exitosa." : "Error al actualizar."),
-          }).then(() => {
-            if (data.success) {
-              window.location.href = "panel_noticias.php";
-            }
-          });
+        // Agregar _method=PUT para simular método PUT
+        formData.append("_method", "PUT");
+
+        fetch("../../api/controllerNoticia.php", {
+          method: "POST", // Cambiamos a POST para que PHP lo reconozca bien
+          credentials: "include",
+          body: formData,
         })
-        .catch(() => {
-          Swal.fire({
-            icon: "error",
-            title: "Error",
-            text: "No se pudo actualizar la noticia.",
+          .then((res) => res.json())
+          .then((data) => {
+            Swal.fire({
+              icon: data.success ? "success" : "error",
+              title: data.success ? "Noticia Actualizada" : "Error",
+              text: data.message || (data.success ? "Actualización exitosa." : "Error al actualizar."),
+            }).then(() => {
+              if (data.success) {
+                window.location.href = "panel_noticias.php";
+              }
+            });
+          })
+          .catch(() => {
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: "No se pudo actualizar la noticia.",
+            });
           });
-        });
-    }
+      }
+    });
   });
 });
