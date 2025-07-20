@@ -639,6 +639,8 @@ textarea {
     border-left: 2px dashed #ccc;
 }
 
+
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .noticia-detalle {

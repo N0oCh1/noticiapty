@@ -1,7 +1,7 @@
 // Variables globales
 let currentPage = 1;
 const initialNewsCount = 5;
-const newsPerPage = 5;
+const newsPerPage = 6;
 let currentCategory = "todas";
 let allNews = [];
 const usuario = sessionStorage.getItem("usuario");
