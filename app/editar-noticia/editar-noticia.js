@@ -189,6 +189,7 @@ document.addEventListener("DOMContentLoaded", () => {
               title: data.success ? "Noticia Actualizada" : "Error",
               text: data.message || (data.success ? "Actualización exitosa." : "Error al actualizar."),
             }).then(() => {
+              console.log(data);
               if (data.success) {
                 window.location.href = "panel_noticias.php";
               }

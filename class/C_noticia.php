@@ -224,13 +224,14 @@ class Noticia
  * Eliminar imágenes relacionadas a una noticia (para reemplazar con nuevas).
  */
 private function EliminarImagenesPorNoticia($id_noticia)
-{
+{   
+    $classImagen = new Imagen();
     try {
         // Primero obtén las rutas de las imágenes para borrarlas físicamente si quieres (opcional)
-        $imagenes = $this->db->select("imagenes", "ruta", "noticia_id = $id_noticia");
+        $imagenes = $classImagen->ObtenerImagenes($id_noticia);
         if ($imagenes) {
             foreach ($imagenes as $img) {
-                $ruta = $img['ruta'];
+                $ruta = $img['imagen'];
                 if (file_exists($ruta)) {
                     unlink($ruta); // borra el archivo
                 }
