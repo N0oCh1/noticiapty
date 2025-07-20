@@ -74,6 +74,7 @@ function mostrarNoticias(noticias) {
           )
           .join("")}
       </td>
+      <td>${noticia.fecha_creacion}</td>
       <td>
         <select data-id="${noticia.id}" class="estado-select">
           <option value="1" ${noticia.activo == 1 ? "selected" : ""}>Activo</option>
