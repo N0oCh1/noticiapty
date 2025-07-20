@@ -46,7 +46,7 @@ function renderizarUsuarios(usuarios) {
       <td>
         <select data-field="rol" data-id="${user.id}">
           <option value="global" ${user.rol === "global" ? "selected" : ""}>Global</option>
-          <option value="publicador" ${user.rol === "publicador" ? "selected" : ""}>Publicador</option>
+          <option value="editor" ${user.rol === "editor" ? "selected" : ""}>Editor</option>
           <option value="admin" ${user.rol === "admin" ? "selected" : ""}>Admin</option>
           <option value="supervisor" ${user.rol === "supervisor" ? "selected" : ""}>Supervisor</option>
         </select>

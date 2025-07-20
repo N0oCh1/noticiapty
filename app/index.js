@@ -1,7 +1,7 @@
 // Variables globales
 let currentPage = 1;
-const initialNewsCount = 3;
-const newsPerPage = 4;
+const initialNewsCount = 5;
+const newsPerPage = 5;
 let currentCategory = "todas";
 let allNews = [];
 const usuario = sessionStorage.getItem("usuario");
@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                 }
 
-                if (data.rol === "supervisor"  || data.rol === "admin") {
+                if (data.rol === "supervisor"  || data.rol === "admin" || data.rol === "editor") {
                     const supervisorBtn = document.getElementById("supervisorPanelBtn");
                     if (supervisorBtn) {
                         supervisorBtn.style.display = "inline-block";

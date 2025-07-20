@@ -1,6 +1,6 @@
 <?php
 require "../class/C_noticia.php";
-
+session_start();
 header("Content-Type: application/json; charset=utf-8");
 
 $noticia = new Noticia();
@@ -52,8 +52,23 @@ if ($method === "PUT") {
 }
 
 if ($method === "GET") {
-  // Obtener noticias
   try {
+    // Si se pasa el parámetro "mis_noticias=true", devolver solo las del usuario en sesión
+    if (isset($_GET['mis_noticias']) && $_GET['mis_noticias'] === "true") {
+      if (isset($_SESSION['usuario_id'])) {
+        $usuario = $_SESSION['usuario_id'];
+        $noticiasUsuario = $noticia->ObtenerNoticiasPorUsuario($usuario);
+        http_response_code(200);
+        echo json_encode($noticiasUsuario);
+        exit();
+      } else {
+        http_response_code(401);
+        echo json_encode(["message" => "No hay usuario en sesión"]);
+        exit();
+      }
+    }
+
+    // Si no se pidió "mis_noticias", se devuelven todas o por categoría
     $categoria = $_GET['category'] ?? 'todas';
     $noticias = $noticia->ObtenerNoticias($categoria);
     http_response_code(200);
@@ -62,10 +77,8 @@ if ($method === "GET") {
     http_response_code(500);
     echo json_encode(["message" => "Error al obtener noticias: " . $e->getMessage()]);
   }
-  exit();
-}
+    exit();
+  }
 
-http_response_code(405);
-echo json_encode(["message" => "Método no permitido"]);
-exit();
+
 ?>
