@@ -10,7 +10,7 @@ class Noticia
   private int $id;
   private string $titulo;
   private string $contenido;
-  private bool $activo;
+  private int $activo;
   private string $categoria;
   private string $usuario;
   private $imagen;
