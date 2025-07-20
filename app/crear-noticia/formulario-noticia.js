@@ -54,12 +54,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Validar mínimo 3 imágenes y enviar formulario
   form.addEventListener("submit", function (e) {
-    if (inputImagen.files.length < 3) {
+    if (inputImagen.files.length < 3 || inputImagen.files.length > 3) {
       e.preventDefault();
       Swal.fire({
         icon: 'warning',
-        title: 'Imágenes insuficientes',
-        text: 'Por favor, selecciona al menos 3 imágenes.',
+        title: 'Cantidad de Imágenes',
+        text: 'Por favor, selecciona exactamente 3 imágenes.',
       });
       return;
     }
