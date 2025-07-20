@@ -62,7 +62,10 @@ function mostrarNoticias(noticias) {
     fila.innerHTML = `
       <td>${noticia.id}</td>
       <td>${noticia.titulo}</td>
-      <td>${noticia.contenido}</td>
+      <td class="contenido-celda" data-contenido="${noticia.contenido.replace(/"/g, '&quot;')}">
+    ${noticia.contenido.slice(0, 100)}...
+  </td>
+
       <td>${noticia.categoria}</td>
       <td>${noticia.autor}</td>
       <td class="imagenes-container">
@@ -89,6 +92,8 @@ function mostrarNoticias(noticias) {
 </tr>
     `;
     tbody.appendChild(fila);
+
+
   });
 
   document.querySelectorAll(".btn-guardar").forEach(btn => {
@@ -157,3 +162,40 @@ cerrar.onclick = function () {
 modal.onclick = function (e) {
   if (e.target === modal) modal.style.display = "none";
 };
+// Delegación de eventos para mostrar el modal de contenido al hacer clic
+document.addEventListener("click", function (e) {
+  const celda = e.target.closest(".contenido-celda");
+  if (celda) {
+    const contenidoCompleto = celda.dataset.contenido;
+
+    // Crear modal solo si no existe ya
+    let modal = document.querySelector(".modal-contenido");
+    if (modal) modal.remove(); // Eliminar uno anterior si ya existe
+
+    modal = document.createElement("div");
+    modal.classList.add("modal-contenido");
+
+    modal.innerHTML = `
+    <span class="cerrar-modal">&times;</span>
+    <div class="contenido-modal-texto">
+      <div class="texto-completo">${contenidoCompleto}</div>
+    </div>
+  `;
+
+
+    document.body.appendChild(modal);
+
+    // Mostrar el modal (ya tiene `display: flex` en CSS)
+    modal.style.display = "flex";
+
+    // Cerrar al hacer clic en la X
+    modal.querySelector(".cerrar-modal").addEventListener("click", () => {
+      modal.remove();
+    });
+
+    // Cerrar al hacer clic fuera del contenido
+    modal.addEventListener("click", (ev) => {
+      if (ev.target === modal) modal.remove();
+    });
+  }
+});
