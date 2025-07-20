@@ -58,6 +58,7 @@ function mostrarNoticias(noticias) {
   tbody.innerHTML = "";
 
   noticias.forEach(noticia => {
+    console.log(noticia);
     const fila = document.createElement("tr");
     fila.innerHTML = `
       <td>${noticia.id}</td>
@@ -66,7 +67,7 @@ function mostrarNoticias(noticias) {
     ${noticia.contenido.slice(0, 100)}...
   </td>
 
-      <td>${noticia.categoria}</td>
+      <td>${noticia.categoria_nombre}</td>
       <td>${noticia.autor}</td>
       <td class="imagenes-container">
         ${(noticia.imagenes || [])
