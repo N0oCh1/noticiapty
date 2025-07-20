@@ -105,9 +105,41 @@ button.btn-guardar:hover {
 }
 
 .imagen-noticia {
-  width: 80px;
-  height: auto;
+  width: 100px;      
+  height: 100px;
+  object-fit: cover; 
+  cursor: pointer;
   border-radius: 5px;
-  object-fit: cover;
-  border: 1px solid #ccc;
+}
+
+.modal-imagen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.8);
+}
+
+.contenido-modal {
+  max-width: 90%;
+  max-height: 90%;
+  border: 5px solid white;
+  border-radius: 10px;
+}
+
+.cerrar-modal {
+  position: absolute;
+  top: 30px;
+  right: 50px;
+  color: white;
+  font-size: 40px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 10000;
 }

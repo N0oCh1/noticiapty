@@ -70,19 +70,23 @@ function mostrarNoticias(noticias) {
           .map(
             obj =>
               `<img src="../${obj.imagen}" alt="Imagen noticia" class="imagen-noticia"
+                style="cursor: pointer;" onclick="mostrarImagenModal(this.src)"
                 onerror="this.src='../../imagenDB/default.png'; this.onerror=null;">`
           )
           .join("")}
       </td>
       <td>${noticia.fecha_creacion}</td>
       <td>
-        <select data-id="${noticia.id}" class="estado-select">
-          <option value="1" ${noticia.activo == 1 ? "selected" : ""}>Activo</option>
-          <option value="2" ${noticia.activo == 2 ? "selected" : ""}>Inactivo</option>
-          <option value="3" ${noticia.activo == 3 ? "selected" : ""}>En espera</option>
-        </select>
-      </td>
-      <td><button class="btn-guardar" data-id="${noticia.id}">Guardar</button></td>
+  <select data-id="${noticia.id}" class="estado-select" ${rolUsuario === "editor" ? "disabled" : ""}>
+    <option value="1" ${noticia.activo == 1 ? "selected" : ""}>Activo</option>
+    <option value="2" ${noticia.activo == 2 ? "selected" : ""}>Inactivo</option>
+    <option value="3" ${noticia.activo == 3 ? "selected" : ""}>En espera</option>
+  </select>
+</td>
+<td>
+  <button class="btn-guardar" data-id="${noticia.id}" ${rolUsuario === "editor" ? "disabled" : ""}>Guardar</button>
+</td>
+</tr>
     `;
     tbody.appendChild(fila);
   });
@@ -121,3 +125,35 @@ function actualizarEstado(id, estado) {
       });
     });
 }
+function mostrarImagenModal(src) {
+  const modal = document.getElementById("modalImagen");
+  const img = document.getElementById("imagenAmpliada");
+  img.src = src;
+  modal.style.display = "flex";
+}
+
+// Evento para cerrar el modal al hacer clic fuera de la imagen
+document.getElementById("modalImagen").addEventListener("click", () => {
+  document.getElementById("modalImagen").style.display = "none";
+  document.getElementById("imagenAmpliada").src = "";
+});
+
+// Modal de imagen
+const modal = document.getElementById("modalImagen");
+const imagenGrande = document.getElementById("imagenGrande");
+const cerrar = document.getElementById("cerrarModal");
+
+document.addEventListener("click", function (e) {
+  if (e.target.classList.contains("imagen-noticia")) {
+    imagenGrande.src = e.target.src;
+    modal.style.display = "flex";
+  }
+});
+
+cerrar.onclick = function () {
+  modal.style.display = "none";
+};
+
+modal.onclick = function (e) {
+  if (e.target === modal) modal.style.display = "none";
+};
