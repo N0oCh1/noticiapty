@@ -22,6 +22,7 @@ class Noticia
     $this->db_conexion = $this->db->getConexion();
   }
 
+  // Guarda una nueva noticia y sus imágenes
   public function GuardarNoticia($titulo, $contenido, $categoria, $activo, $usuario, array $imagen = [], $autor = '')
   {
     $this->titulo = $titulo;
@@ -32,15 +33,14 @@ class Noticia
     $this->imagen = $imagen;
     $this->autor = $autor;
 
-
-    $datos = array(
+    $datos = [
       "titulo" => $this->titulo,
       "contenido" => $this->contenido,
       "categoria_id" => $this->categoria,
       "activo" => $this->activo,
       "usuario_id" => $this->usuario,
-      "autor" => $this->autor  
-    );
+      "autor" => $this->autor
+    ];
 
     try {
       $this->db->insertSeguro("noticias", $datos);
@@ -49,23 +49,19 @@ class Noticia
       $this->db->disconnect();
       return true;
     } catch (Exception $e) {
-      // Puedes registrar el error o devolverlo
       error_log("Error al guardar noticia: " . $e->getMessage());
       $this->db->disconnect();
       return false;
     }
   }
 
-
-
-
+  // Obtiene todas las noticias o por categoría
   public function ObtenerNoticias($categoria = 'todas')
   {
     $classImagen = new Imagen();
-    try {
-      $response = [];
+    $response = [];
 
-      // JOIN con filtro para usuarios con rol 'publicador'
+    try {
       $selectFields = "n.*, c.nombre AS categoria_nombre, u.nombre AS nombre_usuario, u.apellido AS apellido_usuario";
       $fromTables = "noticias n 
                     LEFT JOIN categorias c ON n.categoria_id = c.id
@@ -93,8 +89,8 @@ class Noticia
     }
   }
 
-
-  public function GuardarImagen($id_noticia,  $imagen)
+  // Guarda imágenes asociadas a la noticia
+  public function GuardarImagen($id_noticia, $imagen)
   {
     $total = count($imagen['name']);
     $guardarImagen = new Imagen();
@@ -108,8 +104,11 @@ class Noticia
         'error' => $imagen['error'][$i],
         'size' => $imagen['size'][$i]
       ];
+
       $imagen_procesada = $procesar->procesarImagen($file);
       $guardarImagen->GuardarImagen($id_noticia, $imagen_procesada['ruta_original'], $imagen_procesada['tipo']);
+
+      // Solo genera y guarda miniatura de la primera imagen
       if ($i === 0) {
         $rutaMinuatura = $procesar->generarMiniatura($imagen_procesada['ruta_original'], $imagen_procesada['tipo']);
         $guardarImagen->GuardarImagen($id_noticia, $rutaMinuatura, $imagen_procesada['tipo']);
@@ -117,23 +116,27 @@ class Noticia
     }
   }
 
-  public function CambiarEstado($id, $estado) {
+  // Cambia el estado de una noticia (activo, inactivo, en espera)
+  public function CambiarEstado($id, $estado)
+  {
     $tb_name = "noticias";
     $string = "activo = $estado";
     $astriction = "id = $id";
 
     return $this->db->update($tb_name, $string, $astriction);
   }
-  
-  public function ObtenerNoticiasPorUsuario($usuario_id) {
+
+  // Obtiene noticias filtradas por usuario (para editores)
+  public function ObtenerNoticiasPorUsuario($usuario_id)
+  {
     $classImagen = new Imagen();
     $response = [];
 
     try {
       $selectFields = "n.*, c.nombre AS categoria_nombre, u.nombre AS nombre_usuario, u.apellido AS apellido_usuario";
       $fromTables = "noticias n 
-                      LEFT JOIN categorias c ON n.categoria_id = c.id
-                      LEFT JOIN usuarios u ON n.usuario_id = u.id";
+                    LEFT JOIN categorias c ON n.categoria_id = c.id
+                    LEFT JOIN usuarios u ON n.usuario_id = u.id";
       $where = "n.usuario_id = '$usuario_id' ORDER BY n.fecha_creacion DESC";
 
       $noticias = $this->db->selectRaw($fromTables, $selectFields, $where);
@@ -149,7 +152,6 @@ class Noticia
       $this->db->disconnect();
       return $response;
     } catch (Exception $e) {
-      // Puedes loguear si necesitas
       return [];
     }
   }

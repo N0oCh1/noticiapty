@@ -1,8 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
   verificarSesion();
 });
-let noticiasCargadas = []; 
+
+let noticiasCargadas = [];
 let rolUsuario = "";
+
+// Verifica la sesión del usuario y su rol
 function verificarSesion() {
   fetch("../../api/controllerSessionInfo.php", {
     method: "GET",
@@ -12,7 +15,7 @@ function verificarSesion() {
     .then(data => {
       if (data.success && ["supervisor", "admin", "editor"].includes(data.rol)) {
         rolUsuario = data.rol;
-        cargarNoticias(); // Llama a la función una vez identificado el rol
+        cargarNoticias();
       } else {
         redirigir("Solo los supervisores y administradores pueden acceder.");
       }
@@ -22,6 +25,7 @@ function verificarSesion() {
     });
 }
 
+// Redirige a la página de inicio con una alerta
 function redirigir(mensaje) {
   Swal.fire({
     icon: "error",
@@ -32,6 +36,7 @@ function redirigir(mensaje) {
   });
 }
 
+// Carga las noticias dependiendo del rol
 function cargarNoticias() {
   const endpoint =
     rolUsuario === "editor"
@@ -43,7 +48,7 @@ function cargarNoticias() {
   })
     .then(res => res.json())
     .then(noticias => {
-      noticiasCargadas = noticias; // Guardar en memoria
+      noticiasCargadas = noticias;
       mostrarNoticias(noticias);
     })
     .catch(() => {
@@ -55,7 +60,7 @@ function cargarNoticias() {
     });
 }
 
-
+// Muestra las noticias en la tabla
 function mostrarNoticias(noticias) {
   const tbody = document.querySelector("#noticiasTable tbody");
   tbody.innerHTML = "";
@@ -106,7 +111,7 @@ function mostrarNoticias(noticias) {
     tbody.appendChild(fila);
   });
 
-  // Agregar listeners a botones "Guardar"
+  // Asigna eventos a los botones de guardar
   document.querySelectorAll(".btn-guardar").forEach(btn => {
     btn.addEventListener("click", () => {
       const id = btn.dataset.id;
@@ -116,7 +121,7 @@ function mostrarNoticias(noticias) {
   });
 }
 
-
+// Actualiza el estado de una noticia
 function actualizarEstado(id, estado) {
   fetch("../../api/controllerNoticia.php", {
     method: "PUT",
@@ -142,6 +147,8 @@ function actualizarEstado(id, estado) {
       });
     });
 }
+
+// Muestra imagen en modal
 function mostrarImagenModal(src) {
   const modal = document.getElementById("modalImagen");
   const img = document.getElementById("imagenAmpliada");
@@ -149,13 +156,13 @@ function mostrarImagenModal(src) {
   modal.style.display = "flex";
 }
 
-// Evento para cerrar el modal al hacer clic fuera de la imagen
+// Cierra el modal de imagen al hacer clic fuera
 document.getElementById("modalImagen").addEventListener("click", () => {
   document.getElementById("modalImagen").style.display = "none";
   document.getElementById("imagenAmpliada").src = "";
 });
 
-// Modal de imagen
+// Modal de imagen (click sobre imagen para ampliar)
 const modal = document.getElementById("modalImagen");
 const imagenGrande = document.getElementById("imagenGrande");
 const cerrar = document.getElementById("cerrarModal");
@@ -167,63 +174,59 @@ document.addEventListener("click", function (e) {
   }
 });
 
+// Cierra modal con botón de cerrar
 cerrar.onclick = function () {
   modal.style.display = "none";
 };
 
+// Cierra modal si se hace clic fuera de la imagen
 modal.onclick = function (e) {
   if (e.target === modal) modal.style.display = "none";
 };
-// Delegación de eventos para mostrar el modal de contenido al hacer clic
+
+// Muestra modal con el contenido completo de la noticia
 document.addEventListener("click", function (e) {
   const celda = e.target.closest(".contenido-celda");
   if (celda) {
     const contenidoCompleto = celda.dataset.contenido;
 
-    // Crear modal solo si no existe ya
     let modal = document.querySelector(".modal-contenido");
-    if (modal) modal.remove(); // Eliminar uno anterior si ya existe
+    if (modal) modal.remove();
 
     modal = document.createElement("div");
     modal.classList.add("modal-contenido");
 
     modal.innerHTML = `
-    <span class="cerrar-modal">&times;</span>
-    <div class="contenido-modal-texto">
-      <div class="texto-completo">${contenidoCompleto}</div>
-    </div>
-  `;
-
+      <span class="cerrar-modal">&times;</span>
+      <div class="contenido-modal-texto">
+        <div class="texto-completo">${contenidoCompleto}</div>
+      </div>
+    `;
 
     document.body.appendChild(modal);
-
-    // Mostrar el modal (ya tiene `display: flex` en CSS)
     modal.style.display = "flex";
 
-    // Cerrar al hacer clic en la X
     modal.querySelector(".cerrar-modal").addEventListener("click", () => {
       modal.remove();
     });
 
-    // Cerrar al hacer clic fuera del contenido
-    modal.addEventListener("click", (ev) => {
+    modal.addEventListener("click", ev => {
       if (ev.target === modal) modal.remove();
     });
   }
 });
 
+// Filtrado de noticias mientras se escribe
 document.getElementById("buscadorNoticias").addEventListener("input", function () {
   const palabra = this.value.trim();
-
-  // Si está vacío, volver a cargar todas
   if (palabra === "") {
     cargarNoticias();
     return;
   }
-
   buscarNoticias(palabra);
 });
 
+// Filtra las noticias en memoria por coincidencia
 function buscarNoticias(palabra) {
   const filtro = palabra.toLowerCase();
 
@@ -236,5 +239,3 @@ function buscarNoticias(palabra) {
 
   mostrarNoticias(filtradas);
 }
-
-
