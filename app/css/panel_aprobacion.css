@@ -63,6 +63,22 @@ button.btn-guardar:hover {
   background-color: #218838;
 }
 
+/* Botón Editar */
+button.btn-editar {
+  background-color: #ffc107; /* amarillo bootstrap */
+  border: none;
+  color: #212529; /* texto oscuro para contraste */
+  padding: 6px 14px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin: 8px; /* espacio entre botones */
+}
+
+button.btn-editar:hover {
+  background-color: #e0a800; /* amarillo oscuro al pasar mouse */
+}
 /* Responsivo: ajusta la tabla en pantallas pequeñas */
 @media (max-width: 768px) {
   table, thead, tbody, th, td, tr {
@@ -189,4 +205,3 @@ button.btn-guardar:hover {
 .modal-contenido .cerrar-modal:hover {
   color: #ff4c4c; /* Rojo claro al pasar el mouse */
 }
-

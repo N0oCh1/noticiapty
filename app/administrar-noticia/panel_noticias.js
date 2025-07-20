@@ -105,6 +105,7 @@ function mostrarNoticias(noticias) {
         </select>
       </td>
       <td>
+        <button class="btn-editar" data-id="${noticia.id}">Editar</button>
         <button class="btn-guardar" data-id="${noticia.id}" ${rolUsuario === "editor" ? "disabled" : ""}>Guardar</button>
       </td>
     `;
@@ -119,7 +120,16 @@ function mostrarNoticias(noticias) {
       actualizarEstado(id, select.value);
     });
   });
+
+  // Asigna eventos a los botones de editar (¡aquí está la corrección!)
+  document.querySelectorAll(".btn-editar").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const id = btn.dataset.id;
+      window.location.href = `../editar-noticia/index.html?id=${id}`;
+    });
+  });
 }
+
 
 // Actualiza el estado de una noticia
 function actualizarEstado(id, estado) {

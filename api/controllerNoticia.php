@@ -53,6 +53,25 @@ if ($method === "PUT") {
 
 if ($method === "GET") {
   try {
+    // Buscar noticia por id si se pasa parámetro 'id'
+    if (isset($_GET['id'])) {
+      $id = intval($_GET['id']);
+      if ($id > 0) {
+        $resultado = $noticia->ObtenerNoticiaPorId($id);
+        if ($resultado) {
+          http_response_code(200);
+          echo json_encode(["success" => true, "noticia" => $resultado]);
+        } else {
+          http_response_code(404);
+          echo json_encode(["success" => false, "message" => "Noticia no encontrada"]);
+        }
+      } else {
+        http_response_code(400);
+        echo json_encode(["success" => false, "message" => "ID inválido"]);
+      }
+      exit();
+    }
+
     // Si se pasa el parámetro "mis_noticias=true", devolver solo las del usuario en sesión
     if (isset($_GET['mis_noticias']) && $_GET['mis_noticias'] === "true") {
       if (isset($_SESSION['usuario_id'])) {
@@ -77,8 +96,6 @@ if ($method === "GET") {
     http_response_code(500);
     echo json_encode(["message" => "Error al obtener noticias: " . $e->getMessage()]);
   }
-    exit();
-  }
-
-
+  exit();
+}
 ?>
