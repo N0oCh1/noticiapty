@@ -44,18 +44,38 @@ document.addEventListener("DOMContentLoaded", () => {
                         adminBtn.style.display = "inline-block";
                         adminBtn.addEventListener("click", () => {
                             window.location.href =
-                                "../../app/administrar-usuario/index.html";
+                                "../app/administrar-usuario/index.html";
                         });
                     }
                 }
 
-                if (data.rol === "publicador") {
+                if (
+                    data.rol === "supervisor" ||
+                    data.rol === "admin" ||
+                    data.rol === "editor"
+                ) {
+                    const supervisorBtn =
+                        document.getElementById("supervisorPanelBtn");
+                    if (supervisorBtn) {
+                        supervisorBtn.style.display = "inline-block";
+                        supervisorBtn.addEventListener("click", () => {
+                            window.location.href =
+                                "../app/administrar-noticia/index.html";
+                        });
+                    }
+                }
+
+                if (
+                    data.rol === "editor" ||
+                    data.rol === "admin" ||
+                    data.rol === "supervisor"
+                ) {
                     const publicarBtn = document.getElementById("publicarBtn");
                     if (publicarBtn) {
                         publicarBtn.style.display = "inline-block";
                         publicarBtn.addEventListener("click", () => {
                             window.location.href =
-                                "../../app/crear-noticia/index.html";
+                                "../app/crear-noticia/index.html";
                         });
                     }
                 }

@@ -47,23 +47,25 @@ $totalVisitas = $visita->ObtenerVisitas();
             <i class="fas fa-users"></i>
             <span id="visitorCount"><?php echo $totalVisitas . " "; ?>visitas</span>
         </div>
+        <div class="username">
+            <p id="usernameDisplay" class="username-text"></p>
+
+
+        </div>
+
 
         <div class="user-info" style="display: none;">
-            <div class="username">
-                <p id="usernameDisplay" class="username-text"></p>
 
-
-            </div>
 
             <!-- Botón para supervisores -->
-            <button id="supervisorPanelBtn" style="display: none; margin-right: 10px;">Panel de Noticias</button>
+            <button id="supervisorPanelBtn" style="display: none;">Panel de Noticias</button>
 
             <!-- Mostrar nombre de usuario y rol -->
-            <button id="publicarBtn" style="display: none; margin-right: 10px;">
+            <button id="publicarBtn" style="display: none; ">
                 <i class="fas fa-newspaper"></i> Publicar Noticia</button>
 
             <!-- Botón solo visible si el usuario es admin (se controla por JS) -->
-            <button id="adminBtn" style="display: none; margin-right: 10px;">
+            <button id="adminBtn" style="display: none; ">
                 <i class="fas fa-users-cog"></i> Administrar Usuarios</button>
 
             <button id="logoutBtn" onclick="logout()">
