@@ -183,7 +183,6 @@ document.addEventListener("DOMContentLoaded", () => {
         return div;
     }
 
-    // Formulario para responder comentarios
     function crearFormularioRespuesta(comentarioPadreId) {
         const form = document.createElement("form");
         form.className = "form-respuesta";
@@ -192,17 +191,38 @@ document.addEventListener("DOMContentLoaded", () => {
         textarea.placeholder = "Escribe una respuesta...";
         textarea.required = true;
 
-        const btn = document.createElement("button");
-        btn.type = "submit";
-        btn.textContent = "Enviar respuesta";
-        btn.className = "submit-comment";
+        const botones = document.createElement("div");
+        botones.style.display = "flex";
+        botones.style.gap = "10px";
+        botones.style.marginTop = "10px";
+
+        const btnEnviar = document.createElement("button");
+        btnEnviar.type = "submit";
+        btnEnviar.textContent = "Enviar respuesta";
+        btnEnviar.className = "submit-comment";
+
+        const btnCancelar = document.createElement("button");
+        btnCancelar.type = "button";
+        btnCancelar.textContent = "Cancelar";
+        btnCancelar.className = "submit-comment";
+        btnCancelar.style.backgroundColor = "#888"; // gris neutro
+        btnCancelar.style.backgroundImage = "none";
+
+        // Evento para cancelar y ocultar el formulario
+        btnCancelar.addEventListener("click", () => {
+            form.remove(); // Elimina el formulario del DOM
+        });
+
+        botones.appendChild(btnEnviar);
+        botones.appendChild(btnCancelar);
 
         form.appendChild(textarea);
-        form.appendChild(btn);
+        form.appendChild(botones);
 
+        // Envío del formulario
         form.addEventListener("submit", function (e) {
-            console.log("responder")
             e.preventDefault();
+            console.log("responder");
             const texto = textarea.value.trim();
             if (!texto || !usuarioId) return;
 
@@ -229,6 +249,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         return form;
     }
+
 
 
 
