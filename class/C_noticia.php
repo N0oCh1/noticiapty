@@ -153,37 +153,5 @@ class Noticia
       return [];
     }
   }
-  public function buscarNoticias($palabraCla){
-    $classImagen = new Imagen();
-    $response = [];
-
-    $selectFields = "n.id, n.titulo, n.contenido, n.fecha_creacion, c.nombre AS categoria, u.nombre AS nombre_usuario, u.apellido AS apellido_usuario";
-    $fromTables = "noticias n
-      LEFT JOIN categorias c ON n.categoria_id = c.id
-      LEFT JOIN usuarios u ON n.usuario_id = u.id";
-
-    // Preparamos la cláusula WHERE sin usar parámetros directamente, ya que selectRaw no usa bind
-    $searchTerm = addslashes($palabraCla); // escapa para prevenir errores de sintaxis
-    $where = "(n.titulo LIKE '%$searchTerm%' OR n.contenido LIKE '%$searchTerm%') AND n.activo = 1 ORDER BY n.fecha_creacion DESC";
-
-    try {
-      $noticias = $this->db->selectRaw($fromTables, $selectFields, $where);
-
-      if (is_iterable($noticias)) {
-        foreach ($noticias as $noticia) {
-          $imagenes = $classImagen->ObtenerImagenes($noticia['id']);
-          $noticia['imagenes'] = $imagenes;
-          $response[] = $noticia;
-        }
-      }
-
-      $this->db->disconnect();
-      return $response;
-    } catch (Exception $e) {
-      // Registrar error si es necesario
-      error_log("Error al buscar noticias: " . $e->getMessage());
-      return [];
-    }
-  }
 }
 ?>

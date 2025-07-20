@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   verificarSesion();
 });
-
+let noticiasCargadas = []; 
 let rolUsuario = "";
 function verificarSesion() {
   fetch("../../api/controllerSessionInfo.php", {
@@ -33,7 +33,6 @@ function redirigir(mensaje) {
 }
 
 function cargarNoticias() {
-  // Si es editor, solo carga sus propias noticias
   const endpoint =
     rolUsuario === "editor"
       ? "../../api/controllerNoticia.php?mis_noticias=true"
@@ -43,7 +42,10 @@ function cargarNoticias() {
     credentials: "include"
   })
     .then(res => res.json())
-    .then(noticias => mostrarNoticias(noticias))
+    .then(noticias => {
+      noticiasCargadas = noticias; // Guardar en memoria
+      mostrarNoticias(noticias);
+    })
     .catch(() => {
       Swal.fire({
         icon: "error",
@@ -52,6 +54,7 @@ function cargarNoticias() {
       });
     });
 }
+
 
 function mostrarNoticias(noticias) {
   const tbody = document.querySelector("#noticiasTable tbody");
@@ -222,23 +225,16 @@ document.getElementById("buscadorNoticias").addEventListener("input", function (
 });
 
 function buscarNoticias(palabra) {
-  const formData = new FormData();
-  formData.append("buscar", palabra);
+  const filtro = palabra.toLowerCase();
 
-  fetch("../../api/controllerNoticia.php", {
-    method: "POST",
-    credentials: "include",
-    body: formData
-  })
-    .then(res => res.json())
-    .then(noticias => {
-      mostrarNoticias(noticias);
-    })
-    .catch(() => {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "No se pudieron buscar las noticias."
-      });
-    });
+  const filtradas = noticiasCargadas.filter(noticia =>
+    noticia.titulo.toLowerCase().includes(filtro) ||
+    noticia.contenido.toLowerCase().includes(filtro) ||
+    noticia.categoria_nombre.toLowerCase().includes(filtro) ||
+    noticia.autor.toLowerCase().includes(filtro)
+  );
+
+  mostrarNoticias(filtradas);
 }
+
+
