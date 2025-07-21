@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         adminBtn.style.display = "inline-block";
                         adminBtn.addEventListener("click", () => {
                             window.location.href =
-                                "../app/administrar-usuario/index.html";
+                                "../administrar-usuario/";
                         });
                     }
                 }
@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         supervisorBtn.style.display = "inline-block";
                         supervisorBtn.addEventListener("click", () => {
                             window.location.href =
-                                "../app/administrar-noticia/index.html";
+                                "../administrar-noticia/";
                         });
                     }
                 }
@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         publicarBtn.style.display = "inline-block";
                         publicarBtn.addEventListener("click", () => {
                             window.location.href =
-                                "../app/crear-noticia/index.html";
+                                "../crear-noticia/";
                         });
                     }
                 }
@@ -327,7 +327,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 confirmButtonText: "Iniciar sesión",
             }).then((result) => {
                 if (result.isConfirmed) {
-                    window.location.href = "../auth/iniciar-sesion/index.html"; // Ajusta la ruta si es diferente
+                    window.location.href = "../auth/iniciar-sesion/index.html";
                 }
             });
             return;

@@ -58,7 +58,8 @@ $totalVisitas = $visita->ObtenerVisitas();
 
 
             <!-- Botón para supervisores -->
-            <button id="supervisorPanelBtn" style="display: none;">Panel de Noticias</button>
+            <button id="supervisorPanelBtn" style="display: none;">
+                <i class="fas fa-chart-line"></i> Panel de Noticias</button>
 
             <!-- Mostrar nombre de usuario y rol -->
             <button id="publicarBtn" style="display: none; ">
