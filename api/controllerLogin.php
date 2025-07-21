@@ -1,8 +1,9 @@
 <?php
+require_once "../class/C_usuario.php";
+require_once '../utils/sanitizar.php';
 
 try {
-    require_once "../class/C_usuario.php";
-
+    
     session_start();
 
     if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -11,15 +12,14 @@ try {
         $data = json_decode(file_get_contents("php://input"), true);
 
         if (isset($data['usuario'], $data['password'])) {
-            $usuarioInput = $data['usuario'];
-            $passwordInput = $data['password'];
+            // Sanitizar entradas
+            $usuarioInput = SanitizarEntrada::limpiarCadena($data['usuario']);
+            $passwordInput = trim($data['password']); // No aplicar strip_tags ni htmlspecialchars
 
             $usuarioObj = new Usuario();
-
             $datosLogin = $usuarioObj->verificarLogin($usuarioInput, $passwordInput);
 
             if ($datosLogin) {
-                // Guardar el ID y rol del usuario en sesión
                 $_SESSION['usuario_id'] = $datosLogin['id'];
                 $_SESSION['rol'] = $datosLogin['rol'];
 
@@ -61,4 +61,3 @@ try {
         'message' => 'Error interno del servidor'
     ]);
 }
-?>
