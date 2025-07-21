@@ -96,6 +96,7 @@ class Noticia
 
   public function GuardarImagen($id_noticia,  $imagen)
   {
+    
     $total = count($imagen['name']);
     $guardarImagen = new Imagen();
     $procesar = new ImagenUploader();

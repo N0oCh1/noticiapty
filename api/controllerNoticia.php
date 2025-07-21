@@ -17,8 +17,8 @@ if ($method === "POST") {
     $contenido = $_POST["contenido"] ?? "";
     $categoria = $_POST["categoria"] ?? "";
     $usuario = $_POST["usuario"] ?? "";
-    $autor = $_POST["autor"] ?? "";
     $imagen = $_FILES["imagen"] ?? null;
+    $autor = $_POST["autor"] ?? "";
 
     $id = intval($id);
     if ($id <= 0) {

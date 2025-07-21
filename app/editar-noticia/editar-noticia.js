@@ -191,7 +191,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }).then(() => {
               console.log(data);
               if (data.success) {
-                window.location.href = "panel_noticias.php";
+                window.location.href = "../administrar-noticia/";
               }
             });
           })
