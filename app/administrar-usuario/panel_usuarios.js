@@ -220,3 +220,31 @@ document.getElementById("buscadorUsuarios").addEventListener("input", function (
 
 // Inicia validación al cargar
 verificarSesionYPermiso();
+
+document.getElementById("filtrosUsuarios").addEventListener("click", function (e) {
+  if (e.target.tagName !== "BUTTON") return;
+
+  const filtro = e.target.dataset.filtro;
+
+  let filtrados = [];
+
+  switch (filtro) {
+    case "activos":
+      filtrados = usuariosCargados.filter(u => u.activo == 1);
+      break;
+    case "inactivos":
+      filtrados = usuariosCargados.filter(u => u.activo == 0);
+      break;
+    case "supervisor":
+      filtrados = usuariosCargados.filter(u => u.rol === "supervisor");
+      break;
+    case "editor":
+      filtrados = usuariosCargados.filter(u => u.rol === "editor");
+      break;
+    default:
+      filtrados = usuariosCargados;
+      break;
+  }
+
+  renderizarUsuarios(filtrados);
+});

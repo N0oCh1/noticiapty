@@ -1,4 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
+  
+
   verificarSesion();
 });
 
@@ -249,3 +251,23 @@ function buscarNoticias(palabra) {
 
   mostrarNoticias(filtradas);
 }
+
+document.getElementById("btnMostrarTodas").addEventListener("click", () => {
+  mostrarNoticias(noticiasCargadas);
+});
+
+document.getElementById("btnFiltrarActivas").addEventListener("click", () => {
+  const activas = noticiasCargadas.filter(n => n.activo == 1);
+  mostrarNoticias(activas);
+});
+
+document.getElementById("btnFiltrarInactivas").addEventListener("click", () => {
+  const inactivas = noticiasCargadas.filter(n => n.activo == 2);
+  mostrarNoticias(inactivas);
+});
+
+document.getElementById("btnFiltrarEspera").addEventListener("click", () => {
+  const espera = noticiasCargadas.filter(n => n.activo == 3);
+  mostrarNoticias(espera);
+});
+

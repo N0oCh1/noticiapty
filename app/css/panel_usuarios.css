@@ -94,3 +94,18 @@ button[data-action="toggle"]:hover {
 button[data-action="guardar"]:hover {
   background-color: #1e8e4f;
 }
+
+#filtrosUsuarios button {
+  padding: 0.5rem 1rem;
+  margin-right: 0.5rem;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+#filtrosUsuarios button:hover {
+  background-color: #2980b9;
+}

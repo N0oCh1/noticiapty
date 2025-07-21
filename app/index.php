@@ -33,6 +33,8 @@ $totalVisitas = $visita->ObtenerVisitas();
         type="image/png"
         sizes="16x16"
         href="../logo.png" />
+    <link rel="stylesheet" href="css/footer.css" />
+
     <!-- SweetAlert2 CDN -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -113,5 +115,5 @@ $totalVisitas = $visita->ObtenerVisitas();
     <script src="index.js"></script>
 
 </body>
-
+<?php include "footer.php"; ?>
 </html>

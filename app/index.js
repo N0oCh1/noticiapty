@@ -264,7 +264,7 @@ function createFeaturedNewsCard(article, className) {
 
     card.addEventListener("click", () => {
         localStorage.setItem("noticia", JSON.stringify(article));
-        window.location.href = "../app/detalle-noticia/index.html";
+        window.location.href = "../app/detalle-noticia/";
     });
 
     const imageUrl =

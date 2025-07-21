@@ -19,12 +19,13 @@ thead {
 
 thead th {
   padding: 12px 15px;
+  border: solid 1px black;
 }
 
 /* Filas del cuerpo */
 tbody tr {
-  border-bottom: 1px solid #ddd;
   transition: background-color 0.3s ease;
+  border: solid 1px black;
 }
 
 tbody tr:hover {
@@ -205,3 +206,27 @@ button.btn-editar:hover {
 .modal-contenido .cerrar-modal:hover {
   color: #ff4c4c; /* Rojo claro al pasar el mouse */
 }
+
+.filtros-noticias {
+  margin: 20px 0;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn-filtro {
+  padding: 8px 14px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-filtro:hover {
+  background-color: #2980b9;
+} 

@@ -8,6 +8,7 @@
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
         />
+        <link rel="stylesheet" href="../css/footer.css" />
 
         <link rel="icon" type="image/png" sizes="16x16" href="../../logo.png" />
         <!-- SweetAlert2 CDN -->
@@ -122,4 +123,5 @@
 
         <script src="script.js"></script>
     </body>
+    <?php include "../footer.php"; ?>
 </html>
