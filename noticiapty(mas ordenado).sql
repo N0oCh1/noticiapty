@@ -68,10 +68,10 @@ CREATE TABLE IF NOT EXISTS `comentarios` (
 --
 
 INSERT INTO `comentarios` (`id`, `noticia_id`, `usuario_id`, `contenido`, `fecha_creacion`, `comentario_padre_id`) VALUES
-(32, 45, 34, 'Goty', '2025-07-17 19:45:48', NULL),
-(33, 49, 34, 'Noooooooo😭', '2025-07-17 20:17:34', NULL),
-(34, 49, 35, 'Jajajaj XD', '2025-07-17 20:17:59', NULL),
-(35, 49, 37, 'Se nos fue un idolo :(', '2025-07-17 20:19:43', NULL);
+(1, 45, 34, 'Goty', '2025-07-17 19:45:48', NULL),
+(2, 49, 34, 'Noooooooo😭', '2025-07-17 20:17:34', NULL),
+(3, 49, 35, 'Jajajaj XD', '2025-07-17 20:17:59', NULL),
+(4, 49, 37, 'Se nos fue un idolo :(', '2025-07-17 20:19:43', NULL);
 
 -- --------------------------------------------------------
 
