@@ -174,10 +174,13 @@ function loadFilteredNews() {
     );
 
     if (sortedNews.length === 0) {
-        document.getElementById("newsGrid").innerHTML =
-            "<p style='text-align: center; font-size: 18px; margin-top: 16rem; color: #2c3e50;'>No hay noticias para esta categoría.</p>";
+        document.getElementById("wrapper").style.minHeight = "100vh"; // Ajustar altura del wrapper si no hay noticias
+            document.getElementById("newsGrid").innerHTML =
+                "<p style='text-align: center; font-size: 18px; color: #2c3e50;'>No hay noticias para esta categoría.</p>";
         document.getElementById("loadMore").style.display = "none";
     } else {
+        document.getElementById("wrapper").style.minHeight = ""; // Quitar minHeight cuando sí hay noticias
+
         renderNews(sortedNews.slice(0, initialNewsCount));
         document.getElementById("loadMore").style.display =
             sortedNews.length > initialNewsCount ? "block" : "none";
