@@ -104,16 +104,24 @@ $totalVisitas = $visita->ObtenerVisitas();
         </ul>
     </nav>
 
-    <!-- Contenedor principal de noticias -->
-    <main class="news-container">
-        <div id="newsGrid" class="news-grid"></div>
-        <button id="loadMore" class="load-more-btn">
-            <i class="fas fa-sync"></i> Cargar más noticias
-        </button>
-    </main>
+
+    <div id="wrapper">
+        <!-- Contenedor principal de noticias -->
+        <main class="news-container">
+            <div id="newsGrid" class="news-grid"></div>
+            <button id="loadMore" class="load-more-btn">
+                <i class="fas fa-sync"></i> Cargar más noticias
+            </button>
+        </main>
+
+
+    </div>
+
+
+    <?php include "footer.php"; ?>
 
     <script src="index.js"></script>
 
 </body>
-<?php include "footer.php"; ?>
+
 </html>
