@@ -28,7 +28,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 document.querySelector(".user-info").style.display = "flex";
                 document.querySelector(".nav-auth").style.display = "none";
                 document.getElementById("logoutBtn").style.display = "block";
-
+                                // Mostrar botón de perfil si hay sesión
+                const perfilBtn = document.getElementById("btn-editar");
+                if (perfilBtn && data.success) {
+                    perfilBtn.style.display = "inline-block";
+                    perfilBtn.addEventListener("click", () => {
+                        window.location.href = "../app/editar-usuario/index.html";
+                    });
+                }
+                
                 if (data.rol === "admin") {
                     const adminBtn = document.getElementById("adminBtn");
                     if (adminBtn) {

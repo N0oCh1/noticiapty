@@ -70,6 +70,9 @@ $totalVisitas = $visita->ObtenerVisitas();
             <!-- Botón solo visible si el usuario es admin (se controla por JS) -->
             <button id="adminBtn" style="display: none; ">
                 <i class="fas fa-users-cog"></i> Administrar Usuarios</button>
+            
+            <button id="btn-editar" style="display: none;">
+                <i class="fa-solid fa-user"></i> Perfil</button>
 
             <button id="logoutBtn" onclick="logout()">
                 <i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión

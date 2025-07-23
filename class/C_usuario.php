@@ -22,7 +22,7 @@ class Usuario {
   // MÉTODO: Verificar Login
   // ===========================
   public function verificarLogin(string $usuario, string $password): array|false {
-    $resultado = $this->db->select("usuarios", "id, nombre, apellido, usuario, contrasena, rol", "usuario = " . $this->conexion->quote($usuario));
+    $resultado = $this->db->select("usuarios", "id, nombre, apellido, usuario, contrasena, rol, activo", "usuario = " . $this->conexion->quote($usuario));
 
     if ($resultado && count($resultado) > 0) {
         $usuarioData = $resultado[0];
