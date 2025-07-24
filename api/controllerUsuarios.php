@@ -66,9 +66,7 @@ switch ($method) {
             echo json_encode(["message" => "No tienes permisos para crear usuarios con rol '{$input['rol']}'"]);
             exit;
         }
-        $input = array_map(function($valor) {
-            return is_string($valor) ? SanitizarEntrada::limpiarCadena($valor) : $valor;
-        }, $input);
+
 
         $ok = $usuario->insertarUsuario(
             $input['nombre'],
@@ -91,61 +89,73 @@ switch ($method) {
         break;
 
     case 'PUT':
-        if (!$usuarioSesionId) {
-            http_response_code(401);
-            echo json_encode(["message" => "No autenticado"]);
-            exit;
-        }
-
-        if (!$id) {
-            http_response_code(400);
-            echo json_encode(["message" => "Se requiere el ID para actualizar"]);
-            exit;
-        }
-
-        // Obtener los datos actuales del usuario desde la base de datos
-        $usuarioActual = $usuario->obtenerUsuarioPorId($id);
-        if (!$usuarioActual) {
-            http_response_code(404);
-            echo json_encode(["message" => "Usuario no encontrado"]);
-            exit;
-        }
-
-        // Decodificar los datos enviados en el PUT
-        $input = json_decode(file_get_contents("php://input"), true);
-        if (!$input) {
-            http_response_code(400);
-            echo json_encode(["message" => "Datos de actualización no válidos"]);
-            exit;
-        }
-
-        // Verificar si los datos realmente cambiaron
-        $datosNoHanCambiado = true;
-        foreach ($input as $key => $value) {
-            if (isset($usuarioActual[$key]) && $usuarioActual[$key] != $value) {
-                $datosNoHanCambiado = false;
-                break;
+        try{ 
+            if (!$usuarioSesionId) {
+                http_response_code(401);
+                echo json_encode(["message" => "No autenticado"]);
+                exit;
             }
-        }
 
-        // Si los datos no cambiaron, responder sin hacer la actualización
-        if ($datosNoHanCambiado) {
-            http_response_code(200);
-            echo json_encode(["message" => "No se realizaron cambios"]);
-            exit;
-        }
+            if (!$id) {
+                http_response_code(400);
+                echo json_encode(["message" => "Se requiere el ID para actualizar"]);
+                exit;
+            }
 
-        // Realizar la actualización si los datos cambiaron
-        $ok = $usuario->actualizarUsuario($id, $input);
-        if ($ok) {
-            http_response_code(200);
-            echo json_encode(["success" => true]);
-        } else {
+            // Decodificar los datos enviados en el PUT
+            $input = json_decode(file_get_contents("php://input"), true);
+            if (!$input) {
+                http_response_code(400);
+                echo json_encode(["message" => "Datos de actualización no válidos"]);
+                exit;
+            }
+
+            // Verificar si el frontend intenta actualizar el rol sin ser admin
+            if (array_key_exists('rol', $input) && !validarRolAdmin($usuarioSesionId) && $_SESSION['rol'] !== 'admin') {
+                http_response_code(403);
+                echo json_encode(["message" => "No tienes permisos para actualizar el rol a '{$input['rol']}'"]);
+                exit;
+            }
+            // Obtener usuario actual de la base de datos
+            $usuarioActual = $usuario->obtenerUsuarioPorId($id);
+            if (!$usuarioActual) {
+                http_response_code(404);
+                echo json_encode(["message" => "Usuario no encontrado"]);
+                exit;
+            }
+
+            // Comparar si hubo cambios reales
+            $datosNoHanCambiado = true;
+            foreach ($input as $key => $value) {
+                // Asegúrate de comparar solo campos que existen en la BD
+                if (isset($usuarioActual[$key])) {
+                    if ((string)$usuarioActual[$key] !== (string)$value) {
+                        $datosNoHanCambiado = false;
+                        break;
+                    }
+                }
+            }
+
+            if ($datosNoHanCambiado) {
+                http_response_code(200);
+                echo json_encode(["message" => "No se realizaron cambios"]);
+                exit;
+            }
+
+            // Realizar la actualización si los datos cambiaron
+            $ok = $usuario->actualizarUsuario($id, $input);
+            if ($ok) {
+                http_response_code(200);
+                echo json_encode(["success" => true]);
+            } else {
+                http_response_code(500);
+                echo json_encode(["message" => "No se pudo actualizar el usuario"]);
+            }
+            break;
+        } catch (Exception $e) {
             http_response_code(500);
-            echo json_encode(["message" => "No se pudo actualizar el usuario"]);
+            echo json_encode(["message" => "Error interno del servidor: ".$e->getMessage()]);
         }
-        break;
-
 
     case 'DELETE':
         if (!$usuarioSesionId || !validarPermiso($usuarioSesionId, 'admin')) {

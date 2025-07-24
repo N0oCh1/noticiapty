@@ -92,7 +92,7 @@ document.getElementById("formEditarSesion").addEventListener("submit", async fun
       const res = await fetch(`${apiUsuariosUrl}?id=${usuarioId}`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ nombre, apellido, usuario }),
+          body: JSON.stringify({ nombre, apellido, usuario}),
       });
 
       // Verifica si la respuesta fue exitosa
