@@ -110,12 +110,6 @@ switch ($method) {
             exit;
         }
 
-        foreach ($input as $clave => $valor) {
-            if (is_string($valor)) {
-                $input[$clave] = SanitizarEntrada::limpiarCadena($valor);
-            }
-        }
-
         $ok = $usuario->actualizarUsuario($id, $input);
         if ($ok) {
             http_response_code(200);
