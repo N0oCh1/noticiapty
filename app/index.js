@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (perfilBtn && data.success) {
                     perfilBtn.style.display = "inline-block";
                     perfilBtn.addEventListener("click", () => {
-                        window.location.href = "../app/editar-usuario/index.html";
+                        window.location.href = "../app/editar-usuario/index.php";
                     });
                 }
                 
@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         adminBtn.style.display = "inline-block";
                         adminBtn.addEventListener("click", () => {
                             window.location.href =
-                                "../app/administrar-usuario/index.html";
+                                "../app/administrar-usuario/index.php";
                         });
                     }
                 }
@@ -53,7 +53,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     if (supervisorBtn) {
                         supervisorBtn.style.display = "inline-block";
                         supervisorBtn.addEventListener("click", () => {
-                            window.location.href = "../app/administrar-noticia/index.html";
+                            window.location.href =
+                                "../app/administrar-noticia/index.php";
                         });
                     }
                 }
@@ -64,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         publicarBtn.style.display = "inline-block";
                         publicarBtn.addEventListener("click", () => {
                             window.location.href =
-                                "../app/crear-noticia/index.html";
+                                "../app/crear-noticia/index.php";
                         });
                     }
                 }

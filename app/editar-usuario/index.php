@@ -1,20 +1,35 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Editar Usuario en Sesión</title>
   <link
-        rel="icon"
-        type="image/png"
-        sizes="16x16"
-        href="../../logo.png" />
+    rel="icon"
+    type="image/png"
+    sizes="16x16"
+    href="../../logo.png" />
   <link rel="stylesheet" href="../css/paneles-comunes.css" />
   <style>
+    html,
+    body {
+      height: 100vh;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+
+    }
+
     /* Estilo para el contenedor */
     .container {
-      max-width: 600px;
-      margin: 40px auto;
+      width: 400px;
+      margin: 4rem auto;
       padding: 30px;
       background-color: #ffffff;
       border-radius: 12px;
@@ -120,49 +135,53 @@
       background-color: #1e8449;
       transform: scale(0.97);
     }
-
   </style>
 </head>
+
 <body>
 
   <header>
     <h1>Perfil</h1>
   </header>
   <!-- Botón de regreso -->
-    <div style="margin-bottom: 20px">
-        <button
-            class="volver-btn"
-            onclick="window.location.href='../'"
-            style="background-color: #6c757d"
-        >
-            ← Volver al Panel de Noticias
-        </button>
-    </div>
+  <div style="margin-bottom: 20px">
+    <button
+      class="volver-btn"
+      onclick="window.location.href='../'"
+      style="background-color: #6c757d">
+      ← Volver al Panel de Noticias
+    </button>
+  </div>
   <div class="container">
     <h2>Editar mis datos</h2>
     <form id="formEditarSesion" class="form-usuario">
-  <div class="form-group">
-    <label>Nombre</label>
-    <input type="text" name="nombre" disabled>
-  </div>
-  <div class="form-group">
-    <label>Apellido</label>
-    <input type="text" name="apellido" disabled>
-  </div>
-  <div class="form-group">
-    <label>Usuario</label>
-    <input type="text" name="usuario" disabled>
-  </div>
-  <div class="botones">
-    <button type="button" id="btnEditar" class="btn btn-editar">Editar</button>
-    <button type="submit" id="btnGuardar" class="btn btn-guardar" style="display: none;">Guardar cambios</button>
-  </div>
-</form>
+      <div class="form-group">
+        <label>Nombre</label>
+        <input type="text" name="nombre" disabled>
+      </div>
+      <div class="form-group">
+        <label>Apellido</label>
+        <input type="text" name="apellido" disabled>
+      </div>
+      <div class="form-group">
+        <label>Usuario</label>
+        <input type="text" name="usuario" disabled>
+      </div>
+      <div class="botones">
+        <button type="button" id="btnEditar" class="btn btn-editar">Editar</button>
+        <button type="submit" id="btnGuardar" class="btn btn-guardar" style="display: none;">Guardar cambios</button>
+      </div>
+    </form>
 
   </div>
+
+  <?php include "../footer.php"; ?>
+
+
 
   <script src="editar_usuario.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </body>
+
 </html>

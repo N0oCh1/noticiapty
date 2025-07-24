@@ -89,44 +89,67 @@ document.getElementById("formEditarSesion").addEventListener("submit", async fun
   if (!confirm.isConfirmed) return;
 
   try {
-    const res = await fetch(`${apiUsuariosUrl}?id=${usuarioId}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ nombre, apellido, usuario })
-    });
-
-    const result = await res.json();
-
-    if (res.ok) {
-      Swal.fire({
-        icon: "success",
-        title: "Actualizado correctamente",
-        text: "Tus datos han sido modificados.",
-        timer: 2000,
-        showConfirmButton: false
+      const res = await fetch(`${apiUsuariosUrl}?id=${usuarioId}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ nombre, apellido, usuario }),
       });
 
-      // Deshabilitar campos y reiniciar botones
-      document.querySelectorAll('input[name="nombre"], input[name="apellido"], input[name="usuario"]')
-        .forEach(input => input.setAttribute("disabled", true));
+      // Verifica si la respuesta fue exitosa
+      if (!res.ok) {
+          const errorText = await res.text();
+          console.error("Error de servidor:", errorText); // Muestra el HTML completo para depurar
+          throw new Error(`HTTP error! status: ${res.status}`);
+      }
 
-      document.getElementById("btnGuardar").style.display = "none";
-      document.getElementById("btnEditar").style.display = "inline-block";
+      const result = await res.json();
 
-    } else {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: result.message || "No se pudo actualizar el usuario.",
-      });
-    }
+      if (res.ok) {
+          if (result.message && result.message === "No se realizaron cambios") {
+              Swal.fire({
+                  icon: "info",
+                  title: "Sin cambios",
+                  text: "No se realizaron cambios en los datos del usuario.",
+                  timer: 2000,
+                  showConfirmButton: false,
+              });
+          } else {
+              Swal.fire({
+                  icon: "success",
+                  title: "Actualizado correctamente",
+                  text: "Tus datos han sido modificados.",
+                  timer: 2000,
+                  showConfirmButton: false,
+              });
+
+              // Deshabilitar campos y reiniciar botones
+              document
+                  .querySelectorAll(
+                      'input[name="nombre"], input[name="apellido"], input[name="usuario"]'
+                  )
+                  .forEach((input) => input.setAttribute("disabled", true));
+
+              document.getElementById("btnGuardar").style.display = "none";
+              document.getElementById("btnEditar").style.display =
+                  "inline-block";
+          }
+      } else {
+          Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: result.message || "No se pudo actualizar el usuario.",
+          });
+      }
   } catch (error) {
-    Swal.fire({
-      icon: "error",
-      title: "Error de red",
-      text: "No se pudo conectar al servidor.",
-    });
+      Swal.fire({
+          icon: "error",
+          title: "Error de red",
+          text: `No se pudo conectar al servidor. Detalle del error: ${
+              error.message || error
+          }`,
+      });
   }
+
 });
 
 // Ejecutar al cargar

@@ -38,13 +38,22 @@ document.addEventListener("DOMContentLoaded", () => {
                 document.querySelector(".nav-auth").style.display = "none";
                 document.getElementById("logoutBtn").style.display = "block";
 
+                const perfilBtn = document.getElementById("btn-editar");
+                if (perfilBtn && data.success) {
+                    perfilBtn.style.display = "inline-block";
+                    perfilBtn.addEventListener("click", () => {
+                        window.location.href =
+                            "../editar-usuario/index.php";
+                    });
+                }
+
                 if (data.rol === "admin") {
                     const adminBtn = document.getElementById("adminBtn");
                     if (adminBtn) {
                         adminBtn.style.display = "inline-block";
                         adminBtn.addEventListener("click", () => {
                             window.location.href =
-                                "../administrar-usuario/";
+                                "../administrar-usuario/index.php";
                         });
                     }
                 }
@@ -60,7 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         supervisorBtn.style.display = "inline-block";
                         supervisorBtn.addEventListener("click", () => {
                             window.location.href =
-                                "../administrar-noticia/";
+                                "../administrar-noticia/index.php";
                         });
                     }
                 }
@@ -75,7 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         publicarBtn.style.display = "inline-block";
                         publicarBtn.addEventListener("click", () => {
                             window.location.href =
-                                "../crear-noticia/";
+                                "../crear-noticia/index.php";
                         });
                     }
                 }
@@ -222,6 +231,22 @@ document.addEventListener("DOMContentLoaded", () => {
         // Envío del formulario
         form.addEventListener("submit", function (e) {
             e.preventDefault();
+
+            if (!usuarioId) {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Debes iniciar sesión",
+                    text: "Inicia sesión para poder comentar.",
+                    confirmButtonColor: "#3085d6",
+                    confirmButtonText: "Iniciar sesión",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href =
+                            "../auth/iniciar-sesion/index.html"; // Ajusta la ruta si es necesario
+                    }
+                });
+                return;
+            }
             console.log("responder");
             const texto = textarea.value.trim();
             if (!texto || !usuarioId) return;

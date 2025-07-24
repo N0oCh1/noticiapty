@@ -103,6 +103,15 @@ switch ($method) {
             exit;
         }
 
+        // Obtener los datos actuales del usuario desde la base de datos
+        $usuarioActual = $usuario->obtenerUsuarioPorId($id);
+        if (!$usuarioActual) {
+            http_response_code(404);
+            echo json_encode(["message" => "Usuario no encontrado"]);
+            exit;
+        }
+
+        // Decodificar los datos enviados en el PUT
         $input = json_decode(file_get_contents("php://input"), true);
         if (!$input) {
             http_response_code(400);
@@ -110,6 +119,23 @@ switch ($method) {
             exit;
         }
 
+        // Verificar si los datos realmente cambiaron
+        $datosNoHanCambiado = true;
+        foreach ($input as $key => $value) {
+            if (isset($usuarioActual[$key]) && $usuarioActual[$key] != $value) {
+                $datosNoHanCambiado = false;
+                break;
+            }
+        }
+
+        // Si los datos no cambiaron, responder sin hacer la actualización
+        if ($datosNoHanCambiado) {
+            http_response_code(200);
+            echo json_encode(["message" => "No se realizaron cambios"]);
+            exit;
+        }
+
+        // Realizar la actualización si los datos cambiaron
         $ok = $usuario->actualizarUsuario($id, $input);
         if ($ok) {
             http_response_code(200);
@@ -119,6 +145,7 @@ switch ($method) {
             echo json_encode(["message" => "No se pudo actualizar el usuario"]);
         }
         break;
+
 
     case 'DELETE':
         if (!$usuarioSesionId || !validarPermiso($usuarioSesionId, 'admin')) {

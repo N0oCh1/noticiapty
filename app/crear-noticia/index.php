@@ -72,6 +72,8 @@
 
             <button type="submit">Guardar Noticia</button>
         </form>
+
+        <?php include "../footer.php"; ?>
         <script src="formulario-noticia.js"></script>
     </body>
 </html>
