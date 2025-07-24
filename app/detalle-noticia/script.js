@@ -144,7 +144,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function renderComentario(comentario) {
         const div = document.createElement("div");
         div.className = "comentario";
-
+        console.log("Comentario:", comentario);
         if (comentario.usuario_id == usuarioId) {
             div.classList.add("comentario-propio");
         }

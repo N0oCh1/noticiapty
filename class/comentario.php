@@ -26,7 +26,7 @@ class Comentario
     // Obtener todos los comentarios de una noticia, incluyendo el nombre del usuario
     public function obtenerComentarios($noticia_id)
     {
-         $sql = "SELECT c.id, c.contenido, c.fecha_creacion, c.usuario_id, c.comentario_padre_id, u.nombre AS usuario
+         $sql = "SELECT c.id, c.contenido, c.fecha_creacion, c.usuario_id, c.comentario_padre_id, u.usuario AS usuario
         FROM comentarios c
         JOIN usuarios u ON c.usuario_id = u.id
         WHERE c.noticia_id = :noticia_id
