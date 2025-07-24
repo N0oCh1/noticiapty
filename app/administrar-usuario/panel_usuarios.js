@@ -192,6 +192,7 @@ document.querySelector("#usersTable tbody").addEventListener("click", async e =>
         });
       }
     } catch (error) {
+      console.error("Error al guardar usuario:", error);
       Swal.fire({
         icon: "error",
         title: "Error de red",
