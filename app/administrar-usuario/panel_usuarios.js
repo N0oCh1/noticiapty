@@ -177,26 +177,38 @@ document.querySelector("#usersTable tbody").addEventListener("click", async e =>
         body: JSON.stringify({ nombre, apellido, usuario, rol })
       });
       const result = await res.json();
+      
       if (res.ok) {
-        Swal.fire({
-          icon: "success",
-          title: "Actualizado",
-          text: "El usuario fue actualizado correctamente.",
-        });
-        verificarSesionYPermiso();
+          if (result.message && result.message === "No se realizaron cambios") {
+              Swal.fire({
+                  icon: "info",
+                  title: "Sin cambios",
+                  text: "No se realizaron cambios en los datos del usuario.",
+                  timer: 2000,
+                  showConfirmButton: false,
+              });
+          } else {
+              Swal.fire({
+                  icon: "success",
+                  title: "Actualizado correctamente",
+                  text: "Tus datos han sido modificados.",
+                  timer: 2000,
+                  showConfirmButton: false,
+              });
+          }
       } else {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: result.message || "Error al actualizar usuario",
-        });
+          Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: result.message || "Error al actualizar usuario",
+          });
       }
-    } catch (error) {
+  } catch (error) {
       console.error("Error al guardar usuario:", error);
       Swal.fire({
         icon: "error",
         title: "Error de red",
-        text: "No se pudo conectar con el servidor.",
+        text: `No se pudo conectar con el servidor. ${error}`
       });
     }
   }
