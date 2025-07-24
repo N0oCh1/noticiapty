@@ -133,7 +133,7 @@ function mostrarNoticias(noticias) {
 }
 
 
-// Actualiza el estado de una noticia
+/// Actualiza el estado de una noticia
 function actualizarEstado(id, estado) {
   fetch("../../api/controllerNoticia.php", {
     method: "PUT",
@@ -147,7 +147,7 @@ function actualizarEstado(id, estado) {
     .then(data => {
       Swal.fire({
         icon: data.success ? "success" : "error",
-        title: data.success ? "Actualizado" : "Error",
+        title: data.success ? (data.message === "No se realizaron cambios en el estado" ? "Sin cambios" : "Actualizado") : "Error",
         text: data.message || "Error al actualizar estado"
       });
     })
@@ -159,6 +159,7 @@ function actualizarEstado(id, estado) {
       });
     });
 }
+
 
 // Muestra imagen en modal
 function mostrarImagenModal(src) {

@@ -96,17 +96,31 @@ if ($method === "PUT") {
     exit();
   }
 
+  // Obtener el estado actual de la noticia
+  $estadoActual = $noticia->obtenerEstado($id);
+
+  // Depuración para ver el estado actual
+  error_log("Estado actual: " . $estadoActual);
+
+  // Si el estado no ha cambiado, no hacer nada
+  if ($estadoActual === $estado) {
+    echo json_encode(["success" => true, "message" => "El estado no ha cambiado"]);
+    exit();
+  }
+
+  // Si el estado cambió, proceder a la actualización
   $resultado = $noticia->CambiarEstado($id, $estado);
 
   if ($resultado) {
     http_response_code(200);
     echo json_encode(["success" => true, "message" => "Estado actualizado correctamente"]);
   } else {
-    http_response_code(500);
-    echo json_encode(["success" => false, "message" => "Error al actualizar estado"]);
+    echo json_encode(["success" => false, "message" => "No se pudo actualizar el estado"]);
   }
   exit();
 }
+
+
 
 if ($method === "GET") {
   try {

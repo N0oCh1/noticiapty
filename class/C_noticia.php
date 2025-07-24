@@ -117,6 +117,31 @@ class Noticia
       }
     }
   }
+  public function obtenerEstado($id)
+  {
+    try {
+      // Consulta para obtener el estado de la noticia
+      $selectFields = "activo";  // Solo necesitamos la columna 'activo'
+      $fromTables = "noticias";  // Tabla 'noticias'
+      $where = "id = $id";       // Filtrar por ID de la noticia
+
+      // Ejecutamos la consulta
+      $resultado = $this->db->selectRaw($fromTables, $selectFields, $where);
+
+      // Si hay resultados, devolvemos el estado
+      if (!empty($resultado) && isset($resultado[0])) {
+        return intval($resultado[0]['activo']);  // Aseguramos que el valor sea un entero
+      } else {
+        // Si no encontramos la noticia, devolvemos null o algún valor predeterminado
+        return null;
+      }
+    } catch (Exception $e) {
+      // En caso de error, logueamos y devolvemos null
+      error_log("Error al obtener estado de la noticia: " . $e->getMessage());
+      return null;
+    }
+  }
+
 
   public function CambiarEstado($id, $estado) {
     $tb_name = "noticias";
