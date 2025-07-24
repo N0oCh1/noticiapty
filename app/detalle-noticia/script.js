@@ -231,6 +231,22 @@ document.addEventListener("DOMContentLoaded", () => {
         // Envío del formulario
         form.addEventListener("submit", function (e) {
             e.preventDefault();
+
+            if (!usuarioId) {
+                Swal.fire({
+                    icon: "warning",
+                    title: "Debes iniciar sesión",
+                    text: "Inicia sesión para poder comentar.",
+                    confirmButtonColor: "#3085d6",
+                    confirmButtonText: "Iniciar sesión",
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.href =
+                            "../auth/iniciar-sesion/index.html"; // Ajusta la ruta si es necesario
+                    }
+                });
+                return;
+            }
             console.log("responder");
             const texto = textarea.value.trim();
             if (!texto || !usuarioId) return;
