@@ -2,7 +2,8 @@
 session_start(); // Inicio sesión para acceder a $_SESSION
 
 require_once "../class/C_usuario.php";
-require_once "../utils/security.php"; // Archivo con las funciones validarRolAdmin, validarRolPeriodista, validarRolGeneral
+require_once "../utils/security.php";     // contiene las validaciones de rol (admin, editor, general)
+require_once "../utils/validaciones.php"; // contiene validarPermiso, ocultarContrasena, etc.
 
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
@@ -11,54 +12,22 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 
 $method = $_SERVER['REQUEST_METHOD'];
 $usuario = new Usuario();
-$id = isset($_GET['id']) ? intval($_GET['id']) : null;
-
-// Función para ocultar contraseña
-function ocultarContrasena(array $usuarios) {
-    if (isset($usuarios[0]) && is_array($usuarios[0])) {
-        foreach ($usuarios as &$u) {
-            unset($u['contrasena']);
-        }
-        return $usuarios;
-    }
-    if (isset($usuarios['contrasena'])) {
-        unset($usuarios['contrasena']);
-    }
-    return $usuarios;
-}
-
-
-// Validar autenticación y rol mínimo requerido
-function validarPermiso(int $usuarioId, string $permiso): bool {
-    switch ($permiso) {
-        case 'admin':
-            return validarRolAdmin($usuarioId);
-        case 'publicador':
-            return validarRolPeriodista($usuarioId);
-        case 'global':
-            return validarRolGeneral($usuarioId);
-        default:
-            return false;
-    }
-}
-
+$id = idGetValido();
 $usuarioSesionId = $_SESSION['usuario_id'] ?? null;
 
 switch ($method) {
     case 'GET':
-
         if ($id) {
             $data = $usuario->obtenerUsuarioPorId($id);
             if ($data) {
                 $data = ocultarContrasena($data);
-                http_response_code(200); // OK
+                http_response_code(200);
                 echo json_encode($data);
             } else {
                 http_response_code(404);
                 echo json_encode(["message" => "Usuario no encontrado"]);
             }
         } else {
-            // Solo admins pueden ver todos los usuarios
             if (!$usuarioSesionId || !validarPermiso($usuarioSesionId, 'admin')) {
                 http_response_code(403);
                 echo json_encode(["message" => "Permiso denegado"]);
@@ -77,15 +46,7 @@ switch ($method) {
         break;
 
     case 'POST':
-        // Solo usuarios autenticados pueden crear otros usuarios
-        if (!$usuarioSesionId) {
-            http_response_code(401);
-            echo json_encode(["message" => "No autenticado"]);
-            exit;
-        }
-
-        $rolSesion = validarRolAdmin($usuarioSesionId) ? 'admin' : null;
-        if ($rolSesion === null) {
+        if (!$usuarioSesionId || !validarPermiso($usuarioSesionId, 'admin')) {
             http_response_code(401);
             echo json_encode(["message" => "No autenticado"]);
             exit;
@@ -93,20 +54,21 @@ switch ($method) {
 
         $input = json_decode(file_get_contents("php://input"), true);
 
-        if (!isset($input['nombre'], $input['apellido'], $input['usuario'], $input['contrasena'], $input['rol'])) {
+        if (!validarCamposRequeridos($input, ['nombre', 'apellido', 'usuario', 'contrasena', 'rol'])) {
             http_response_code(400);
             echo json_encode(["message" => "Datos incompletos"]);
             exit;
         }
 
-        // Validar permiso para crear usuario con rol admin o periodista (solo admins)
-        if (in_array($input['rol'], ['admin', 'publicador']) && $rolSesion !== 'admin') {
+        // Validar permiso para crear usuario con rol sensible
+        if (in_array($input['rol'], ['admin']) && !validarRolAdmin($usuarioSesionId)) {
             http_response_code(403);
             echo json_encode(["message" => "No tienes permisos para crear usuarios con rol '{$input['rol']}'"]);
             exit;
         }
-
-        // Para roles distintos a admin o periodista, si quieres podrías agregar más lógica aquí
+        $input = array_map(function($valor) {
+            return is_string($valor) ? SanitizarEntrada::limpiarCadena($valor) : $valor;
+        }, $input);
 
         $ok = $usuario->insertarUsuario(
             $input['nombre'],
@@ -119,7 +81,7 @@ switch ($method) {
         if ($ok === "duplicate") {
             http_response_code(409);
             echo json_encode(["message" => "El usuario ya existe"]);
-        } else if ($ok) {
+        } elseif ($ok) {
             http_response_code(201);
             echo json_encode(["success" => true]);
         } else {
@@ -134,20 +96,24 @@ switch ($method) {
             echo json_encode(["message" => "No autenticado"]);
             exit;
         }
+
         if (!$id) {
             http_response_code(400);
             echo json_encode(["message" => "Se requiere el ID para actualizar"]);
             exit;
         }
 
-        // Aquí podrías validar permisos más específicos según necesidad
-        // Por ejemplo, sólo admin puede actualizar ciertos campos
-
         $input = json_decode(file_get_contents("php://input"), true);
         if (!$input) {
             http_response_code(400);
             echo json_encode(["message" => "Datos de actualización no válidos"]);
             exit;
+        }
+
+        foreach ($input as $clave => $valor) {
+            if (is_string($valor)) {
+                $input[$clave] = SanitizarEntrada::limpiarCadena($valor);
+            }
         }
 
         $ok = $usuario->actualizarUsuario($id, $input);
@@ -161,7 +127,6 @@ switch ($method) {
         break;
 
     case 'DELETE':
-        // Solo admin puede activar/desactivar usuarios
         if (!$usuarioSesionId || !validarPermiso($usuarioSesionId, 'admin')) {
             http_response_code(403);
             echo json_encode(["message" => "Permiso denegado"]);
@@ -175,19 +140,13 @@ switch ($method) {
         }
 
         $input = json_decode(file_get_contents("php://input"), true);
-        if (!isset($input['activo'])) {
+        if (!isset($input['activo']) || !validarBinario($input['activo'])) {
             http_response_code(400);
             echo json_encode(["message" => "Se requiere el estado activo (0 o 1)"]);
             exit;
         }
 
         $nuevoEstado = intval($input['activo']);
-        if ($nuevoEstado !== 0 && $nuevoEstado !== 1) {
-            http_response_code(400);
-            echo json_encode(["message" => "Estado activo inválido, debe ser 0 o 1"]);
-            exit;
-        }
-
         $ok = $usuario->actualizarUsuario($id, ['activo' => $nuevoEstado]);
         if ($ok) {
             http_response_code(200);

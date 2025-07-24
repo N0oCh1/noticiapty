@@ -8,8 +8,6 @@ function obtenerRolPorId(int $id_usuario): ?string {
     $usuario = new Usuario();
     return $usuario->obtenerRolPorId($id_usuario);
 }
-
-
 // ===========================
 // Valida si el usuario tiene un rol general permitido.
 //  Roles permitidos: admin, periodista, lglobal (puedes ajustar aquí).
@@ -18,7 +16,7 @@ function validarRolGeneral(int $id_usuario): bool {
     $rol = obtenerRolPorId($id_usuario);
     if ($rol === null) return false;
 
-    $rolesValidos = ['admin', 'publicador', 'lglobal'];
+    $rolesValidos = ['admin', 'editor', 'lglobal'];
     return in_array($rol, $rolesValidos);
 }
 
@@ -33,7 +31,8 @@ function validarRolAdmin(int $id_usuario): bool {
 // ===========================
 // Valida si el usuario es periodista.
 // ===========================
-function validarRolPeriodista(int $id_usuario): bool {
+function validarRolEditor(int $id_usuario): bool {
     $rol = obtenerRolPorId($id_usuario);
-    return $rol === 'publicador';
+    return $rol === 'editor';
 }
+?>

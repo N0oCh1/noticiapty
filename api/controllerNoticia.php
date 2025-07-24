@@ -1,35 +1,44 @@
 <?php
 require "../class/C_noticia.php";
 session_start();
+require_once "../utils/validaciones.php";
+require_once "../utils/sanitizar.php";
+
 header("Content-Type: application/json; charset=utf-8");
 
 $noticia = new Noticia();
-
 $method = $_SERVER["REQUEST_METHOD"];
 
 if ($method === "POST") {
   // Detectar simulación de PUT con POST (_method=PUT)
   if (isset($_POST['_method']) && $_POST['_method'] === 'PUT') {
     // Actualizar noticia
-
-    $id = $_POST["noticia_id"] ?? 0;
-    $titulo = $_POST["titulo"] ?? "";
-    $contenido = $_POST["contenido"] ?? "";
-    $categoria = $_POST["categoria"] ?? "";
-    $usuario = $_POST["usuario"] ?? "";
-    $imagen = $_FILES["imagen"] ?? null;
-    $autor = $_POST["autor"] ?? "";
-
-    $id = intval($id);
-    if ($id <= 0) {
+    $id = intval($_POST["noticia_id"] ?? 0);
+    if (!validarId($id)) {
       http_response_code(400);
       echo json_encode(["success" => false, "message" => "ID de noticia inválido"]);
       exit();
     }
 
-    // Aquí llamas al método para actualizar noticia, 
-    // que debes implementar en tu clase Noticia
-    $result = $noticia->ActualizarNoticia($id, $titulo, $contenido, $categoria, $usuario, $imagen, $autor);
+    $datos = [
+      'titulo' => $_POST["titulo"] ?? "",
+      'contenido' => $_POST["contenido"] ?? "",
+      'categoria' => $_POST["categoria"] ?? "",
+      'usuario' => $_POST["usuario"] ?? "",
+      'autor' => $_POST["autor"] ?? ""
+    ];
+
+    if (!validarCamposRequeridos($datos, ['titulo', 'contenido', 'categoria', 'usuario', 'autor'])) {
+      http_response_code(400);
+      echo json_encode(["success" => false, "message" => "Datos incompletos"]);
+      exit();
+    }
+
+    $datos = sanitizarArray($datos);
+
+    $imagen = $_FILES["imagen"] ?? null;
+
+    $result = $noticia->ActualizarNoticia($id, $datos['titulo'], $datos['contenido'], $datos['categoria'], $datos['usuario'], $imagen, $datos['autor']);
 
     if ($result) {
       http_response_code(200);
@@ -42,15 +51,27 @@ if ($method === "POST") {
   }
 
   // Guardar noticia (crear)
-  $titulo = $_POST["titulo"] ?? "";
-  $contenido = $_POST["contenido"] ?? "";
-  $categoria = $_POST["categoria"] ?? "";
-  $usuario = $_POST["usuario"] ?? "";
+  $datos = [
+    'titulo' => $_POST["titulo"] ?? "",
+    'contenido' => $_POST["contenido"] ?? "",
+    'categoria' => $_POST["categoria"] ?? "",
+    'usuario' => $_POST["usuario"] ?? "",
+    'autor' => $_POST["autor"] ?? ""
+  ];
+
+  if (!validarCamposRequeridos($datos, ['titulo', 'contenido', 'categoria', 'usuario', 'autor'])) {
+    http_response_code(400);
+    echo json_encode(["success" => false, "message" => "Datos incompletos"]);
+    exit();
+  }
+
+  $datos = sanitizarArray($datos);
+
   $imagen = $_FILES["imagen"] ?? null;
-  $autor = $_POST["autor"] ?? "";
+
   $activo = 3; // Por defecto: en espera
 
-  $result = $noticia->GuardarNoticia($titulo, $contenido, $categoria, $activo, $usuario, $imagen, $autor);
+  $result = $noticia->GuardarNoticia($datos['titulo'], $datos['contenido'], $datos['categoria'], $activo, $datos['usuario'], $imagen, $datos['autor']);
 
   if ($result) {
     http_response_code(201);
@@ -65,21 +86,24 @@ if ($method === "POST") {
 if ($method === "PUT") {
   // PUT para cambiar estado de una noticia
   $input = json_decode(file_get_contents("php://input"), true);
+
   $id = isset($input['id']) ? intval($input['id']) : 0;
   $estado = isset($input['estado']) ? intval($input['estado']) : 0;
 
-  if ($id > 0 && in_array($estado, [1, 2, 3])) {
-    $resultado = $noticia->CambiarEstado($id, $estado);
-    if ($resultado) {
-      http_response_code(200);
-      echo json_encode(["success" => true, "message" => "Estado actualizado correctamente"]);
-    } else {
-      http_response_code(500);
-      echo json_encode(["success" => false, "message" => "Error al actualizar estado"]);
-    }
-  } else {
+  if (!validarId($id) || !validarEstadoNoticia($estado)) {
     http_response_code(400);
     echo json_encode(["success" => false, "message" => "Datos inválidos para cambio de estado"]);
+    exit();
+  }
+
+  $resultado = $noticia->CambiarEstado($id, $estado);
+
+  if ($resultado) {
+    http_response_code(200);
+    echo json_encode(["success" => true, "message" => "Estado actualizado correctamente"]);
+  } else {
+    http_response_code(500);
+    echo json_encode(["success" => false, "message" => "Error al actualizar estado"]);
   }
   exit();
 }
@@ -89,18 +113,18 @@ if ($method === "GET") {
     // Buscar noticia por id si se pasa parámetro 'id'
     if (isset($_GET['id'])) {
       $id = intval($_GET['id']);
-      if ($id > 0) {
-        $resultado = $noticia->ObtenerNoticiaPorId($id);
-        if ($resultado) {
-          http_response_code(200);
-          echo json_encode(["success" => true, "noticia" => $resultado]);
-        } else {
-          http_response_code(404);
-          echo json_encode(["success" => false, "message" => "Noticia no encontrada"]);
-        }
-      } else {
+      if (!validarId($id)) {
         http_response_code(400);
         echo json_encode(["success" => false, "message" => "ID inválido"]);
+        exit();
+      }
+      $resultado = $noticia->ObtenerNoticiaPorId($id);
+      if ($resultado) {
+        http_response_code(200);
+        echo json_encode(["success" => true, "noticia" => $resultado]);
+      } else {
+        http_response_code(404);
+        echo json_encode(["success" => false, "message" => "Noticia no encontrada"]);
       }
       exit();
     }
