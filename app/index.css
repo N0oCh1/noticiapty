@@ -114,7 +114,7 @@ body {
 /* Grid de noticias */
 .news-container {
     max-width: 1200px;
-    min-width: 800px;
+    min-width: 1200px;
     margin: 0 auto; /* solo centrado horizontal */
     padding-top: 160px; /* para evitar que el nav lo tape */
     padding-left: 1rem;
