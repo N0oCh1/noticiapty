@@ -12,10 +12,24 @@
     href="../../logo.png" />
   <link rel="stylesheet" href="../css/paneles-comunes.css" />
   <style>
+    html,
+    body {
+      height: 100vh;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+
+    }
+
     /* Estilo para el contenedor */
     .container {
-      max-width: 600px;
-      margin: 40px auto;
+      width: 400px;
+      margin: 4rem auto;
       padding: 30px;
       background-color: #ffffff;
       border-radius: 12px;
