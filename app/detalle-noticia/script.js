@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     perfilBtn.style.display = "inline-block";
                     perfilBtn.addEventListener("click", () => {
                         window.location.href =
-                            "../editar-usuario/index.html";
+                            "../editar-usuario/index.php";
                     });
                 }
 
@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         adminBtn.style.display = "inline-block";
                         adminBtn.addEventListener("click", () => {
                             window.location.href =
-                                "../administrar-usuario/";
+                                "../administrar-usuario/index.php";
                         });
                     }
                 }
@@ -69,7 +69,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         supervisorBtn.style.display = "inline-block";
                         supervisorBtn.addEventListener("click", () => {
                             window.location.href =
-                                "../administrar-noticia/";
+                                "../administrar-noticia/index.php";
                         });
                     }
                 }
@@ -84,7 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         publicarBtn.style.display = "inline-block";
                         publicarBtn.addEventListener("click", () => {
                             window.location.href =
-                                "../crear-noticia/";
+                                "../crear-noticia/index.php";
                         });
                     }
                 }

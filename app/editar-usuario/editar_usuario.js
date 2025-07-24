@@ -3,6 +3,16 @@ const apiUsuariosUrl = "../../api/controllerUsuarios.php";
 
 let usuarioId = null;
 
+ document.addEventListener("DOMContentLoaded", function () {
+     // Usando fetch para cargar el contenido de footer.php
+     fetch("../footer.php")
+         .then((response) => response.text())
+         .then((data) => {
+             document.getElementById("footer-container").innerHTML = data;
+         })
+         .catch((error) => console.error("Error al cargar el footer:", error));
+ });
+
 async function verificarSesionYObtenerId() {
   try {
     const res = await fetch(sessionInfoUrl);
