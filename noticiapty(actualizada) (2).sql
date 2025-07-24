@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Jul 24, 2025 at 04:32 AM
+-- Generation Time: Jul 24, 2025 at 11:12 PM
 -- Server version: 9.1.0
 -- PHP Version: 8.3.14
 
@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS `comentarios` (
   PRIMARY KEY (`id`),
   KEY `noticia_id` (`noticia_id`),
   KEY `usuario_id` (`usuario_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Comentarios';
+) ENGINE=MyISAM AUTO_INCREMENT=52 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Comentarios';
 
 --
 -- Dumping data for table `comentarios`
@@ -81,7 +81,12 @@ INSERT INTO `comentarios` (`id`, `noticia_id`, `usuario_id`, `contenido`, `fecha
 (43, 46, 37, 'zzzzz', '2025-07-23 20:38:37', NULL),
 (44, 45, 32, 'Balatro no es solo un juego de cartas, es un estilo de vida. Respiro y tomo Balatro. Si tuviera un hijo lo llamaría \"Full House\" y si tuviera dos les pondría \"Doble\" y \"Par\" para mejorarlos a nivel 18 y que rompan las ligas de jefe cuando sean adultos. Brindo por Balatro, Como por Balatro, este me hizo mejor persona, y cuando tengo el celular descargado, cierro mis ojos para jugarlo en mi mente. La rueda de la fortuna dicta mi vida. Siempre tengo un plátano en mi bolsillo para sumar puntos. Me identifico con el Joker \"Misprint\" porque mi estado mental es así de inestable. No puedo subir las escaleras sin pensar en Balatro y el dia que mu3ra espero que pongan en mi tumb4 \"Mur1ó en pleno Balatreo\". El unico corazón que quiero es el de la reina. Mi papá cree que estoy mal, pero él no sabe lo que es ser la carta más alta de la familia. El día que el juego ya no tenga fans es porque ya no estaré en este mundo. Porque yo... Soy el Balatro.', '2025-07-23 23:28:22', NULL),
 (45, 51, 32, 'no funciona gaste 600$ y nada 😡', '2025-07-23 23:31:37', NULL),
-(46, 51, 35, 'no le sabes 🤫🧏‍♂️', '2025-07-23 23:32:27', 45);
+(46, 51, 35, 'no le sabes 🤫🧏‍♂️', '2025-07-23 23:32:27', 45),
+(47, 51, 38, 'donde me inscribo?', '2025-07-24 18:04:40', NULL),
+(48, 48, 38, 'y pa colon?', '2025-07-24 18:10:30', NULL),
+(49, 49, 38, 'de que te ries??????', '2025-07-24 18:10:51', 3),
+(50, 49, 38, 'mi infancia bro :(', '2025-07-24 18:11:02', NULL),
+(51, 50, 38, 'zzzzz', '2025-07-24 18:11:26', NULL);
 
 -- --------------------------------------------------------
 
@@ -152,7 +157,7 @@ CREATE TABLE IF NOT EXISTS `likes` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `usuario_id` (`usuario_id`,`noticia_id`),
   KEY `noticia_id` (`noticia_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=98 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=100 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `likes`
@@ -169,7 +174,9 @@ INSERT INTO `likes` (`id`, `usuario_id`, `noticia_id`, `fecha`) VALUES
 (92, 37, 45, '2025-07-21 01:17:30'),
 (94, 32, 51, '2025-07-21 18:38:09'),
 (96, 37, 52, '2025-07-24 01:37:50'),
-(97, 37, 50, '2025-07-24 01:38:01');
+(97, 37, 50, '2025-07-24 01:38:01'),
+(98, 38, 48, '2025-07-24 23:10:20'),
+(99, 38, 49, '2025-07-24 23:11:09');
 
 -- --------------------------------------------------------
 
@@ -204,7 +211,7 @@ INSERT INTO `noticias` (`id`, `titulo`, `contenido`, `activo`, `fecha_creacion`,
 (49, 'Tragedia en el mundo del automovilismo: Fallece el legendario Rayo McQueen ', 'En un suceso que ha conmocionado a fanáticos y expertos del automovilismo alrededor del mundo, el icónico Rayo McQueen, símbolo de velocidad y valentía en las pistas, falleció la madrugada del pasado sábado tras protagonizar un trágico accidente automovilístico. Las autoridades confirmaron que el choque fue provocado por un estado de ebriedad, desencadenado por problemas de alcoholismo que, hasta ahora, habían permanecido ocultos para el público.\r\n\r\nEl accidente ocurrió en una carretera rural, cuando McQueen perdió el control de su vehículo a alta velocidad y colisionó contra un árbol. Pese a la rápida respuesta de los servicios de emergencia, el piloto no pudo sobrevivir a las graves heridas sufridas. Según informes policiales, se detectaron altos niveles de alcohol en sangre, lo que apunta a que el consumo excesivo fue factor determinante en el siniestro.\r\n\r\nDurante años, McQueen fue admirado por su destreza y múltiples victorias en competencias internacionales. Sin embargo, fuentes cercanas al piloto revelaron que en los últimos meses había enfrentado serias luchas personales con el alcohol, algo que había intentado manejar en privado sin éxito.\r\n\r\nLa noticia ha generado un profundo impacto en la comunidad deportiva, que ahora se enfrenta al difícil debate sobre la salud mental y las presiones que enfrentan los atletas de élite. Organizaciones dedicadas a la prevención del alcoholismo y al apoyo psicológico han hecho un llamado para intensificar los programas de ayuda a deportistas.\r\n\r\nFamiliares, amigos y fanáticos han rendido homenaje a McQueen, recordándolo como un campeón dentro y fuera de las pistas. Se espera que en los próximos días se realice una ceremonia pública para despedir al corredor y celebrar su legado.\r\n\r\nEste trágico desenlace pone en evidencia la importancia de visibilizar y atender los problemas de adicciones, incluso entre aquellos que parecen invencibles, y abre una reflexión sobre la necesidad de apoyo integral para preservar la salud y bienestar de los deportistas.', 1, '2025-07-17 20:16:41', 4, 34, 'Ramses Szobotka'),
 (50, 'Gobierno anuncia ambicioso plan de reforma política para fortalecer la tran', 'En una conferencia de prensa celebrada este jueves en el Palacio Presidencial, la presidenta de la República, Laura Montenegro, anunció la presentación oficial de un ambicioso proyecto de reforma política que busca transformar profundamente el sistema democrático del país. El paquete de medidas, titulado \"Reforma 2030: Por una Democracia Transparente\", incluye propuestas clave en materia de financiamiento electoral, rendición de cuentas, participación ciudadana y modernización institucional.\r\n\r\nSegún Montenegro, esta reforma surge como respuesta directa a las crecientes demandas de la ciudadanía por una clase política más ética, accesible y comprometida con el bien común. \"No podemos seguir ignorando la desconfianza que gran parte de la población siente hacia el sistema político. Esta reforma no es solo necesaria, es urgente\", afirmó durante su intervención.\r\n\r\nEntre las medidas más destacadas se encuentran:\r\n\r\nLa eliminación del fuero penal electoral, permitiendo que todos los candidatos y funcionarios públicos puedan ser investigados por corrupción sin restricciones durante las campañas.\r\n\r\nLa reducción del financiamiento estatal a partidos políticos, acompañado de un nuevo sistema de auditoría digital en tiempo real que permitirá a los ciudadanos monitorear cómo se utilizan los fondos públicos en campañas electorales.\r\n\r\nLa implementación de un mecanismo de revocatoria de mandato, a partir del segundo año de gestión, mediante el cual los ciudadanos podrán destituir a cualquier funcionario electo si no cumple con sus promesas de campaña o incurre en actos de corrupción.\r\n\r\nLa creación del Consejo Nacional de Participación Ciudadana, una instancia consultiva compuesta por representantes de la sociedad civil, universidades, gremios y pueblos originarios, que tendrá voz vinculante en la discusión de leyes clave.\r\n\r\nLa propuesta será enviada al Parlamento la próxima semana, donde se anticipa un amplio debate. Mientras tanto, líderes de oposición han expresado posturas mixtas: algunos elogian la intención de fortalecer la institucionalidad democrática, mientras que otros han cuestionado la \"velocidad\" con la que el gobierno busca aprobar la reforma, sugiriendo que podría haber intereses ocultos detrás de ciertas cláusulas.\r\n\r\nOrganizaciones ciudadanas y analistas políticos han aplaudido el carácter integral del proyecto, aunque también han advertido que su éxito dependerá en gran parte de su implementación efectiva y de la voluntad real de todos los actores políticos de romper con las prácticas del pasado.\r\n\r\nDe ser aprobada, la Reforma 2030 podría marcar un antes y un después en la historia democrática del país, posicionándolo como un referente regional en transparencia, innovación institucional y empoderamiento ciudadano.', 1, '2025-07-17 20:28:28', 2, 34, 'Jose Raul Mulino'),
 (51, 'Aprende Mewing en 3 sencillos pasos!!!!', '¿Quieres lucir una mandíbula digna de un dios griego sin cirugía ni gimnasio facial? ¡El mewing es la tendencia viral que lo está revolucionando todo! Con solo seguir tres sencillos pasos podrás presumir de perfil marcado, o al menos eso prometen los gurús del internet que juraron que funcionaba.\r\n\r\nPaso 1: Coloca la lengua donde nadie pensó que debía ir\r\nSí, has leído bien. Para hacer mewing tienes que pegar la lengua en el paladar, como si tuvieras un caramelo pegado en el techo de la boca, pero sin el caramelo. No te preocupes si al principio parece incómodo o te provoca ganas de hablar como Darth Vader; dicen que es parte del proceso.\r\n\r\nPaso 2: Respira por la nariz como si te fuera la vida en ello\r\nOlvídate de respirar por la boca —eso está pasado de moda—. Respira por la nariz con tal devoción que podrías competir en una maratón nasal. Recuerda que una respiración correcta es clave para que tu mandíbula no termine pareciendo un bocadillo aplastado.\r\n\r\nPaso 3: No te olvides de sonreír y esperar... pacientemente\r\nComo todo en la vida, la magia no es instantánea. El secreto está en ser constante y mantener la lengua en la posición correcta mientras evitas mirar selfies durante los primeros tres meses, para no deprimirte. Los influencers aseguran que los cambios se notan, pero también podrían estar vendiendo cursos premium.\r\n\r\nAunque los expertos reales siguen debatiendo si el mewing tiene efectos reales o si es solo otra moda pasajera, miles de jóvenes ya han convertido este ejercicio en su ritual diario, junto con el café y las stories de Instagram.\r\n\r\n¿El resultado? Rostros con mandíbula tan marcadas que podrían cortar el aire... o al menos un montón de memes nuevos en internet.\r\n\r\nAsí que, si quieres probar el mewing, recuerda: lengua arriba, nariz abierta y paciencia de santo. ¡Quién sabe! Quizás dentro de unos meses seas la envidia de tus amigos o al menos la estrella de los grupos de WhatsApp con tus selfies raros.', 1, '2025-07-18 00:05:45', 1, 37, 'Arena Rosa'),
-(52, '“Grow a Garden”, el juego de Roblox que superó a Fortnite y rompió récords', '“Grow a Garden”, un relajante simulador de jardinería lanzado en Roblox el 26 de marzo de 2025, alcanzó una cifra histórica: más de 21 millones de jugadores conectados al mismo tiempo el 21 de junio, superando incluso a Fortnite, cuyo récord anterior era de 15 millones. \r\n\r\nEl juego —que permite plantar semillas, decorar jardines y recibir recompensas offline— fue creado originalmente por un joven desarrollador en apenas tres días, y luego respaldado por estudios como Splitting Point y Do Big Studios.\r\n\r\nSu jugabilidad sencilla y atractiva ha cautivado a millones, especialmente a jugadores menores de 13 años, con picos de hasta 16,4 millones al mismo tiempo en junio .\r\n\r\nEl éxito ha llevado a Roblox a convertirse en una poderosa plataforma de creador‑economía, generando ingresos millonarios para los desarrolladores y elevando a “Grow a Garden” como un símbolo de lo que un juego indie puede lograr en un entorno de desarrollo abierto', 2, '2025-07-23 19:44:05', 4, 37, 'Kelvin He');
+(52, '“Grow a Garden”, el juego de Roblox que superó a Fortnite y rompió récords', '“Grow a Garden”, un relajante simulador de jardinería lanzado en Roblox el 26 de marzo de 2025, alcanzó una cifra histórica: más de 21 millones de jugadores conectados al mismo tiempo el 21 de junio, superando incluso a Fortnite, cuyo récord anterior era de 15 millones. \r\n\r\nEl juego —que permite plantar semillas, decorar jardines y recibir recompensas offline— fue creado originalmente por un joven desarrollador en apenas tres días, y luego respaldado por estudios como Splitting Point y Do Big Studios.\r\n\r\nSu jugabilidad sencilla y atractiva ha cautivado a millones, especialmente a jugadores menores de 13 años, con picos de hasta 16,4 millones al mismo tiempo en junio .\r\n\r\nEl éxito ha llevado a Roblox a convertirse en una poderosa plataforma de creador‑economía, generando ingresos millonarios para los desarrolladores y elevando a “Grow a Garden” como un símbolo de lo que un juego indie puede lograr en un entorno de desarrollo abierto', 2, '2025-07-23 19:44:05', 4, 32, 'Kelvin He');
 
 -- --------------------------------------------------------
 
@@ -225,20 +232,21 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Última actualización',
   PRIMARY KEY (`id`),
   UNIQUE KEY `UQ_usuario` (`usuario`)
-) ENGINE=MyISAM AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Usuarios';
+) ENGINE=MyISAM AUTO_INCREMENT=40 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='Usuarios';
 
 --
 -- Dumping data for table `usuarios`
 --
 
 INSERT INTO `usuarios` (`id`, `nombre`, `apellido`, `usuario`, `contrasena`, `rol`, `activo`, `create_time`, `updated_at`) VALUES
-(32, 'admin', 'admin', 'admin', '$2y$10$Bkkpu/8ST2gz9WX/ynCcGOOcA/OXYDeWQctnFHVha/NVYBT3PfUXi', 'admin', 1, '2025-07-17 19:37:32', '2025-07-21 13:15:12'),
+(32, 'admin', 'admin', 'admin', '$2y$10$Bkkpu/8ST2gz9WX/ynCcGOOcA/OXYDeWQctnFHVha/NVYBT3PfUXi', 'admin', 1, '2025-07-17 19:37:32', '2025-07-24 17:47:01'),
 (33, 'supervisor', 'Roman', 'supervisor', '$2y$10$AlxH107eDZSGBSLvDZY2r.kEhzD3zpf/T2UZ..dAXsFj/9JMsBSjG', 'supervisor', 1, '2025-07-17 19:41:50', '2025-07-17 19:41:50'),
 (34, 'Ricardo', 'Martinelli', 'editor', '$2y$10$o7PHmS.l4dos.IE20Nx.yuGK6ck19T7LqjjWePJWfVtI237H1tSSO', 'editor', 1, '2025-07-17 19:42:57', '2025-07-23 23:24:23'),
-(35, 'Balatro', 'Balatrez', 'Balatro Balatrez', '$2y$10$pBReWC3vWt403Q27KvyUaeAJ.0dGeHXsc8lALaEYVE2wwZRFV2MNG', 'global', 1, '2025-07-17 19:43:40', '2025-07-23 17:20:45'),
-(36, 'global', 'global', 'global', '$2y$10$45TTO8q8KDj5L4c8dqF2t.7kfJBirtHN3U2jpZZpm2lp2.Ru3aNqe', 'global', 0, '2025-07-17 19:44:03', '2025-07-23 18:50:50'),
-(37, 'Vlastos', 'Kr', 'V.kr1', '$2y$10$2uLFL4ERguyYN4Fi3oMwtekgzw347.6ZbQ6mE54d2wZAAhg9l4Jtu', 'admin', 1, '2025-07-17 20:19:11', '2025-07-23 23:20:33'),
-(38, 'Aldo', 'Bovel', 'AsaltaAbuelas3000', '$2y$10$aii7n8nP/m9RT//KLI0QTeg0ZXG47lkBwdyL5y4wNVciWj3TU.wVW', 'global', 1, '2025-07-23 18:36:32', '2025-07-23 18:36:32');
+(35, 'Balatro', 'Balatrez', 'Balatro Balatrez', '$2y$10$pBReWC3vWt403Q27KvyUaeAJ.0dGeHXsc8lALaEYVE2wwZRFV2MNG', 'global', 1, '2025-07-17 19:43:40', '2025-07-24 17:43:12'),
+(36, 'global', 'global', 'global', '$2y$10$45TTO8q8KDj5L4c8dqF2t.7kfJBirtHN3U2jpZZpm2lp2.Ru3aNqe', 'global', 1, '2025-07-17 19:44:03', '2025-07-24 17:57:38'),
+(37, 'Vlastos', 'Kr', 'V.kr', '$2y$10$2uLFL4ERguyYN4Fi3oMwtekgzw347.6ZbQ6mE54d2wZAAhg9l4Jtu', 'admin', 1, '2025-07-17 20:19:11', '2025-07-24 18:00:07'),
+(38, 'Aldo', 'Bovel', 'AsaltaAbuelas3000', '$2y$10$aii7n8nP/m9RT//KLI0QTeg0ZXG47lkBwdyL5y4wNVciWj3TU.wVW', 'global', 1, '2025-07-23 18:36:32', '2025-07-24 17:57:59'),
+(39, 'Miguel ', 'Hernandez', 'ultrakiller1945', '$2y$10$pQYOG7.5mmwJ0uJDnPQ..OV9oKdLSDXelnxY3208a7Mhmg0Ekk/Qy', 'global', 1, '2025-07-24 17:56:26', '2025-07-24 17:57:42');
 
 -- --------------------------------------------------------
 
@@ -258,7 +266,7 @@ CREATE TABLE IF NOT EXISTS `visitas` (
 --
 
 INSERT INTO `visitas` (`id`, `cantidad`) VALUES
-(1, 1671);
+(1, 1675);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
