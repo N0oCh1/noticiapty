@@ -38,6 +38,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 document.querySelector(".nav-auth").style.display = "none";
                 document.getElementById("logoutBtn").style.display = "block";
 
+                const perfilBtn = document.getElementById("btn-editar");
+                if (perfilBtn && data.success) {
+                    perfilBtn.style.display = "inline-block";
+                    perfilBtn.addEventListener("click", () => {
+                        window.location.href =
+                            "../editar-usuario/index.html";
+                    });
+                }
+
                 if (data.rol === "admin") {
                     const adminBtn = document.getElementById("adminBtn");
                     if (adminBtn) {
