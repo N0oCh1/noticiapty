@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (perfilBtn && data.success) {
                     perfilBtn.style.display = "inline-block";
                     perfilBtn.addEventListener("click", () => {
-                        window.location.href = "../app/editar-usuario/index.php";
+                        window.location.href = "../app/editar-usuario/";
                     });
                 }
                 
@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         adminBtn.style.display = "inline-block";
                         adminBtn.addEventListener("click", () => {
                             window.location.href =
-                                "../app/administrar-usuario/index.php";
+                                "../app/administrar-usuario/";
                         });
                     }
                 }
