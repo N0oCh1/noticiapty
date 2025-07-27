@@ -34,6 +34,7 @@ class Usuario {
             $this->apellido = $usuarioData['apellido'];
             $this->usuario = $usuarioData['usuario'];
             $this->rol = $usuarioData['rol'];
+            $this->activo = $usuarioData['activo'];
 
             // Devolver info útil al frontend o controlador
             return [
@@ -41,7 +42,8 @@ class Usuario {
                 "nombre" => $usuarioData['nombre'],
                 "apellido" => $usuarioData['apellido'],
                 "usuario" => $usuarioData['usuario'],
-                "rol" => $usuarioData['rol']
+                "rol" => $usuarioData['rol'],
+                "activo"=> $usuarioData['activo']
             ];
         }
     }

@@ -18,8 +18,16 @@ try {
 
             $usuarioObj = new Usuario();
             $datosLogin = $usuarioObj->verificarLogin($usuarioInput, $passwordInput);
-
+        
             if ($datosLogin) {
+                if ($datosLogin["activo"] != 1) {
+                    http_response_code(403); // Forbidden
+                    echo json_encode([
+                        'success' => false,
+                        'message' => 'Tu cuenta ha sido inhabilitada por un administrador.'
+                    ]);
+                    exit;
+                }
                 $_SESSION['usuario_id'] = $datosLogin['id'];
                 $_SESSION['rol'] = $datosLogin['rol'];
 
