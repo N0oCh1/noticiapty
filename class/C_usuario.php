@@ -174,8 +174,9 @@ class Usuario {
       'activo' => $this->activo,
     ];
   }
-
-  //obtener rol por ID
+  // ===========================
+  // Obtener rol por ID
+  // ===========================
   public function obtenerRolPorId(int $id): ?string {
       try {
           $resultado = $this->db->select("usuarios", "rol", "id = $id");

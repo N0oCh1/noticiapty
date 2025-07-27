@@ -42,4 +42,14 @@ class Comentario
             return [];
         }
     }
+    // Eliminar un comentario por ID
+    public function eliminarComentario($id)
+    {   
+        try {
+            $resultado = $this->db->delete("comentarios", "id = :id", [":id" => $id]);
+            return $resultado;
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
 }

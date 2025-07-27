@@ -104,11 +104,15 @@ class db {
     }
   }
 
-  public function delete($table, $condition) {
+  public function delete($table, $condition, $params = []) {
     $this->conectar();
     $sql = "DELETE FROM $table WHERE $condition";
     try {
-      return $this->conexion->exec($sql);
+      $stmt = $this->conexion->prepare($sql);
+      foreach ($params as $key => $value) {
+        $stmt->bindValue($key, $value);
+      }
+      return $stmt->execute();
     } catch (PDOException $e) {
       echo "Error al eliminar: " . $e->getMessage();
       return false;
