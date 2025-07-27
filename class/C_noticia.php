@@ -65,7 +65,7 @@ class Noticia
     try {
       $response = [];
 
-      // JOIN con filtro para usuarios con rol 'publicador'
+      // JOIN con filtro para usuarios con rol 'editor'
       $selectFields = "n.*, c.nombre AS categoria_nombre, u.nombre AS nombre_usuario, u.apellido AS apellido_usuario";
       $fromTables = "noticias n 
                     LEFT JOIN categorias c ON n.categoria_id = c.id
