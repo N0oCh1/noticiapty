@@ -1,0 +1,153 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Cambiado de flex-start a center para centrar vertical */
+  padding: 0; /* Removemos padding-top para centrar bien */
+  color: #2c3e50;
+}
+
+.auth-container {
+  width: 100%;
+  max-width: 420px;
+  background: #fff;
+  padding: 2.5rem 2rem 3rem;
+  border-radius: 12px;
+  box-shadow:
+    0 8px 24px rgba(149, 157, 165, 0.2),
+    0 6px 12px rgba(115, 128, 146, 0.15);
+  /* Si quieres que el formulario tenga altura mínima, opcional: */
+  min-height: 400px;
+}
+
+
+.auth-form h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-weight: 700;
+  font-size: 1.8rem;
+  color: #1a2a40;
+  letter-spacing: 0.05em;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-weight: 600;
+  font-size: 1rem;
+  color: #34495e;
+  user-select: none;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  font-size: 1rem;
+  border: 2px solid #ccc;
+  border-radius: 6px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  outline-offset: 2px;
+}
+
+.form-group input:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 8px rgba(52, 152, 219, 0.4);
+  outline: none;
+}
+
+.form-group small {
+  color: #7f8c8d;
+  font-size: 0.85rem;
+  margin-top: 4px;
+  display: block;
+  font-style: italic;
+  user-select: none;
+}
+
+.auth-submit {
+  width: 100%;
+  padding: 0.75rem;
+  background: #3498db;
+  color: white;
+  font-weight: 700;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 6px 15px rgba(52, 152, 219, 0.4);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  user-select: none;
+}
+
+.auth-submit:hover {
+  background: #2980b9;
+  box-shadow: 0 8px 18px rgba(41, 128, 185, 0.6);
+}
+
+.auth-links {
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: 0.95rem;
+  color: #34495e;
+}
+
+.auth-links a {
+  color: #3498db;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.auth-links a:hover {
+  color: #1d6fa5;
+  text-decoration: underline;
+}
+
+/* Menú superior */
+.top-nav {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: #2c3e50;
+  padding: 1rem ;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 10;
+}
+
+.nav-brand a {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-decoration: none;
+    color: white;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .auth-container {
+    margin: 0 1rem;
+    padding: 2rem 1.5rem 2.5rem;
+  }
+
+  .auth-form h2 {
+    font-size: 1.5rem;
+  }
+
+  .nav-brand a {
+    font-size: 1.5rem;
+  }
+}

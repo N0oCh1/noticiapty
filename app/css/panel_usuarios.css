@@ -1,0 +1,111 @@
+form {
+  background-color: #ffffff;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+label {
+  display: block;
+  margin-top: 12px;
+  font-weight: bold;
+}
+
+input[type="text"],
+input[type="password"],
+select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 4px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+button {
+  margin-top: 15px;
+  padding: 10px 15px;
+  background-color: #2980b9;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+button:hover {
+  background-color: #1c5980;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+  font-size: 14px;
+}
+
+th {
+  background-color: #f0f0f0;
+  color: #555;
+}
+
+tr.active {
+  background-color: #e8f5e9;
+}
+
+tr.inactive {
+  background-color: #fdecea;
+}
+
+td[contenteditable="true"] {
+  background-color: #fffbe6;
+  outline: none;
+}
+
+select[data-field="rol"] {
+  padding: 5px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+button[data-action="toggle"] {
+  background-color: #f39c12;
+}
+
+button[data-action="guardar"] {
+  background-color: #27ae60;
+  margin-left: 5px;
+}
+
+button[data-action="toggle"]:hover {
+  background-color: #d78c0d;
+}
+
+button[data-action="guardar"]:hover {
+  background-color: #1e8e4f;
+}
+
+#filtrosUsuarios button {
+  padding: 0.5rem 1rem;
+  margin-right: 0.5rem;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+#filtrosUsuarios button:hover {
+  background-color: #2980b9;
+}

@@ -1,0 +1,232 @@
+
+/* Estilos generales para la tabla */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+/* Cabecera de la tabla */
+thead {
+  background-color: #007BFF;
+  color: white;
+  text-align: left;
+  font-weight: bold;
+}
+
+thead th {
+  padding: 12px 15px;
+  border: solid 1px black;
+}
+
+/* Filas del cuerpo */
+tbody tr {
+  transition: background-color 0.3s ease;
+  border: solid 1px black;
+}
+
+tbody tr:hover {
+  background-color: #f1f9ff;
+}
+
+/* Celdas del cuerpo */
+tbody td {
+  padding: 10px 15px;
+  vertical-align: middle;
+}
+
+/* Select para estado */
+select.estado-select {
+  padding: 5px 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 0.9rem;
+  cursor: pointer;
+  background-color: #fff;
+}
+
+/* Botón Guardar */
+button.btn-guardar {
+  background-color: #28a745;
+  border: none;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button.btn-guardar:hover {
+  background-color: #218838;
+}
+
+/* Botón Editar */
+button.btn-editar {
+  background-color: #ffc107; /* amarillo bootstrap */
+  border: none;
+  color: #212529; /* texto oscuro para contraste */
+  padding: 6px 14px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin: 8px; /* espacio entre botones */
+}
+
+button.btn-editar:hover {
+  background-color: #e0a800; /* amarillo oscuro al pasar mouse */
+}
+/* Responsivo: ajusta la tabla en pantallas pequeñas */
+@media (max-width: 768px) {
+  table, thead, tbody, th, td, tr {
+    display: block;
+  }
+
+  thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  tbody tr {
+    margin-bottom: 15px;
+    border-bottom: 2px solid #007BFF;
+  }
+
+  tbody td {
+    padding-left: 50%;
+    position: relative;
+    white-space: normal;
+    text-align: left;
+  }
+
+  tbody td::before {
+    position: absolute;
+    top: 10px;
+    left: 15px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+    font-weight: bold;
+    content: attr(data-label);
+  }
+}
+.imagenes-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.imagen-noticia {
+  width: 100px;      
+  height: 100px;
+  object-fit: cover; 
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+/* Modal imagen */
+.modal-imagen {
+  display: none; /* que se muestre solo cuando se active */
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.8);
+}
+
+.modal-imagen .contenido-modal {
+  max-width: 90%;
+  max-height: 90%;
+  border: 5px solid white;
+  border-radius: 10px;
+  position: relative;
+}
+
+.modal-imagen .cerrar-modal {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  color: white;
+  font-size: 40px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 10000;
+  user-select: none;
+}
+
+/* Modal contenido de texto */
+.modal-contenido {
+  display: none; /* que se muestre solo cuando se active */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+}
+
+.contenido-modal-texto {
+  position: relative;
+  background-color: #fff;
+  padding: 20px 30px;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.3);
+}
+
+/* Cerrar modal texto */
+.modal-contenido .cerrar-modal {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  color: white; /* Ícono claro como en modal de imagen */
+  font-size: 40px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 10001;
+  user-select: none;
+  transition: color 0.3s ease;
+}
+.modal-contenido .cerrar-modal:hover {
+  color: #ff4c4c; /* Rojo claro al pasar el mouse */
+}
+
+.filtros-noticias {
+  margin: 20px 0;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn-filtro {
+  padding: 8px 14px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-filtro:hover {
+  background-color: #2980b9;
+} 

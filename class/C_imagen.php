@@ -25,7 +25,7 @@ require_once "C_conexion.php";
     }
     public function ObtenerImagenes($id_noticia) {
       try{
-        $data = $this->db->select("imagenes", "imagen, tipo_imagen", "noticia_id = $id_noticia");
+        $data = $this->db->select("imagenes", "imagen, tipo_imagen", "noticia_id = $id_noticia ORDER BY id ASC");
         return $data;
       }
       catch(Exception $e){

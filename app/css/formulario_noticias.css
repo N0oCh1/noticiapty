@@ -1,0 +1,128 @@
+
+/* Formulario */
+form {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+/* Etiquetas */
+label {
+  display: block;
+  margin-top: 12px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* Inputs y textarea */
+input[type="text"],
+textarea,
+select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 4px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+textarea {
+  resize: vertical;
+}
+
+/* Botón principal */
+button[type="submit"] {
+  display: block;
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+  background-color: #2980b9;
+}
+
+/* Botones generales */
+button {
+  margin-top: 15px;
+  padding: 10px 15px;
+  background-color: #2980b9;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+button:hover {
+  background-color: #1c5980;
+}
+/* Estiliza el input de tipo file */
+#imagen {
+  padding: 12px;
+  border: 2px dashed #ccc;
+  background-color: #f8f8f8;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: border-color 0.3s, background-color 0.3s;
+  width: 100%;
+  font-family: inherit;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+#imagen:hover {
+  background-color: #f0f0f0;
+  border-color: #999;
+}
+
+/* Estilo para ocultar el texto feo por defecto (solo icono de subir) */
+#imagen::file-selector-button {
+  background-color: #007bff;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+#imagen::file-selector-button:hover {
+  background-color: #0056b3;
+}
+
+/* Previsualización de imagen */
+#previewContainer,
+#preview-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.imagen-preview {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  border: 2px solid #ddd;
+  transition: transform 0.3s ease;
+}
+
+.imagen-preview:hover {
+  transform: scale(1.05);
+  border-color: #007bff;
+}
