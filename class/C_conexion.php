@@ -10,8 +10,8 @@ class db {
     if ($this->conexion === null) {
       $sql_host = "127.0.0.1";
       $sql_db = "noticiapty";
-      $sql_user = "User";
-      $sql_pass = "user";
+      $sql_user = "root";
+      $sql_pass = "demo";
 
       $url_conexion = "mysql:host=$sql_host;dbname=$sql_db;charset=utf8mb4";
       try {
